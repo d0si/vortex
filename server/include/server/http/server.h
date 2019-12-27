@@ -5,6 +5,11 @@ namespace vortex {
 namespace server {
 namespace http {
 
+class HttpServer {
+public:
+void start(int port);
+};
+
 }  // namespace http
 }  // namespace server
 }  // namespace vortex
