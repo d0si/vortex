@@ -7,11 +7,16 @@ add_library(${PROJECT_NAME}
 
 add_library(vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+find_package(Boost REQUIRED COMPONENTS system)
+
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}/include
-    # TODO: Includes for boost, mongodb, v8...
+    PUBLIC ${Boost_INCLUDE_DIRS}
+    # TODO: Includes for mongodb, v8...
 )
 
 target_link_libraries(${PROJECT_NAME}
-    # TODO: References to boost, mongodb, v8...
+    PUBLIC vortex::core
+    PUBLIC ${Boost_LIBRARIES}
+    # TODO: References to mongodb, v8...
 )
