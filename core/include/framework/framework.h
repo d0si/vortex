@@ -1,5 +1,5 @@
-#ifndef VORTEX_CORE_FRAMEWORK_H
-#define VORTEX_CORE_FRAMEWORK_H
+#ifndef VORTEX_CORE_FRAMEWORK_FRAMEWORK_H
+#define VORTEX_CORE_FRAMEWORK_FRAMEWORK_H
 
 namespace vortex {
 namespace core {
@@ -11,4 +11,4 @@ namespace framework {
 }  // namespace core
 }  // namespace vortex
 
-#endif  // VORTEX_CORE_FRAMEWORK_H
+#endif  // VORTEX_CORE_FRAMEWORK_FRAMEWORK_H
