@@ -1,7 +1,11 @@
 #ifndef VORTEX_SERVER_HTTP_SESSION_H
 #define VORTEX_SERVER_HTTP_SESSION_H
 
+#include <boost/asio/strand.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/beast/core/flat_buffer.hpp>
+#include <boost/beast/http/message.hpp>
+#include <boost/beast/http/string_body.hpp>
 
 namespace vortex {
 namespace server {
@@ -16,6 +20,7 @@ private:
   boost::beast::http::response<boost::beast::http::string_body> res_;
 public:
   explicit HttpSession(boost::asio::ip::tcp::socket socket);
+
   void run();
   void do_read();
   void on_read(boost::system::error_code ec, std::size_t bytes_transferred);
