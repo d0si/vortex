@@ -8,6 +8,9 @@ namespace framework {
 Router::Router(Framework* framework) : framework_(framework) {
   lang_ = "en";
   controller_ = "index";
+
+  std::string target = framework_->request_->target().to_string();
+  request_uri_ = target.substr(1, target.length() - 1);
 }
 
 void Router::setup() {

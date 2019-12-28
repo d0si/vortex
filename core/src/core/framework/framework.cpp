@@ -13,7 +13,10 @@ Framework::Framework(
     request_(request),
     response_(response),
     router_(this),
-    host_(this) {
+    host_(this),
+    application_(this),
+    controller_(this),
+    view_(this) {
 }
 
 void Framework::setup() {
@@ -29,7 +32,7 @@ void Framework::run() {
 }
 
 void Framework::exit() {
-  // TODO(Ziga)
+  view_.respond();
 
   throw(0);
 }

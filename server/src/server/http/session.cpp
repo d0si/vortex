@@ -2,6 +2,7 @@
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
+#include "core/framework/framework.h"
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -44,7 +45,56 @@ void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
     return;
   }
 
-  // TODO(ziga)
+  const clock_t begin_time = clock();
+  std::cout << "Request received ("
+    << req_.method_string().to_string()
+    << ") "
+    << req_.target().to_string()
+    << std::endl;
+
+  res_.version(req_.version());
+
+  res_.keep_alive(req_.keep_alive());
+  if (req_.method() == boost::beast::http::verb::post) {
+    res_.keep_alive(false);
+  }
+
+  res_.set(boost::beast::http::field::server, "Vortex Framework");
+  res_.set(boost::beast::http::field::content_type, "text/html");
+  res_.result(boost::beast::http::status::ok);
+
+  core::framework::Framework* framework = nullptr;
+
+  try {
+    framework = new core::framework::Framework(
+      stream_.socket().remote_endpoint().address().to_string(),
+      &req_,
+      &res_);
+
+    framework->setup();
+
+    framework->run();
+  } catch (int e) {
+
+  } catch (...) {
+    res_.result(boost::beast::http::status::internal_server_error);
+    res_.body() = "Internal server error";
+  }
+
+  if (framework != nullptr) {
+    delete framework;
+  }
+
+  res_.set(boost::beast::http::field::content_length, res_.body().size());
+
+  std::cout << "Request finished "
+    << req_.target().to_string()
+    << " ["
+    << std::to_string(float(clock() - begin_time) / CLOCKS_PER_SEC)
+    << "]"
+    << std::endl;
+
+  send();
 }
 
 void HttpSession::on_write(

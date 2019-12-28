@@ -5,6 +5,9 @@
 #include <boost/beast/http.hpp>
 #include "core/framework/router.h"
 #include "core/framework/host.h"
+#include "core/framework/application.h"
+#include "core/framework/controller.h"
+#include "core/framework/view.h"
 
 namespace vortex {
 namespace core {
@@ -18,6 +21,9 @@ class Framework {
 
   Router router_;
   Host host_;
+  Application application_;
+  Controller controller_;
+  View view_;
 
   Framework(
     std::string client_ip,
