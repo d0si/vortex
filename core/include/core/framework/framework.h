@@ -3,6 +3,7 @@
 
 #include <string>
 #include <boost/beast/http.hpp>
+#include "core/framework/router.h"
 
 namespace vortex {
 namespace core {
@@ -13,6 +14,8 @@ class Framework {
   std::string client_ip_;
   boost::beast::http::request<boost::beast::http::string_body>* request_;
   boost::beast::http::response<boost::beast::http::string_body>* response_;
+
+  Router router_;
 
   Framework(
     std::string client_ip,

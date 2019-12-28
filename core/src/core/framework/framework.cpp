@@ -9,7 +9,10 @@ Framework::Framework(
     boost::beast::http::request<boost::beast::http::string_body>* request,
     boost::beast::http::response<boost::beast::http::string_body>* response
 )
-    : client_ip_(client_ip), request_(request), response_(response) {
+    : client_ip_(client_ip),
+    request_(request),
+    response_(response),
+    router_(this) {
 }
 
 void Framework::setup() {
