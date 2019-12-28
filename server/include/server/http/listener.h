@@ -10,14 +10,14 @@ namespace http {
 
 class HttpListener : public std::enable_shared_from_this<HttpListener> {
 private:
+  boost::asio::io_context& ioC_;
   boost::asio::ip::tcp::acceptor acceptor_;
-  boost::asio::ip::tcp::socket socket_;
 public:
   HttpListener(boost::asio::io_context& ioC, boost::asio::ip::tcp::endpoint endpoint);
 
   void run();
   void do_accept();
-  void on_accept(boost::system::error_code ec);
+  void on_accept(boost::system::error_code ec, boost::asio::ip::tcp::socket socket);
 };
 
 }  // namespace http
