@@ -2,7 +2,7 @@ project(core)
 
 include(${PROJECT_NAME}.cmake)
 add_library(${PROJECT_NAME}
-    ${${$PROJECT_NAME}_SRC}
+    ${${PROJECT_NAME}_SRC}
 )
 
 add_library(vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})

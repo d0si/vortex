@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.10)
 project(vortexProject)
 
 # Set output properties
@@ -11,4 +11,4 @@ set(CMAKE_BUILD_TYPE Debug)
 # Include subprojects
 add_subdirectory(core)
 add_subdirectory(server)
-add_subdirectory(vortex)
+#add_subdirectory(vortex)
