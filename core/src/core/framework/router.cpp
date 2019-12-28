@@ -15,8 +15,7 @@ void Router::setup() {
 }
 
 std::string Router::getHost() {
-  return framework->request->base()[boost::beast::http::field::host]
-    ->to_string();
+  return framework_->request_->base()[boost::beast::http::field::host].to_string();
 }
 
 std::string Router::getLang() {

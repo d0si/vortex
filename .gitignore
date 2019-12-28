@@ -1,5 +1,7 @@
 # Editor specific files
 .vscode
+.idea
+cmake-build-debug
 
 # CMake files
 CMakeLists.txt.user

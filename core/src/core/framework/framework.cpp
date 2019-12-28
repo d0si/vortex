@@ -6,8 +6,8 @@ namespace framework {
 
 Framework::Framework(
   std::string client_ip,
-    boost::beast::http::request<boost::beast::http::string_body>* request,
-    boost::beast::http::response<boost::beast::http::string_body>* response
+  boost::beast::http::request<boost::beast::http::string_body>* request,
+  boost::beast::http::response<boost::beast::http::string_body>* response
 )
     : client_ip_(client_ip),
     request_(request),
