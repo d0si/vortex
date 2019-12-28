@@ -7,18 +7,17 @@
 #include "server/http/listener.h"
 
 using std::string;
+using std::vector;
 namespace ip = boost::asio::ip;
 
 namespace vortex {
 namespace server {
 namespace http {
 
-void HttpServer::start(int port) {
+void HttpServer::start(unsigned short port) {
   ip::address address;
 
-  address = ip::make_address("0.0.0.0")
-
-  unsigned short port = 8080;
+  address = ip::make_address("0.0.0.0");
 
   int threadCount = 4;
 
@@ -31,12 +30,12 @@ void HttpServer::start(int port) {
     std::cout << "Starting http server on port " << port << std::endl;
 
     vector<std::thread> threads;
-    threads.reserver(threadCount - 1);
+    threads.reserve(threadCount - 1);
 
     for (int i = threadCount - 1; i > 0; --i) {
       threads.emplace_back([&ioContext] {
         ioContext.run();
-      })
+      });
     }
 
     ioContext.run();

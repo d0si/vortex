@@ -4,7 +4,8 @@
 #include <boost/asio/ip/tcp.hpp>
 #include "server/http/session.h"
 
-using boost::asio::ip::tcp;
+namespace asio = boost::asio;
+using asio::ip::tcp;
 using boost::system::error_code;
 
 namespace vortex {

@@ -27,7 +27,7 @@ public:
   void on_write(boost::system::error_code ec, std::size_t bytes_transferred, bool close);
   void do_close();
   void send();
-}
+};
 
 }  // namespace http
 }  // namespace server

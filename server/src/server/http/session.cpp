@@ -27,7 +27,7 @@ void HttpSession::do_read() {
     asio::bind_executor(
       strand_,
       std::bind(
-        &HttpSession.on_read,
+        &HttpSession::on_read,
         shared_from_this(),
         std::placeholders::_1,
         std::placeholders::_2
@@ -73,14 +73,14 @@ void HttpSession::do_close() {
 }
 
 void HttpSession::send() {
-  beast::http::async_write(socket_, res, asio::bind_executor(
+  beast::http::async_write(socket_, res_, asio::bind_executor(
     strand_,
     std::bind(
       &HttpSession::on_write,
       shared_from_this(),
       std::placeholders::_1,
-      std::placeholders::_1,
-      res.need_eof()
+      std::placeholders::_2,
+      res_.need_eof()
     )
   ));
 }
