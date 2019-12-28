@@ -24,7 +24,9 @@ void HttpServer::start(unsigned short port) {
   try {
     boost::asio::io_context ioContext{ threadCount };
 
-    std::make_shared<HttpListener>(ioContext, ip::tcp::endpoint{ address, port })
+    std::make_shared<HttpListener>(
+      ioContext,
+      ip::tcp::endpoint{ address, port })
       ->run();
 
     std::cout << "Starting http server on port " << port << std::endl;

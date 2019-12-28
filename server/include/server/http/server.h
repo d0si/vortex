@@ -6,7 +6,7 @@ namespace server {
 namespace http {
 
 class HttpServer {
-public:
+ public:
   void start(unsigned short port);
 };
 

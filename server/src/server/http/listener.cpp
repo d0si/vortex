@@ -27,7 +27,8 @@ HttpListener::HttpListener(asio::io_context& ioC, tcp::endpoint endpoint)
 
   acceptor_.set_option(asio::socket_base::reuse_address(true), ec);
   if (ec) {
-    std::cout << "Listener set option REUSE_ADDRESS failed. " << ec.message() << std::endl;
+    std::cout << "Listener set option REUSE_ADDRESS failed. "
+      << ec.message() << std::endl;
 
     return;
   }
@@ -60,9 +61,7 @@ void HttpListener::do_accept() {
     asio::make_strand(ioC_),
     beast::bind_front_handler(
       &HttpListener::on_accept,
-      shared_from_this()
-    )
-  );
+      shared_from_this()));
 }
 
 void HttpListener::on_accept(error_code ec, tcp::socket socket) {
@@ -70,8 +69,8 @@ void HttpListener::on_accept(error_code ec, tcp::socket socket) {
     std::cout << "Listener accept failed. " << ec.message() << std::endl;
   } else {
     std::make_shared<HttpSession>(
-      std::move(socket)
-    )->run();
+      std::move(socket))
+      ->run();
   }
 
   do_accept();

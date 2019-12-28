@@ -13,18 +13,22 @@ namespace server {
 namespace http {
 
 class HttpSession : public std::enable_shared_from_this<HttpSession> {
-private:
+ private:
   boost::beast::tcp_stream stream_;
   boost::beast::flat_buffer buffer_;
   boost::beast::http::request<boost::beast::http::string_body> req_;
   boost::beast::http::response<boost::beast::http::string_body> res_;
-public:
+
+ public:
   explicit HttpSession(boost::asio::ip::tcp::socket socket);
 
   void run();
   void do_read();
   void on_read(boost::system::error_code ec, std::size_t bytes_transferred);
-  void on_write(bool close, boost::system::error_code ec, std::size_t bytes_transferred);
+  void on_write(
+    bool close,
+    boost::system::error_code ec,
+    std::size_t bytes_transferred);
   void do_close();
   void send();
 };

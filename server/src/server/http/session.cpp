@@ -28,8 +28,7 @@ void HttpSession::do_read() {
 
   beast::http::async_read(stream_, buffer_, req_, beast::bind_front_handler(
       &HttpSession::on_read,
-      shared_from_this()
-  ));
+      shared_from_this()));
 }
 
 void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
@@ -45,10 +44,13 @@ void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
     return;
   }
 
-  //  TODO
+  // TODO(ziga)
 }
 
-void HttpSession::on_write(bool close, error_code ec, std::size_t bytes_transferred) {
+void HttpSession::on_write(
+    bool close,
+    error_code ec,
+    std::size_t bytes_transferred) {
   boost::ignore_unused(bytes_transferred);
 
   if (ec) {
@@ -74,8 +76,7 @@ void HttpSession::send() {
   beast::http::async_write(stream_, res_, beast::bind_front_handler(
     &HttpSession::on_write,
     shared_from_this(),
-    res_.need_eof()
-  ));
+    res_.need_eof()));
 }
 
 }  // namespace http

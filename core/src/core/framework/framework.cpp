@@ -10,21 +10,20 @@ Framework::Framework(
     boost::beast::http::response<boost::beast::http::string_body>* response
 )
     : client_ip_(client_ip), request_(request), response_(response) {
-
 }
 
 void Framework::setup() {
-  // TODO
+  // TODO(Ziga)
 }
 
 void Framework::run() {
-  // TODO
+  // TODO(Ziga)
 
   throw(0);
 }
 
 void Framework::exit() {
-  // TODO
+  // TODO(Ziga)
 
   throw(0);
 }
