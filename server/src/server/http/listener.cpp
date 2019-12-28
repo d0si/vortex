@@ -2,6 +2,7 @@
 #include <iostream>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include "server/http/session.h"
 
 using boost::asio::ip::tcp;
 using boost::system::error_code;
@@ -56,9 +57,9 @@ void HttpListener::on_accept(error_code ec) {
   if (ec) {
     std::cout << "Listener accept failed. " << ec.message() << std::endl;
   } else {
-    // std::make_shared<HttpSession>(
-    //   std::move(socket_)
-    // )->run();
+    std::make_shared<HttpSession>(
+      std::move(socket_)
+    )->run();
   }
 
   do_accept();

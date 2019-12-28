@@ -7,7 +7,7 @@ namespace http {
 
 class HttpServer {
 public:
-void start(int port);
+  void start(int port);
 };
 
 }  // namespace http
