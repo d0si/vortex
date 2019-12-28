@@ -12,10 +12,13 @@ Framework::Framework(
     : client_ip_(client_ip),
     request_(request),
     response_(response),
-    router_(this) {
+    router_(this),
+    host_(this) {
 }
 
 void Framework::setup() {
+  host_.find(router_.getHost());
+
   // TODO(Ziga)
 }
 
