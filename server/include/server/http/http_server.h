@@ -9,10 +9,10 @@ namespace http {
 
 class http_server {
  private:
-  maze::maze_object server_params_;
+  maze::maze_object config_;
 
  public:
-  void start(maze::maze_object server_params);
+  void start(maze::maze_object config);
 };
 
 }  // namespace http

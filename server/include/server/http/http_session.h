@@ -19,10 +19,10 @@ class http_session : public std::enable_shared_from_this<http_session> {
   boost::beast::flat_buffer buffer_;
   boost::beast::http::request<boost::beast::http::string_body> req_;
   boost::beast::http::response<boost::beast::http::string_body> res_;
-  maze::maze_object server_params_;
+  maze::maze_object config_;
 
  public:
-  explicit http_session(maze::maze_object server_params, boost::asio::ip::tcp::socket socket);
+  explicit http_session(maze::maze_object config, boost::asio::ip::tcp::socket socket);
 
   void run();
   void do_read();

@@ -13,11 +13,11 @@ class http_listener : public std::enable_shared_from_this<http_listener> {
  private:
   boost::asio::io_context& ioC_;
   boost::asio::ip::tcp::acceptor acceptor_;
-  maze::maze_object server_params_;
+  maze::maze_object config_;
 
  public:
   http_listener(
-    maze::maze_object server_params,
+    maze::maze_object config,
     boost::asio::io_context& ioC,
     boost::asio::ip::tcp::endpoint endpoint);
 

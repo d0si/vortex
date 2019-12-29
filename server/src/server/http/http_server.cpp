@@ -14,10 +14,10 @@ namespace vortex {
 namespace server {
 namespace http {
 
-void http_server::start(maze::maze_object server_params) {
-  server_params_ = server_params;
+void http_server::start(maze::maze_object config) {
+  config_ = config;
 
-  unsigned short port = (unsigned short)server_params.get("port").get_int();
+  unsigned short port = (unsigned short)config_.get("port").get_int();
 
   ip::address address;
 
@@ -29,7 +29,7 @@ void http_server::start(maze::maze_object server_params) {
     boost::asio::io_context ioContext{ threadCount };
 
     std::make_shared<http_listener>(
-      server_params_,
+      config_,
       ioContext,
       ip::tcp::endpoint{ address, port })
       ->run();
