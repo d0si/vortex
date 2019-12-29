@@ -5,7 +5,7 @@ namespace core {
 namespace framework {
 
 Framework::Framework(
-  maze::MazeObject server_params,
+  maze::maze_object server_params,
   std::string client_ip,
   boost::beast::http::request<boost::beast::http::string_body>* request,
   boost::beast::http::response<boost::beast::http::string_body>* response

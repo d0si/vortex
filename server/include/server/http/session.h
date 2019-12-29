@@ -7,7 +7,7 @@
 #include <boost/beast/core/flat_buffer.hpp>
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
-#include <maze/mazeObject.h>
+#include <maze/maze_object.h>
 
 namespace vortex {
 namespace server {
@@ -19,10 +19,10 @@ class HttpSession : public std::enable_shared_from_this<HttpSession> {
   boost::beast::flat_buffer buffer_;
   boost::beast::http::request<boost::beast::http::string_body> req_;
   boost::beast::http::response<boost::beast::http::string_body> res_;
-  maze::MazeObject server_params_;
+  maze::maze_object server_params_;
 
  public:
-  explicit HttpSession(maze::MazeObject server_params, boost::asio::ip::tcp::socket socket);
+  explicit HttpSession(maze::maze_object server_params, boost::asio::ip::tcp::socket socket);
 
   void run();
   void do_read();

@@ -2,26 +2,26 @@
 #define MAZE_HELPERS_H
 
 #include <nlohmann/json.hpp>
-#include "maze/mazeElement.h"
+#include <maze/maze_element.h>
 
 namespace maze {
 namespace element {
 
-nlohmann::json toJsonElement(MazeElement* element);
-void applyJson(MazeElement* element, nlohmann::json json);
-MazeElement fromJson(nlohmann::json json);
+nlohmann::json to_json_element(maze_element* element);
+void apply_json(maze_element* element, nlohmann::json json);
+maze_element from_json(nlohmann::json json);
 
 }  // namespace element
 namespace array {
 
-nlohmann::json toJsonArray(MazeArray* array);
-MazeArray fromJson(nlohmann::json jsonArray);
+nlohmann::json to_json_array(maze_array* array);
+maze_array from_json(nlohmann::json json_array);
 
 }  // namespace array
 namespace object {
 
-nlohmann::json toJsonObject(MazeObject* object);
-MazeObject fromJson(nlohmann::json jsonObject);
+nlohmann::json to_json_object(maze_object* object);
+maze_object from_json(nlohmann::json json_object);
 
 }  // namespace object
 }  // namespace maze

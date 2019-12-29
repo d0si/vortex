@@ -14,10 +14,10 @@ namespace vortex {
 namespace server {
 namespace http {
 
-void HttpServer::start(maze::MazeObject server_params) {
+void HttpServer::start(maze::maze_object server_params) {
   server_params_ = server_params;
 
-  unsigned short port = (unsigned short)server_params.get("port").getInt();
+  unsigned short port = (unsigned short)server_params.get("port").get_int();
 
   ip::address address;
 

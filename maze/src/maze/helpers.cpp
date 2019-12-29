@@ -1,34 +1,34 @@
-#include "maze/helpers.h"
+#include <maze/helpers.h>
 
 namespace maze {
 namespace element {
 
-nlohmann::json toJsonElement(MazeElement* element) {
+nlohmann::json to_json_element(maze_element* element) {
   nlohmann::json el;
 
-  switch (element->getType()) {
-    case MazeType::Null:
+  switch (element->get_type()) {
+    case maze_type::Null:
       break;
-    case MazeType::Bool:
-      el = element->getBool();
+    case maze_type::Bool:
+      el = element->get_bool();
       break;
-    case MazeType::Int:
-      el = element->getInt();
+    case maze_type::Int:
+      el = element->get_int();
       break;
-    case MazeType::Double:
-      el = element->getDouble();
+    case maze_type::Double:
+      el = element->get_double();
       break;
-    case MazeType::String:
-      el = element->getString();
+    case maze_type::String:
+      el = element->get_string();
       break;
-    case MazeType::Array: {
-      MazeArray array = element->getArray();
-      el = array::toJsonArray(&array);
+    case maze_type::Array: {
+      maze_array array = element->get_array();
+      el = array::to_json_array(&array);
       break;
     }
-    case MazeType::Object: {
-      MazeObject object = element->getObject();
-      el = object::toJsonObject(&object);
+    case maze_type::Object: {
+      maze_object object = element->get_object();
+      el = object::to_json_object(&object);
       break;
     }
   }
@@ -36,12 +36,12 @@ nlohmann::json toJsonElement(MazeElement* element) {
   return el;
 }
 
-void applyJson(MazeElement* element, nlohmann::json json) {
-  element->apply(fromJson(json));
+void apply_json(maze_element* element, nlohmann::json json) {
+  element->apply(from_json(json));
 }
 
-MazeElement fromJson(nlohmann::json json) {
-  MazeElement el;
+maze_element from_json(nlohmann::json json) {
+  maze_element el;
 
   if (json.is_boolean()) {
     el = json.get<bool>();
@@ -52,11 +52,11 @@ MazeElement fromJson(nlohmann::json json) {
   } else if (json.is_string()) {
     el = json.get<std::string>();
   } else if (json.is_array()) {
-    el = array::fromJson(json);
+    el = array::from_json(json);
   } else if (json.is_object()) {
-    el = object::fromJson(json);
+    el = object::from_json(json);
   } else if (json.is_null()) {
-    el.setNull();
+    el.set_null();
   }
 
   return el;
@@ -65,36 +65,36 @@ MazeElement fromJson(nlohmann::json json) {
 }  // namespace element
 namespace array {
 
-nlohmann::json toJsonArray(MazeArray* array) {
+nlohmann::json to_json_array(maze_array* array) {
   nlohmann::json arr = nlohmann::json::array();
 
-  auto mazes = array->getMazes();
+  auto mazes = array->get_mazes();
   for (unsigned int i = 0; i < mazes.size(); i++) {
-    MazeElement maze = mazes[i];
-    switch (maze.getType()) {
-      case MazeType::String:
-        arr.push_back(maze.getString());
+    maze_element maze = mazes[i];
+    switch (maze.get_type()) {
+      case maze_type::String:
+        arr.push_back(maze.get_string());
         break;
-      case MazeType::Int:
-        arr.push_back(maze.getInt());
+      case maze_type::Int:
+        arr.push_back(maze.get_int());
         break;
-      case MazeType::Double:
-        arr.push_back(maze.getDouble());
+      case maze_type::Double:
+        arr.push_back(maze.get_double());
         break;
-      case MazeType::Bool:
-        arr.push_back(maze.getBool());
+      case maze_type::Bool:
+        arr.push_back(maze.get_bool());
         break;
-      case MazeType::Null:
+      case maze_type::Null:
         arr.push_back(nullptr);
         break;
-      case MazeType::Array: {
-        MazeArray array = maze.getArray();
-        arr.push_back(array::toJsonArray(&array));
+      case maze_type::Array: {
+        maze_array array = maze.get_array();
+        arr.push_back(array::to_json_array(&array));
         break;
       }
-      case MazeType::Object: {
-        MazeObject object = maze.getObject();
-        arr.push_back(object::toJsonObject(&object));
+      case maze_type::Object: {
+        maze_object object = maze.get_object();
+        arr.push_back(object::to_json_object(&object));
         break;
       }
     }
@@ -103,10 +103,10 @@ nlohmann::json toJsonArray(MazeArray* array) {
   return arr;
 }
 
-MazeArray fromJson(nlohmann::json jsonArray) {
-  MazeArray arr;
+maze_array from_json(nlohmann::json json_array) {
+  maze_array arr;
 
-  for (auto it = jsonArray.begin(); it != jsonArray.end(); it++) {
+  for (auto it = json_array.begin(); it != json_array.end(); it++) {
     if (it->is_string()) {
       arr.push(it->get<std::string>());
     } else if (it->is_number_integer()) {
@@ -116,11 +116,11 @@ MazeArray fromJson(nlohmann::json jsonArray) {
     } else if (it->is_boolean()) {
       arr.push(it->get<bool>());
     } else if (it->is_array()) {
-      arr.push(array::fromJson(*it));
+      arr.push(array::from_json(*it));
     } else if (it->is_object()) {
-      arr.push(object::fromJson(*it));
+      arr.push(object::from_json(*it));
     } else if (it->is_null()) {
-      arr.pushMaze(MazeElement(MazeType::Null));
+      arr.push_maze(maze_element(maze_type::Null));
     }
   }
 
@@ -130,38 +130,38 @@ MazeArray fromJson(nlohmann::json jsonArray) {
 }  // namespace array
 namespace object {
 
-nlohmann::json toJsonObject(MazeObject* object) {
+nlohmann::json to_json_object(maze_object* object) {
   nlohmann::json obj = nlohmann::json::object();
-  auto mazes = object->getMazes();
+  auto mazes = object->get_mazes();
 
   for (auto m : mazes) {
     std::string index = m.first;
     auto maze = m.second;
 
-    switch (maze.getType()) {
-      case MazeType::String:
-        obj[index] = maze.getString();
+    switch (maze.get_type()) {
+      case maze_type::String:
+        obj[index] = maze.get_string();
         break;
-      case MazeType::Int:
-        obj[index] = maze.getInt();
+      case maze_type::Int:
+        obj[index] = maze.get_int();
         break;
-      case MazeType::Double:
-        obj[index] = maze.getDouble();
+      case maze_type::Double:
+        obj[index] = maze.get_double();
         break;
-      case MazeType::Bool:
-        obj[index] = maze.getBool();
+      case maze_type::Bool:
+        obj[index] = maze.get_bool();
         break;
-      case MazeType::Null:
+      case maze_type::Null:
         obj[index] = nullptr;
         break;
-      case MazeType::Array: {
-        MazeArray array = maze.getArray();
-        obj[index] = array::toJsonArray(&array);
+      case maze_type::Array: {
+        maze_array array = maze.get_array();
+        obj[index] = array::to_json_array(&array);
         break;
       }
-      case MazeType::Object: {
-        MazeObject object = maze.getObject();
-        obj[index] = object::toJsonObject(&object);
+      case maze_type::Object: {
+        maze_object object = maze.get_object();
+        obj[index] = object::to_json_object(&object);
         break;
       }
     }
@@ -170,10 +170,10 @@ nlohmann::json toJsonObject(MazeObject* object) {
   return obj;
 }
 
-MazeObject fromJson(nlohmann::json jsonObject) {
-  MazeObject obj;
+maze_object from_json(nlohmann::json json_object) {
+  maze_object obj;
 
-  for (auto it = jsonObject.begin(); it != jsonObject.end(); it++) {
+  for (auto it = json_object.begin(); it != json_object.end(); it++) {
     if (it->is_string()) {
       obj.set(it.key(), it->get<std::string>());
     } else if (it->is_number_integer()) {
@@ -183,11 +183,11 @@ MazeObject fromJson(nlohmann::json jsonObject) {
     } else if (it->is_boolean()) {
       obj.set(it.key(), it->get<bool>());
     } else if (it->is_array()) {
-      obj.set(it.key(), array::fromJson(*it));
+      obj.set(it.key(), array::from_json(*it));
     } else if (it->is_object()) {
-      obj.set(it.key(), object::fromJson(*it));
+      obj.set(it.key(), object::from_json(*it));
     } else if (it->is_null()) {
-      obj.setMaze(it.key(), MazeElement(MazeType::Null));
+      obj.set_maze(it.key(), maze_element(maze_type::Null));
     }
   }
 

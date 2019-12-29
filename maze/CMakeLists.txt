@@ -3,7 +3,7 @@ project(maze)
 include(${PROJECT_NAME}.cmake)
 add_library(${PROJECT_NAME}
     ${${PROJECT_NAME}_SRC}
-        src/maze/mazeArray.cpp include/maze/mazeElement.h include/maze/mazeObject.h include/maze/mazeType.h src/maze/mazeType.cpp include/maze/helpers.h src/maze/helpers.cpp)
+)
 
 add_library(vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 

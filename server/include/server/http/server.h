@@ -1,7 +1,7 @@
 #ifndef VORTEX_SERVER_HTTP_SERVER_H
 #define VORTEX_SERVER_HTTP_SERVER_H
 
-#include <maze/MazeObject.h>
+#include <maze/maze_object.h>
 
 namespace vortex {
 namespace server {
@@ -9,10 +9,10 @@ namespace http {
 
 class HttpServer {
  private:
-  maze::MazeObject server_params_;
+  maze::maze_object server_params_;
 
  public:
-  void start(maze::MazeObject server_params);
+  void start(maze::maze_object server_params);
 };
 
 }  // namespace http
