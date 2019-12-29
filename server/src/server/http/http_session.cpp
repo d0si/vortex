@@ -1,4 +1,4 @@
-#include "server/http/session.h"
+#include <server/http/http_session.h>
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
@@ -13,26 +13,26 @@ namespace vortex {
 namespace server {
 namespace http {
 
-HttpSession::HttpSession(maze::maze_object server_params, tcp::socket socket)
+http_session::http_session(maze::maze_object server_params, tcp::socket socket)
     : server_params_(server_params), stream_(std::move(socket)) {
 
 }
 
-void HttpSession::run() {
+void http_session::run() {
   do_read();
 }
 
-void HttpSession::do_read() {
+void http_session::do_read() {
   req_ = {};
 
   stream_.expires_after(std::chrono::seconds(30));
 
   beast::http::async_read(stream_, buffer_, req_, beast::bind_front_handler(
-      &HttpSession::on_read,
+      &http_session::on_read,
       shared_from_this()));
 }
 
-void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
+void http_session::on_read(error_code ec, std::size_t bytes_transferred) {
   boost::ignore_unused(bytes_transferred);
 
   if (ec == beast::http::error::end_of_stream) {
@@ -98,7 +98,7 @@ void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
   send();
 }
 
-void HttpSession::on_write(
+void http_session::on_write(
     bool close,
     error_code ec,
     std::size_t bytes_transferred) {
@@ -117,15 +117,15 @@ void HttpSession::on_write(
   do_read();
 }
 
-void HttpSession::do_close() {
+void http_session::do_close() {
   error_code ec;
 
   stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
 }
 
-void HttpSession::send() {
+void http_session::send() {
   beast::http::async_write(stream_, res_, beast::bind_front_handler(
-    &HttpSession::on_write,
+    &http_session::on_write,
     shared_from_this(),
     res_.need_eof()));
 }

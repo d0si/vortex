@@ -1,5 +1,5 @@
-#ifndef VORTEX_SERVER_HTTP_SESSION_H
-#define VORTEX_SERVER_HTTP_SESSION_H
+#ifndef VORTEX_SERVER_HTTP_HTTP_SESSION_H
+#define VORTEX_SERVER_HTTP_HTTP_SESSION_H
 
 #include <boost/asio/strand.hpp>
 #include <boost/asio/ip/tcp.hpp>
@@ -13,7 +13,7 @@ namespace vortex {
 namespace server {
 namespace http {
 
-class HttpSession : public std::enable_shared_from_this<HttpSession> {
+class http_session : public std::enable_shared_from_this<http_session> {
  private:
   boost::beast::tcp_stream stream_;
   boost::beast::flat_buffer buffer_;
@@ -22,7 +22,7 @@ class HttpSession : public std::enable_shared_from_this<HttpSession> {
   maze::maze_object server_params_;
 
  public:
-  explicit HttpSession(maze::maze_object server_params, boost::asio::ip::tcp::socket socket);
+  explicit http_session(maze::maze_object server_params, boost::asio::ip::tcp::socket socket);
 
   void run();
   void do_read();
@@ -39,4 +39,4 @@ class HttpSession : public std::enable_shared_from_this<HttpSession> {
 }  // namespace server
 }  // namespace vortex
 
-#endif  // VORTEX_SERVER_HTTP_SESSION_H
+#endif  // VORTEX_SERVER_HTTP_HTTP_SESSION_H

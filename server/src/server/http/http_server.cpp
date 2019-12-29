@@ -1,10 +1,10 @@
-#include "server/http/server.h"
+#include <server/http/http_server.h>
 #include <iostream>
 #include <thread>
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include "server/http/listener.h"
+#include <server/http/http_listener.h>
 
 using std::string;
 using std::vector;
@@ -14,7 +14,7 @@ namespace vortex {
 namespace server {
 namespace http {
 
-void HttpServer::start(maze::maze_object server_params) {
+void http_server::start(maze::maze_object server_params) {
   server_params_ = server_params;
 
   unsigned short port = (unsigned short)server_params.get("port").get_int();
@@ -28,7 +28,7 @@ void HttpServer::start(maze::maze_object server_params) {
   try {
     boost::asio::io_context ioContext{ threadCount };
 
-    std::make_shared<HttpListener>(
+    std::make_shared<http_listener>(
       server_params_,
       ioContext,
       ip::tcp::endpoint{ address, port })
