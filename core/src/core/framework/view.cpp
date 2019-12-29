@@ -1,24 +1,24 @@
-#include "core/framework/view.h"
-#include "core/framework/framework.h"
+#include <core/framework/view.h>
+#include <core/framework/framework.h>
 
 namespace vortex {
 namespace core {
 namespace framework {
 
-View::View(Framework* framework) : framework_(framework) {
+view::view(framework* framework) : framework_(framework) {
 }
 
-void View::output() {
+void view::output() {
   // TODO(Ziga): Render from template
 
   respond();
 }
 
-void View::respond() {
+void view::respond() {
   framework_->response_->body() = rendered_;
 }
 
-void View::echo(std::string contents) {
+void view::echo(std::string contents) {
   rendered_ += contents;
 }
 

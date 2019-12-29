@@ -1,10 +1,10 @@
-#include "core/framework/framework.h"
+#include <core/framework/framework.h>
 
 namespace vortex {
 namespace core {
 namespace framework {
 
-Framework::Framework(
+framework::framework(
   maze::maze_object server_params,
   std::string client_ip,
   boost::beast::http::request<boost::beast::http::string_body>* request,
@@ -21,19 +21,19 @@ Framework::Framework(
     view_(this) {
 }
 
-void Framework::setup() {
-  host_.find(router_.getHost());
+void framework::setup() {
+  host_.find(router_.get_host());
 
   // TODO(Ziga)
 }
 
-void Framework::run() {
+void framework::run() {
   // TODO(Ziga)
 
   throw(0);
 }
 
-void Framework::exit() {
+void framework::exit() {
   view_.respond();
 
   throw(0);

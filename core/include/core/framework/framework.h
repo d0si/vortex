@@ -4,30 +4,30 @@
 #include <string>
 #include <boost/beast/http.hpp>
 #include <maze/maze_object.h>
-#include "core/framework/router.h"
-#include "core/framework/host.h"
-#include "core/framework/application.h"
-#include "core/framework/controller.h"
-#include "core/framework/view.h"
+#include <core/framework/router.h>
+#include <core/framework/host.h>
+#include <core/framework/application.h>
+#include <core/framework/controller.h>
+#include <core/framework/view.h>
 
 namespace vortex {
 namespace core {
 namespace framework {
 
-class Framework {
+class framework {
  public:
   std::string client_ip_;
   boost::beast::http::request<boost::beast::http::string_body>* request_;
   boost::beast::http::response<boost::beast::http::string_body>* response_;
   maze::maze_object server_params_;
 
-  Router router_;
-  Host host_;
-  Application application_;
-  Controller controller_;
-  View view_;
+  router router_;
+  host host_;
+  application application_;
+  controller controller_;
+  view view_;
 
-  Framework(
+  framework(
     maze::maze_object server_params,
     std::string client_ip,
     boost::beast::http::request<boost::beast::http::string_body>* request,

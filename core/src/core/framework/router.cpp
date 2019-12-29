@@ -1,11 +1,11 @@
-#include "core/framework/router.h"
-#include "core/framework/framework.h"
+#include <core/framework/router.h>
+#include <core/framework/framework.h>
 
 namespace vortex {
 namespace core {
 namespace framework {
 
-Router::Router(Framework* framework) : framework_(framework) {
+router::router(framework* framework) : framework_(framework) {
   lang_ = "en";
   controller_ = "index";
 
@@ -13,23 +13,23 @@ Router::Router(Framework* framework) : framework_(framework) {
   request_uri_ = target.substr(1, target.length() - 1);
 }
 
-void Router::setup() {
+void router::setup() {
   // TODO(Ziga)
 }
 
-std::string Router::getHost() {
+std::string router::get_host() {
   return framework_->request_->base()[boost::beast::http::field::host].to_string();
 }
 
-std::string Router::getLang() {
+std::string router::get_lang() {
   return lang_;
 }
 
-std::string Router::getController() {
+std::string router::get_controller() {
   return controller_;
 }
 
-std::vector<std::string> Router::getArgs() {
+std::vector<std::string> router::get_args() {
   return args_;
 }
 

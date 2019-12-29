@@ -8,11 +8,11 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class Framework;
+class framework;
 
-class Router {
+class router {
  private:
-  Framework* framework_;
+  framework* framework_;
 
   std::string request_uri_;
   std::string lang_;
@@ -20,13 +20,13 @@ class Router {
   std::vector<std::string> args_;
 
  public:
-  Router(Framework* framework);
+  router(framework* framework);
 
   void setup();
-  std::string getHost();
-  std::string getLang();
-  std::string getController();
-  std::vector<std::string> getArgs();
+  std::string get_host();
+  std::string get_lang();
+  std::string get_controller();
+  std::vector<std::string> get_args();
 };
 
 }  // namespace framework

@@ -7,16 +7,16 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class Framework;
+class framework;
 
-class View {
+class view {
  private:
-  Framework* framework_;
+  framework* framework_;
 
   std::string rendered_;
 
  public:
-  View(Framework* framework);
+  view(framework* framework);
 
   void output();
   void respond();

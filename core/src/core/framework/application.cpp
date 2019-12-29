@@ -1,21 +1,21 @@
-#include "core/framework/application.h"
-#include "core/framework/framework.h"
+#include <core/framework/application.h>
+#include <core/framework/framework.h>
 
 namespace vortex {
 namespace core {
 namespace framework {
 
-Application::Application(Framework* framework) : framework_(framework) {
+application::application(framework* framework) : framework_(framework) {
 }
 
-void Application::find(std::string appId) {
+void application::find(std::string appId) {
 }
 
-std::string Application::getId() {
+std::string application::get_id() {
   return "";
 }
 
-std::string Application::getTitle() {
+std::string application::get_title() {
     return "";
 }
 

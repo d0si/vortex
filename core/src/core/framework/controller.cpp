@@ -1,36 +1,36 @@
-#include "core/framework/controller.h"
-#include "core/framework/framework.h"
+#include <core/framework/controller.h>
+#include <core/framework/framework.h>
 
 namespace vortex {
 namespace core {
 namespace framework {
 
-Controller::Controller(Framework* framework) : framework_(framework) {
+controller::controller(framework* framework) : framework_(framework) {
 }
 
-void Controller::find(std::string appId, std::string name, std::string method) {
+void controller::find(std::string app_id, std::string name, std::string method) {
 }
 
-void Controller::run() {
+void controller::run() {
 }
 
-std::string Controller::getId() {
+std::string controller::get_id() {
   return "";
 }
 
-std::string Controller::getName() {
+std::string controller::get_name() {
   return "";
 }
 
-std::string Controller::getScript() {
+std::string controller::get_script() {
   return "";
 }
 
-std::string Controller::getContentType() {
+std::string controller::get_content_type() {
   return "";
 }
 
-std::string Controller::getMethod() {
+std::string controller::get_method() {
   return "";
 }
 

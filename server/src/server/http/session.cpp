@@ -2,7 +2,7 @@
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
-#include "core/framework/framework.h"
+#include <core/framework/framework.h>
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -63,10 +63,10 @@ void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
   res_.set(boost::beast::http::field::content_type, "text/html");
   res_.result(boost::beast::http::status::ok);
 
-  core::framework::Framework* framework = nullptr;
+  core::framework::framework* framework = nullptr;
 
   try {
-    framework = new core::framework::Framework(
+    framework = new core::framework::framework(
       server_params_,
       stream_.socket().remote_endpoint().address().to_string(),
       &req_,

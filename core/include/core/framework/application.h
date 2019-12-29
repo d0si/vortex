@@ -7,19 +7,19 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class Framework;
+class framework;
 
-class Application {
+class application {
  private:
-  Framework* framework_;
+  framework* framework_;
 
  public:
-  Application(Framework* framework);
+  application(framework* framework);
 
   void find(std::string appId);
 
-  std::string getId();
-  std::string getTitle();
+  std::string get_id();
+  std::string get_title();
 };
 
 }  // namespace framework
