@@ -14,6 +14,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
+    PUBLIC vortex::maze
     PUBLIC ${Boost_LIBRARIES}
     # TODO: References to mongodb, v8...
 )

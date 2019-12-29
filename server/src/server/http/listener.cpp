@@ -14,8 +14,8 @@ namespace vortex {
 namespace server {
 namespace http {
 
-HttpListener::HttpListener(asio::io_context& ioC, tcp::endpoint endpoint)
-    : ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
+HttpListener::HttpListener(maze::MazeObject server_params, asio::io_context& ioC, tcp::endpoint endpoint)
+    : server_params_(server_params), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
   error_code ec;
 
   acceptor_.open(endpoint.protocol(), ec);
@@ -69,6 +69,7 @@ void HttpListener::on_accept(error_code ec, tcp::socket socket) {
     std::cout << "Listener accept failed. " << ec.message() << std::endl;
   } else {
     std::make_shared<HttpSession>(
+      server_params_,
       std::move(socket))
       ->run();
   }

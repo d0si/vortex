@@ -13,8 +13,8 @@ namespace vortex {
 namespace server {
 namespace http {
 
-HttpSession::HttpSession(tcp::socket socket)
-    : stream_(std::move(socket)) {
+HttpSession::HttpSession(maze::MazeObject server_params, tcp::socket socket)
+    : server_params_(server_params), stream_(std::move(socket)) {
 
 }
 
@@ -67,6 +67,7 @@ void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
 
   try {
     framework = new core::framework::Framework(
+      server_params_,
       stream_.socket().remote_endpoint().address().to_string(),
       &req_,
       &res_);
