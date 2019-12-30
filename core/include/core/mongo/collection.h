@@ -31,7 +31,6 @@ class collection {
 
   void insert_many(maze::maze_array values);
   void insert_many(std::vector<std::string> json_values_array);
-  void insert_many(std::string json_values);
 
   void replace_one(maze::maze_object query, maze::maze_object replacement_value);
   void replace_one(std::string json_query, std::string json_replacement_value);
