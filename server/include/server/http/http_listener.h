@@ -3,7 +3,7 @@
 
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <maze/maze_object.h>
+#include <maze/object.h>
 
 namespace vortex {
 namespace server {
@@ -13,11 +13,11 @@ class http_listener : public std::enable_shared_from_this<http_listener> {
  private:
   boost::asio::io_context& ioC_;
   boost::asio::ip::tcp::acceptor acceptor_;
-  maze::maze_object config_;
+  maze::object config_;
 
  public:
   http_listener(
-    maze::maze_object config,
+    maze::object config,
     boost::asio::io_context& ioC,
     boost::asio::ip::tcp::endpoint endpoint);
 

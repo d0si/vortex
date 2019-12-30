@@ -14,7 +14,7 @@ namespace vortex {
 namespace server {
 namespace http {
 
-http_listener::http_listener(maze::maze_object config, asio::io_context& ioC, tcp::endpoint endpoint)
+http_listener::http_listener(maze::object config, asio::io_context& ioC, tcp::endpoint endpoint)
     : config_(config), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
   error_code ec;
 

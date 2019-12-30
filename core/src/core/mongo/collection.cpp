@@ -9,43 +9,43 @@ collection::collection(mongocxx::collection collection) : collection_(collection
 
 }
 
-maze::maze_array collection::find(maze::maze_object query) {
+maze::array collection::find(maze::object query) {
   return find(query.to_json());
 }
 
-maze::maze_array collection::find(std::string json_query) {
-  maze::maze_array results;
+maze::array collection::find(std::string json_query) {
+  maze::array results;
 
   auto values = collection_.find(bsoncxx::from_json(json_query));
   for (auto it = values.begin(); it != values.end(); it++) {
-    results << maze::maze_object::from_json(bsoncxx::to_json(*it));
+    results << maze::object::from_json(bsoncxx::to_json(*it));
   }
 
   return results;
 }
 
-maze::maze_object collection::find_by_id(std::string oid) {
-  maze::maze_object query;
-  query.set("_id", maze::maze_object("$oid", oid));
+maze::object collection::find_by_id(std::string oid) {
+  maze::object query;
+  query.set("_id", maze::object("$oid", oid));
 
   return find_one(query);
 }
 
-maze::maze_object collection::find_one(maze::maze_object query) {
+maze::object collection::find_one(maze::object query) {
   return find_one(query.to_json());
 }
 
-maze::maze_object collection::find_one(std::string json_query) {
+maze::object collection::find_one(std::string json_query) {
   auto value = collection_.find_one(bsoncxx::from_json(json_query));
 
   if (value) {
-    return maze::maze_object::from_json(bsoncxx::to_json(value.value()));
+    return maze::object::from_json(bsoncxx::to_json(value.value()));
   }
 
-  return maze::maze_object();
+  return maze::object();
 }
 
-void collection::delete_one(maze::maze_object query) {
+void collection::delete_one(maze::object query) {
   delete_one(query.to_json());
 }
 
@@ -53,7 +53,7 @@ void collection::delete_one(std::string json_query) {
   collection_.delete_one(bsoncxx::from_json(json_query));
 }
 
-void collection::insert_one(maze::maze_object value) {
+void collection::insert_one(maze::object value) {
   insert_one(value.to_json());
 }
 
@@ -61,7 +61,7 @@ void collection::insert_one(std::string json_value) {
   collection_.insert_one(bsoncxx::from_json(json_value));
 }
 
-void collection::insert_many(maze::maze_array values) {
+void collection::insert_many(maze::array values) {
   std::vector<std::string> json_values;
 
   for (auto it = values.begin(); it != values.end(); it++) {
@@ -81,7 +81,7 @@ void collection::insert_many(std::vector<std::string> json_values_array) {
   collection_.insert_many(bson_values);
 }
 
-void collection::replace_one(maze::maze_object query, maze::maze_object replacement_value) {
+void collection::replace_one(maze::object query, maze::object replacement_value) {
   replace_one(query.to_json(), replacement_value.to_json());
 }
 

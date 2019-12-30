@@ -1,11 +1,11 @@
-#ifndef MAZE_MAZE_TYPE_H
-#define MAZE_MAZE_TYPE_H
+#ifndef MAZE_TYPE_H
+#define MAZE_TYPE_H
 
 #include <string>
 
 namespace maze {
 
-enum class maze_type {
+enum class type {
   Null = 0,
   Bool = 1,
   Int = 2,
@@ -15,8 +15,8 @@ enum class maze_type {
   Object = 6
 };
 
-std::string to_string(maze_type type);
+std::string to_string(type type);
 
 }  // namespace maze
 
-#endif  // MAZE_MAZE_TYPE_H
+#endif  // MAZE_TYPE_H

@@ -3,12 +3,12 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
-#include <maze/maze_object.h>
+#include <maze/object.h>
 #include <server/http/http_server.h>
 
 namespace vortex {
 
-maze::maze_object config;
+maze::object config;
 
 void start_cli() {
   load_config();
@@ -47,7 +47,7 @@ void load_config() {
     buffer << config_file.rdbuf();
 
     try {
-      config = maze::maze_object::from_json(buffer.str());
+      config = maze::object::from_json(buffer.str());
     } catch (...) {
       std::cout << "Unable to parse server_config.json." << std::endl;
     }
@@ -60,11 +60,11 @@ void load_config() {
 
 void apply_config() {
   if (config.is_array("servers")) {
-    maze::maze_array servers = config["servers"];
+    maze::array servers = config["servers"];
 
     for (auto it = servers.begin(); it != servers.end(); it++) {
       if (it->is_int()) {
-        start_server(maze::maze_object("port", it->get_int()));
+        start_server(maze::object("port", it->get_int()));
       } else if (it->is_object()) {
         start_server(it->get_object());
       } else {
@@ -91,12 +91,12 @@ void save_config() {
 
 
 void start_server() {
-  start_server(maze::maze_object());
+  start_server(maze::object());
 }
 
-void start_server(maze::maze_object config) {
+void start_server(maze::object config) {
   if (config.is_object("server")) {
-    maze::maze_object server_config = config["server"];
+    maze::object server_config = config["server"];
 
     if (server_config.is_string("type")) {
       std::string type = server_config["type"];
@@ -127,7 +127,7 @@ void start_server(maze::maze_object config) {
 }
 
 
-void start_http_server(maze::maze_object config) {
+void start_http_server(maze::object config) {
   server::http::http_server server;
 
   server.start(config);

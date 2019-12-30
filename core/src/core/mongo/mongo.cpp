@@ -10,13 +10,13 @@ mongo::mongo() {
   client_ = mongocxx::client{ uri };
 }
 
-mongo::mongo(maze::maze_object mongo_params) : mongo_params_(mongo_params) {
+mongo::mongo(maze::object mongo_params) : mongo_params_(mongo_params) {
   mongocxx::uri uri{ get_connection_uri_from_params(mongo_params) };
 
   client_ = mongocxx::client{ uri };
 }
 
-std::string mongo::get_connection_uri_from_params(maze::maze_object mongo_params) {
+std::string mongo::get_connection_uri_from_params(maze::object mongo_params) {
   std::string uri = "mongodb://";
 
   if (mongo_params.is_string("username") && mongo_params.is_string("password")) {
@@ -102,7 +102,7 @@ void mongo::clone_database(std::string old_name, std::string new_name) {
     collection old_collection = old_db.get_collection(*it);
     collection new_collection = new_db.get_collection(*it);
 
-    maze::maze_array old_values = old_collection.find(maze::maze_object());
+    maze::array old_values = old_collection.find(maze::object());
 
     new_collection.insert_many(old_values);
   }

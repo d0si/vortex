@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <mongocxx/client.hpp>
-#include <maze/maze_object.h>
+#include <maze/object.h>
 #include <core/mongo/db.h>
 #include <core/mongo/collection.h>
 
@@ -15,13 +15,13 @@ namespace mongo {
 class mongo {
  private:
   mongocxx::client client_;
-  maze::maze_object mongo_params_;
+  maze::object mongo_params_;
 
  public:
   mongo();
-  mongo(maze::maze_object mongo_params);
+  mongo(maze::object mongo_params);
 
-  std::string get_connection_uri_from_params(maze::maze_object mongo_params);
+  std::string get_connection_uri_from_params(maze::object mongo_params);
   std::string get_default_db_name();
 
   db get_db(std::string database_name);

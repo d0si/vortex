@@ -14,7 +14,7 @@ namespace vortex {
 namespace server {
 namespace http {
 
-void http_server::start(maze::maze_object config) {
+void http_server::start(maze::object config) {
   config_ = config;
 
   unsigned short port = (unsigned short)config_.get("port").get_int();

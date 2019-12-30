@@ -3,7 +3,7 @@
 
 #include <string>
 #include <boost/beast/http.hpp>
-#include <maze/maze_object.h>
+#include <maze/object.h>
 #include <core/framework/router.h>
 #include <core/framework/host.h>
 #include <core/framework/application.h>
@@ -19,7 +19,7 @@ class framework {
   std::string client_ip_;
   boost::beast::http::request<boost::beast::http::string_body>* request_;
   boost::beast::http::response<boost::beast::http::string_body>* response_;
-  maze::maze_object config_;
+  maze::object config_;
 
   router router_;
   host host_;
@@ -28,7 +28,7 @@ class framework {
   view view_;
 
   framework(
-    maze::maze_object config,
+    maze::object config,
     std::string client_ip,
     boost::beast::http::request<boost::beast::http::string_body>* request,
     boost::beast::http::response<boost::beast::http::string_body>* response);

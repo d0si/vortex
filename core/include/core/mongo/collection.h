@@ -3,8 +3,8 @@
 
 #include <string>
 #include <mongocxx/collection.hpp>
-#include <maze/maze_array.h>
-#include <maze/maze_object.h>
+#include <maze/array.h>
+#include <maze/object.h>
 
 namespace vortex {
 namespace core {
@@ -17,22 +17,22 @@ class collection {
  public:
   collection(mongocxx::collection collection);
 
-  maze::maze_array find(maze::maze_object query);
-  maze::maze_array find(std::string json_query);
-  maze::maze_object find_by_id(std::string oid);
-  maze::maze_object find_one(maze::maze_object query);
-  maze::maze_object find_one(std::string json_query);
+  maze::array find(maze::object query);
+  maze::array find(std::string json_query);
+  maze::object find_by_id(std::string oid);
+  maze::object find_one(maze::object query);
+  maze::object find_one(std::string json_query);
 
-  void delete_one(maze::maze_object query);
+  void delete_one(maze::object query);
   void delete_one(std::string json_query);
 
-  void insert_one(maze::maze_object value);
+  void insert_one(maze::object value);
   void insert_one(std::string json_value);
 
-  void insert_many(maze::maze_array values);
+  void insert_many(maze::array values);
   void insert_many(std::vector<std::string> json_values_array);
 
-  void replace_one(maze::maze_object query, maze::maze_object replacement_value);
+  void replace_one(maze::object query, maze::object replacement_value);
   void replace_one(std::string json_query, std::string json_replacement_value);
 };
 

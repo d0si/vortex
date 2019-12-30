@@ -3,7 +3,7 @@
 
 namespace maze {
 
-class maze_object;
+class object;
 
 }
 
@@ -17,9 +17,9 @@ void apply_config();
 void save_config();
 
 void start_server();
-void start_server(maze::maze_object config);
+void start_server(maze::object config);
 
-void start_http_server(maze::maze_object config);
+void start_http_server(maze::object config);
 
 }  // namespace vortex
 

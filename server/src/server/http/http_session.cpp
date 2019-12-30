@@ -13,7 +13,7 @@ namespace vortex {
 namespace server {
 namespace http {
 
-http_session::http_session(maze::maze_object config, tcp::socket socket)
+http_session::http_session(maze::object config, tcp::socket socket)
     : config_(config), stream_(std::move(socket)) {
 
 }
