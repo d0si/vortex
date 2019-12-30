@@ -17,16 +17,41 @@ namespace http {
 void http_server::start(maze::object config) {
   config_ = config;
 
-  unsigned short port = (unsigned short)config_.get("port").get_int();
+  maze::object server_config;
+  if (config_.is_object("server")) {
+    server_config = config_["server"].get_object();
+  }
 
   ip::address address;
 
-  address = ip::make_address("0.0.0.0");
+  if (server_config.is_string("address")) {
+    try {
+      address = ip::make_address(server_config["address"].get_string());
+    } catch (...) {
+      std::cout << "Server startup error: IP address resolution failed." << std::endl;
 
-  int threadCount = 4;
+      return;
+    }
+  } else {
+    address = ip::make_address("127.0.0.1");
+  }
+
+  unsigned short port;
+  if (server_config.is_int("port")) {
+    port = (unsigned short)server_config["port"].get_int();
+  } else {
+    port = 8080;
+  }
+
+  int thread_count;
+  if (server_config.is_int("thread_count")) {
+    thread_count = server_config["thread_count"].get_int();
+  } else {
+    thread_count = 4;
+  }
 
   try {
-    boost::asio::io_context ioContext{ threadCount };
+    boost::asio::io_context ioContext{ thread_count };
 
     std::make_shared<http_listener>(
       config_,
@@ -37,9 +62,9 @@ void http_server::start(maze::object config) {
     std::cout << "Starting http server on port " << port << std::endl;
 
     vector<std::thread> threads;
-    threads.reserve(threadCount - 1);
+    threads.reserve(thread_count - 1);
 
-    for (int i = threadCount - 1; i > 0; --i) {
+    for (int i = thread_count - 1; i > 0; --i) {
       threads.emplace_back([&ioContext] {
         ioContext.run();
       });
