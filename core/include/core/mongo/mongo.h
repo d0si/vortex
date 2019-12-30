@@ -15,13 +15,13 @@ namespace mongo {
 class mongo {
  private:
   mongocxx::client client_;
-  maze::object mongo_params_;
+  maze::object mongo_config_;
 
  public:
   mongo();
   mongo(maze::object mongo_params);
 
-  std::string get_connection_uri_from_params(maze::object mongo_params);
+  std::string get_connection_uri();
   std::string get_default_db_name();
 
   db get_db(std::string database_name);

@@ -10,46 +10,46 @@ mongo::mongo() {
   client_ = mongocxx::client{ uri };
 }
 
-mongo::mongo(maze::object mongo_params) : mongo_params_(mongo_params) {
-  mongocxx::uri uri{ get_connection_uri_from_params(mongo_params) };
+mongo::mongo(maze::object mongo_config) : mongo_config_(mongo_config) {
+  mongocxx::uri uri{ get_connection_uri() };
 
   client_ = mongocxx::client{ uri };
 }
 
-std::string mongo::get_connection_uri_from_params(maze::object mongo_params) {
+std::string mongo::get_connection_uri() {
   std::string uri = "mongodb://";
 
-  if (mongo_params.is_string("username") && mongo_params.is_string("password")) {
-    uri += mongo_params["username"].get_string() + ":" +
-           mongo_params["password"].get_string() + "@";
+  if (mongo_config_.is_string("username") && mongo_config_.is_string("password")) {
+    uri += mongo_config_["username"].get_string() + ":" +
+            mongo_config_["password"].get_string() + "@";
   }
 
-  if (mongo_params.is_string("host")) {
-    uri += mongo_params["host"].get_string();
+  if (mongo_config_.is_string("host")) {
+    uri += mongo_config_["host"].get_string();
   } else {
     uri += "localhost";
   }
 
-  if (mongo_params.is_int("port")) {
-    int port = mongo_params["port"].get_int();
+  if (mongo_config_.is_int("port")) {
+    int port = mongo_config_["port"].get_int();
 
     if (port > 0) {
       uri += ":" + std::to_string(port);
     }
   }
 
-  if (mongo_params.is_string("database")) {
-    uri += "/" + mongo_params["database"].get_string();
+  if (mongo_config_.is_string("database")) {
+    uri += "/" + mongo_config_["database"].get_string();
   }
 
   return uri;
 }
 
 std::string mongo::get_default_db_name() {
-  if (mongo_params_.is_string("default_database")) {
-    return mongo_params_["default_database"].get_string();
-  } else if (mongo_params_.is_string("database")) {
-    return mongo_params_["database"].get_string();
+  if (mongo_config_.is_string("default_database")) {
+    return mongo_config_["default_database"].get_string();
+  } else if (mongo_config_.is_string("database")) {
+    return mongo_config_["database"].get_string();
   } else {
     return "vortex";
   }
