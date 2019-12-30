@@ -19,6 +19,7 @@ framework::framework(
     application_(this),
     controller_(this),
     view_(this) {
+  mongo_ = mongo::mongo(config_["mongo"].get_object());
 }
 
 void framework::setup() {

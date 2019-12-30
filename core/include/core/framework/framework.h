@@ -9,6 +9,7 @@
 #include <core/framework/application.h>
 #include <core/framework/controller.h>
 #include <core/framework/view.h>
+#include <core/mongo/mongo.h>
 
 namespace vortex {
 namespace core {
@@ -26,6 +27,7 @@ class framework {
   application application_;
   controller controller_;
   view view_;
+  mongo::mongo mongo_;
 
   framework(
     maze::object config,

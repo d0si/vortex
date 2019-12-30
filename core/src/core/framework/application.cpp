@@ -8,15 +8,18 @@ namespace framework {
 application::application(framework* framework) : framework_(framework) {
 }
 
-void application::find(std::string appId) {
+void application::find(std::string app_id) {
+  application_ = framework_->mongo_
+    .get_collection("apps")
+    .find_by_id(app_id);
 }
 
 std::string application::get_id() {
-  return "";
+  return application_["_id"].get_object()["$oid"].get_string();
 }
 
 std::string application::get_title() {
-    return "";
+  return application_["title"].get_string();
 }
 
 }  // namespace framework
