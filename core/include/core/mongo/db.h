@@ -21,7 +21,7 @@ class db {
 
   collection get_collection(std::string collection_name);
 
-  std::vector<std::string> list_collection();
+  std::vector<std::string> list_collections();
 
   void drop_database();
 };
