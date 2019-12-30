@@ -7,14 +7,23 @@ add_library(${PROJECT_NAME}
 
 add_library(vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+find_package(Boost REQUIRED COMPONENTS system)
+find_package(libmongocxx REQUIRED)
+
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}/include
     PUBLIC ${Boost_INCLUDE_DIRS}
-    # TODO: Includes for mongodb, v8...
+    PUBLIC ${LIBMONGOCXX_INCLUDE_DIRS}
+    # TODO: Includes for v8...
 )
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC vortex::maze
     PUBLIC ${Boost_LIBRARIES}
-    # TODO: References to mongodb, v8...
+    PUBLIC ${LIBMONGOCXX_LIBRARIES}
+    # TODO: References to v8...
+)
+
+target_compile_definitions(${PROJECT_NAME}
+    PUBLIC ${LIBMONGOCXX_DEFINITIONS}
 )
