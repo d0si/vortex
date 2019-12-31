@@ -2,6 +2,7 @@
 #define VORTEX_CORE_FRAMEWORK_HOST_H
 
 #include <string>
+#include <maze/object.h>
 
 namespace vortex {
 namespace core {
@@ -12,6 +13,7 @@ class framework;
 class host {
  private:
   framework* framework_;
+  maze::object host_;
 
  public:
   host(framework* framework);
@@ -20,7 +22,7 @@ class host {
 
   std::string get_id();
   std::string get_host();
-  std::string get_app();
+  std::string get_app_id();
 };
 
 }  // namespace framework

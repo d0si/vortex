@@ -24,7 +24,7 @@ class controller {
 
   std::string get_id();
   std::string get_name();
-  maze::array get_apps();
+  maze::array get_app_ids();
   std::string get_script();
   std::string get_content_type();
   std::string get_method();

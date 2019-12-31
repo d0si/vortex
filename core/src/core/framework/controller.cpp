@@ -30,8 +30,8 @@ std::string controller::get_name() {
   return controller_["name"].get_string();
 }
 
-maze::array controller::get_apps() {
-  return controller_["apps"].get_array();
+maze::array controller::get_app_ids() {
+  return controller_["app_ids"].get_array();
 }
 
 std::string controller::get_script() {
