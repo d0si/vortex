@@ -86,6 +86,34 @@ void router::setup() {
       } else if (type == "arg" && i < parts_count) {
         args_.push_back(request_uri_parts[i]);
       }
+    } else if (url_scheme->is_object()) {
+      maze::object scheme = url_scheme->get_object();
+
+      if (scheme.is_string("type")) {
+        std::string type = scheme["type"].get_string();
+
+        if (type == "lang") {
+          if (scheme.is_string("value")) {
+            lang_ = scheme["value"].get_string();
+          } else if (i < parts_count) {
+            std::string lang;
+
+            if (scheme.is_string("prefix")) {
+              lang += scheme["prefix"].get_string();
+            }
+
+            lang += request_uri_parts[i];
+
+            if (scheme.is_string("suffix")) {
+              lang += scheme["suffix"].get_string();
+            }
+
+            lang_ = lang;
+          } else if (scheme.is_string("default_value")) {
+            lang_ = scheme["default_value"].get_string();
+          }
+        }
+      }
     }
 
     i++;
