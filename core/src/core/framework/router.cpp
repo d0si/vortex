@@ -112,6 +112,26 @@ void router::setup() {
           } else if (scheme.is_string("default_value")) {
             lang_ = scheme["default_value"].get_string();
           }
+        } else if (type == "controller") {
+          if (scheme.is_string("value")) {
+            controller_parts.push_back(scheme["value"].get_string());
+          } else if (i < parts_count) {
+            std::string controller;
+
+            if (scheme.is_string("prefix")) {
+              controller += scheme["prefix"].get_string();
+            }
+
+            controller += request_uri_parts[i];
+
+            if (scheme.is_string("suffix")) {
+              controller += scheme["suffix"].get_string();
+            }
+
+            controller_parts.push_back(controller);
+          } else if (scheme.is_string("default_value")) {
+            controller_parts.push_back(scheme["default_value"].get_string());
+          }
         }
       }
     }
