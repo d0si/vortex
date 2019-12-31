@@ -176,6 +176,16 @@ void router::setup() {
     i++;
   }
 
+  if (controller_parts.size() > 0) {
+    std::string controller_str;
+
+    for (int i = 0; i < controller_parts.size(); ++i) {
+      controller_str += controller_parts[i] + "/";
+    }
+    controller_str.erase(controller_str.length() - 1);
+
+    controller_ = controller_str;
+  }
 }
 
 std::string router::get_hostname() {
