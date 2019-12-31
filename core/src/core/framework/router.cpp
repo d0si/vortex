@@ -66,6 +66,31 @@ void router::setup() {
     request_uri_parts.push_back(request_uri_part);
   }
 
+  int i = 0;
+  int parts_count = request_uri_parts.size();
+
+  std::vector<std::string> controller_parts;
+  maze::array url_schemes = router_config["url_schemes"].get_array();
+  for (auto url_scheme = url_schemes.begin(); url_scheme != url_schemes.end(); url_scheme++) {
+    if (url_scheme->is_string()) {
+      std::string type = url_scheme->get_string();
+
+      if (type == "lang" && i < parts_count) {
+        lang_ = request_uri_parts[i];
+      } else if (type == "controller" && i < parts_count) {
+        controller_parts.push_back(request_uri_parts[i]);
+      } else if (type == "args" && i < parts_count) {
+        for (; i < parts_count; i++) {
+          args_.push_back(request_uri_parts[i]);
+        }
+      } else if (type == "arg" && i < parts_count) {
+        args_.push_back(request_uri_parts[i]);
+      }
+    }
+
+    i++;
+  }
+
 }
 
 std::string router::get_hostname() {
