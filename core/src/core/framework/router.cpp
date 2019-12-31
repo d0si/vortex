@@ -17,7 +17,7 @@ void router::setup() {
   // TODO(Ziga)
 }
 
-std::string router::get_host() {
+std::string router::get_hostname() {
   return framework_->request_->base()[boost::beast::http::field::host].to_string();
 }
 

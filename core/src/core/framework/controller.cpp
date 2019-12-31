@@ -16,7 +16,7 @@ void controller::find(std::string app_id, std::string name, std::string method) 
 
   controller_ = framework_->mongo_
     .get_collection("controllers")
-    .find_one(query));
+    .find_one(query);
 }
 
 void controller::run() {

@@ -21,7 +21,7 @@ class host {
   void find(std::string hostname);
 
   std::string get_id();
-  std::string get_host();
+  std::string get_hostname();
   std::string get_app_id();
 };
 

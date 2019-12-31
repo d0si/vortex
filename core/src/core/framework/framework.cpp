@@ -23,7 +23,7 @@ framework::framework(
 }
 
 void framework::setup() {
-  host_.find(router_.get_host());
+  host_.find(router_.get_hostname());
 
   // TODO(Ziga)
 }

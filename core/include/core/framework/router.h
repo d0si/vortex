@@ -23,7 +23,7 @@ class router {
   router(framework* framework);
 
   void setup();
-  std::string get_host();
+  std::string get_hostname();
   std::string get_lang();
   std::string get_controller();
   std::vector<std::string> get_args();
