@@ -24,8 +24,17 @@ framework::framework(
 
 void framework::setup() {
   host_.find(router_.get_hostname());
+  application_.find(host_.get_app_id());
 
-  // TODO(Ziga)
+  config_.apply(application_.get_config());
+  config_.apply(host_.get_config());
+
+  router_.setup();
+
+  controller_.find(
+    application_.get_id(),
+    router_.get_controller(),
+    request_->method_string().to_string());
 }
 
 void framework::run() {
