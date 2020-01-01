@@ -3,6 +3,7 @@
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
 #include <core/framework/framework.h>
+#include <mongocxx/exception/exception.hpp>
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -77,6 +78,10 @@ void http_session::on_read(error_code ec, std::size_t bytes_transferred) {
     framework->run();
   } catch (int e) {
 
+  } catch (mongocxx::exception::runtime_error e) {
+    res_.result(boost::beast::http::status::internal_server_error);
+    std::string what = e.what();
+    res_.body() = "MongoDb exception: " + what;
   } catch (...) {
     res_.result(boost::beast::http::status::internal_server_error);
     res_.body() = "Internal server error";
