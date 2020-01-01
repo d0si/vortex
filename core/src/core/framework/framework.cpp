@@ -38,8 +38,12 @@ void framework::setup() {
 }
 
 void framework::run() {
-  // TODO(Ziga)
 
+  controller_.run();
+
+  view_.echo(router_.get_controller());
+
+  view_.output();
   throw(0);
 }
 
