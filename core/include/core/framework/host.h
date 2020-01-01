@@ -23,6 +23,7 @@ class host {
   std::string get_id();
   std::string get_hostname();
   std::string get_app_id();
+  maze::object get_config();
 };
 
 }  // namespace framework

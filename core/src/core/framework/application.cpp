@@ -22,6 +22,10 @@ std::string application::get_title() {
   return application_["title"].get_string();
 }
 
+maze::object application::get_config() {
+  return application_["config"].get_object();
+}
+
 }  // namespace framework
 }  // namespace core
 }  // namespace vortex

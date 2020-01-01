@@ -26,6 +26,10 @@ std::string host::get_app_id() {
     return host_["app_id"].get_string();
 }
 
+maze::object host::get_config() {
+  return host_["config"].get_object();
+}
+
 }  // namespace framework
 }  // namespace core
 }  // namespace vortex
