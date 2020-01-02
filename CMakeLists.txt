@@ -8,6 +8,9 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_LIBRARY_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_BUILD_TYPE Debug)
 
+# Include dependency projects (should be added as submodules ASAP)
+add_subdirectory(libs/cpp_redis)
+
 # Include subprojects
 add_subdirectory(maze)
 add_subdirectory(core)
