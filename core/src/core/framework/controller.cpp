@@ -10,7 +10,9 @@ controller::controller(framework* framework) : framework_(framework) {
 
 void controller::find(std::string app_id, std::string name, std::string method) {
   maze::object query;
-  query["app_id"] = app_id;
+  query["$or"] = maze::object("$or", maze::array()
+    << maze::object("app_id", app_id)
+    << maze::object("app_id", maze::element::get_null()));
   query["name"] = name;
   query["method"] = method;
 

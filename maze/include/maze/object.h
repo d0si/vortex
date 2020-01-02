@@ -17,7 +17,7 @@ class object {
  public:
   object();
   object(std::string index);
-  object(std::string index, element &maze);
+  object(std::string index, element maze);
   object(std::string index, std::string value);
   object(std::string index, const char* value);
   object(std::string index, int value);

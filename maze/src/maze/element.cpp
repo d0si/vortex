@@ -287,4 +287,10 @@ element element::from_json(std::string json_string) {
   return helpers::element::from_json(nlohmann::json::parse(json_string));
 }
 
+element element::get_null() {
+  element el;
+  el.set_null();
+  return el;
+}
+
 }  // namespace maze

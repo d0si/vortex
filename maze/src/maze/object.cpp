@@ -11,7 +11,7 @@ object::object(std::string index) {
   insert_null(index);
 }
 
-object::object(std::string index, element &maze) {
+object::object(std::string index, element maze) {
   insert(index, maze);
 }
 

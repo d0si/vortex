@@ -88,6 +88,8 @@ class element {
   void apply_json(std::string json_string);
 
   static element from_json(std::string json_string);
+
+  static element get_null();
 };
 
 }  // namespace maze
