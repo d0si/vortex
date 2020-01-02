@@ -1,6 +1,7 @@
 #include <core/framework/router.h>
 #include <core/framework/framework.h>
 #include <maze/object.h>
+#include <maze/element.h>
 
 namespace vortex {
 namespace core {

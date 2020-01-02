@@ -4,6 +4,7 @@
 #include <sstream>
 #include <thread>
 #include <maze/object.h>
+#include <maze/array.h>
 #include <server/http/http_server.h>
 
 namespace vortex {

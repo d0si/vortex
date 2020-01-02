@@ -1,11 +1,14 @@
 #include <maze/helpers.h>
+#include <maze/element.h>
+#include <maze/array.h>
+#include <maze/object.h>
 
 namespace maze {
 namespace helpers {
 namespace element {
 
-nlohmann::json to_json_element(maze::element* el) {
-  nlohmann::json json_el;
+json to_json_element(maze::element* el) {
+  json json_el;
 
   switch (el->get_type()) {
     case type::Null:
@@ -37,11 +40,11 @@ nlohmann::json to_json_element(maze::element* el) {
   return json_el;
 }
 
-void apply_json(maze::element* el, nlohmann::json json) {
+void apply_json(maze::element* el, json json) {
   el->apply(from_json(json));
 }
 
-maze::element from_json(nlohmann::json json) {
+maze::element from_json(json json) {
   maze::element el;
 
   if (json.is_boolean()) {
@@ -66,8 +69,8 @@ maze::element from_json(nlohmann::json json) {
 }  // namespace element
 namespace array {
 
-nlohmann::json to_json_array(maze::array* array) {
-  nlohmann::json json_arr = nlohmann::json::array();
+json to_json_array(maze::array* array) {
+  json json_arr = json::array();
 
   auto mazes = array->get_mazes();
   for (unsigned int i = 0; i < mazes.size(); i++) {
@@ -104,7 +107,7 @@ nlohmann::json to_json_array(maze::array* array) {
   return json_arr;
 }
 
-maze::array from_json(nlohmann::json json_array) {
+maze::array from_json(json json_array) {
   maze::array arr;
 
   for (auto it = json_array.begin(); it != json_array.end(); it++) {
@@ -131,8 +134,8 @@ maze::array from_json(nlohmann::json json_array) {
 }  // namespace array
 namespace object {
 
-nlohmann::json to_json_object(maze::object* object) {
-  nlohmann::json json_obj = nlohmann::json::object();
+json to_json_object(maze::object* object) {
+  json json_obj = json::object();
   auto mazes = object->get_mazes();
 
   for (auto m : mazes) {
@@ -171,7 +174,7 @@ nlohmann::json to_json_object(maze::object* object) {
   return json_obj;
 }
 
-maze::object from_json(nlohmann::json json_object) {
+maze::object from_json(json json_object) {
   maze::object obj;
 
   for (auto it = json_object.begin(); it != json_object.end(); it++) {

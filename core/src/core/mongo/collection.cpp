@@ -1,5 +1,6 @@
 #include <core/mongo/collection.h>
 #include <bsoncxx/json.hpp>
+#include <maze/element.h>
 
 namespace vortex {
 namespace core {

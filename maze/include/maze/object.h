@@ -4,12 +4,8 @@
 #include <string>
 #include <vector>
 #include <maze/element.h>
-#include <maze/type.h>
 
 namespace maze {
-
-class element;
-class array;
 
 class object {
  private:

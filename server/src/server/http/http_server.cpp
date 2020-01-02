@@ -5,6 +5,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <server/http/http_listener.h>
+#include <maze/element.h>
 
 using std::string;
 using std::vector;

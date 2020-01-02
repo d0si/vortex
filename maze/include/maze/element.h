@@ -3,11 +3,12 @@
 
 #include <string>
 #include <memory>
-#include <maze/array.h>
-#include <maze/object.h>
 #include <maze/type.h>
 
 namespace maze {
+
+class array;
+class object;
 
 class element {
  private:

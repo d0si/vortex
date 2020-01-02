@@ -1,4 +1,5 @@
 #include <core/mongo/mongo.h>
+#include <maze/element.h>
 
 namespace vortex {
 namespace core {
