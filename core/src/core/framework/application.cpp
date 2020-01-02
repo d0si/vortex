@@ -9,9 +9,20 @@ application::application(framework* framework) : framework_(framework) {
 }
 
 void application::find(std::string app_id) {
-  application_ = framework_->mongo_
-    .get_collection("apps")
-    .find_by_id(app_id);
+  std::string redis_key = "vortex.core.application.value." + app_id;
+  if (framework_->redis_->exists(redis_key)) {
+    application_ = maze::object::from_json(framework_->redis_->get(redis_key));
+  }
+
+  if (application_.is_empty()) {
+    application_ = framework_->mongo_
+            .get_collection("apps")
+            .find_by_id(app_id);
+
+    if (!application_.is_empty()) {
+      framework_->redis_->set(redis_key, application_.to_json(0));
+    }
+  }
 
   if (application_.is_empty()) {
     framework_->view_.echo("Application associated with this hostname does not exist");
