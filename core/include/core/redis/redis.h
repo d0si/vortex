@@ -17,7 +17,10 @@ class redis {
 
   void connect();
   std::string get(std::string key);
-  void set(std::string key, std::string value);
+  void set(std::string key, std::string value, int expire_seconds = 180);
+  bool exists(std::string key);
+  void del(std::string key);
+  void expire(std::string key, int seconds);
 };
 
 }  // namespace redis
