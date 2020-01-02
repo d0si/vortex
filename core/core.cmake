@@ -9,4 +9,6 @@ SET(core_SRC
     src/core/mongo/mongo.cpp
     src/core/mongo/db.cpp
     src/core/mongo/collection.cpp
+
+    src/core/redis/redis.cpp
 )
