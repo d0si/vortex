@@ -72,6 +72,7 @@ void http_session::on_read(error_code ec, std::size_t bytes_transferred) {
   try {
     framework = new core::framework::framework(
       config_,
+      redis_,
       stream_.socket().remote_endpoint().address().to_string(),
       &req_,
       &res_);

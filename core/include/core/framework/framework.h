@@ -10,6 +10,7 @@
 #include <core/framework/controller.h>
 #include <core/framework/view.h>
 #include <core/mongo/mongo.h>
+#include <core/redis/redis.h>
 
 namespace vortex {
 namespace core {
@@ -21,6 +22,7 @@ class framework {
   boost::beast::http::request<boost::beast::http::string_body>* request_;
   boost::beast::http::response<boost::beast::http::string_body>* response_;
   maze::object config_;
+  redis::redis* redis_;
 
   router router_;
   host host_;
@@ -31,6 +33,7 @@ class framework {
 
   framework(
     maze::object config,
+    redis::redis* redis,
     std::string client_ip,
     boost::beast::http::request<boost::beast::http::string_body>* request,
     boost::beast::http::response<boost::beast::http::string_body>* response);
