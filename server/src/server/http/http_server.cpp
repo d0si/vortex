@@ -16,6 +16,7 @@ namespace http {
 
 void http_server::start(maze::object config) {
   config_ = config;
+  redis_.connect();
 
   maze::object server_config;
   if (config_.is_object("server")) {
@@ -55,6 +56,7 @@ void http_server::start(maze::object config) {
 
     std::make_shared<http_listener>(
       config_,
+      &redis_,
       ioContext,
       ip::tcp::endpoint{ address, port })
       ->run();

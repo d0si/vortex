@@ -4,6 +4,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <maze/object.h>
+#include <core/redis/redis.h>
 
 namespace vortex {
 namespace server {
@@ -14,10 +15,12 @@ class http_listener : public std::enable_shared_from_this<http_listener> {
   boost::asio::io_context& ioC_;
   boost::asio::ip::tcp::acceptor acceptor_;
   maze::object config_;
+  vortex::core::redis::redis* redis_;
 
  public:
   http_listener(
     maze::object config,
+    vortex::core::redis::redis* redis,
     boost::asio::io_context& ioC,
     boost::asio::ip::tcp::endpoint endpoint);
 

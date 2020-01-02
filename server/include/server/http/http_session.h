@@ -8,6 +8,7 @@
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <maze/object.h>
+#include <core/redis/redis.h>
 
 namespace vortex {
 namespace server {
@@ -20,9 +21,13 @@ class http_session : public std::enable_shared_from_this<http_session> {
   boost::beast::http::request<boost::beast::http::string_body> req_;
   boost::beast::http::response<boost::beast::http::string_body> res_;
   maze::object config_;
+  vortex::core::redis::redis* redis_;
 
  public:
-  explicit http_session(maze::object config, boost::asio::ip::tcp::socket socket);
+  explicit http_session(
+    maze::object config,
+    vortex::core::redis::redis* redis,
+    boost::asio::ip::tcp::socket socket);
 
   void run();
   void do_read();

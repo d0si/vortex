@@ -2,6 +2,7 @@
 #define VORTEX_SERVER_HTTP_HTTP_SERVER_H
 
 #include <maze/object.h>
+#include <core/redis/redis.h>
 
 namespace vortex {
 namespace server {
@@ -10,6 +11,7 @@ namespace http {
 class http_server {
  private:
   maze::object config_;
+  vortex::core::redis::redis redis_;
 
  public:
   void start(maze::object config);

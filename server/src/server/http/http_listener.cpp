@@ -14,8 +14,12 @@ namespace vortex {
 namespace server {
 namespace http {
 
-http_listener::http_listener(maze::object config, asio::io_context& ioC, tcp::endpoint endpoint)
-    : config_(config), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
+http_listener::http_listener(
+  maze::object config,
+  vortex::core::redis::redis* redis,
+  asio::io_context& ioC,
+  tcp::endpoint endpoint)
+    : config_(config), redis_(redis), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
   error_code ec;
 
   acceptor_.open(endpoint.protocol(), ec);
@@ -70,6 +74,7 @@ void http_listener::on_accept(error_code ec, tcp::socket socket) {
   } else {
     std::make_shared<http_session>(
       config_,
+      redis_,
       std::move(socket))
       ->run();
   }
