@@ -12,6 +12,11 @@ void host::find(std::string hostname) {
   host_ = framework_->mongo_
     .get_collection("hosts")
     .find_one(maze::object("hostname", hostname));
+
+  if (host_.is_empty()) {
+    framework_->view_.echo("Nothing is running on this hostname");
+    framework_->exit();
+  }
 }
 
 std::string host::get_id() {

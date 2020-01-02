@@ -12,6 +12,11 @@ void application::find(std::string app_id) {
   application_ = framework_->mongo_
     .get_collection("apps")
     .find_by_id(app_id);
+
+  if (application_.is_empty()) {
+    framework_->view_.echo("Application associated with this hostname does not exist");
+    framework_->exit();
+  }
 }
 
 std::string application::get_id() {

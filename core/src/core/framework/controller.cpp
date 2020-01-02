@@ -17,6 +17,12 @@ void controller::find(std::string app_id, std::string name, std::string method) 
   controller_ = framework_->mongo_
     .get_collection("controllers")
     .find_one(query);
+
+
+  if (controller_.is_empty()) {
+    framework_->view_.echo("Controller " + name + " not found.");
+    framework_->exit();
+  }
 }
 
 void controller::run() {
