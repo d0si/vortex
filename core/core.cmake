@@ -11,4 +11,7 @@ SET(core_SRC
     src/core/mongo/collection.cpp
 
     src/core/redis/redis.cpp
+
+    src/core/script/script.cpp
+    src/core/script/duktape.cpp
 )
