@@ -9,7 +9,7 @@ view::view(framework* framework) : framework_(framework) {
 }
 
 void view::output() {
-  // parse_template();
+  rendered_ = parse_template();
 
   respond();
 }
@@ -138,6 +138,60 @@ std::string view::parse(std::string code) {
   }
 
   return rendered;
+}
+
+void view::set_template(std::string name) {
+  maze::object query("name", name);
+  query.set("app_ids", framework_->application_.get_id());
+
+  template_ = framework_->mongo_.get_collection("templates")
+    .find_one(query);
+
+  if (template_.is_empty()) {
+    query.set_null("app_ids");
+
+    template_ = framework_->mongo_.get_collection("templates")
+      .find_one(query);
+  }
+
+  if (template_.is_empty()) {
+    template_.set("contents", "Template " + name + " not found");
+  }
+}
+
+std::string view::parse_template() {
+  if (template_.is_string("contents")) {
+    return parse(template_["contents"].get_string());
+  }
+
+  return "";
+}
+
+void view::set_page(std::string name) {
+  maze::object query("name", name);
+  query.set("app_ids", framework_->application_.get_id());
+
+  page_ = framework_->mongo_.get_collection("pages")
+          .find_one(query);
+
+  if (page_.is_empty()) {
+    query.set_null("app_ids");
+
+    page_ = framework_->mongo_.get_collection("pages")
+            .find_one(query);
+  }
+
+  if (page_.is_empty()) {
+    page_.set("contents", "Page " + name + " not found");
+  }
+}
+
+std::string view::parse_page() {
+  if (template_.is_string("contents")) {
+    return parse(template_["contents"].get_string());
+  }
+
+  return "";
 }
 
 }  // namespace framework

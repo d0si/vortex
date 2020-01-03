@@ -25,14 +25,14 @@ class view {
   void respond();
   void echo(std::string contents);
   void clear();
-  std::string parse(std::string code);
   void finish();
+  std::string parse(std::string code);
 
   void set_template(std::string name);
-  void parse_template();
+  std::string parse_template();
 
   void set_page(std::string name);
-  void parse_page();
+  std::string parse_page();
 };
 
 }  // namespace framework
