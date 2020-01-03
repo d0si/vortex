@@ -43,6 +43,14 @@ maze::object application::get_config() {
   return application_["config"].get_object();
 }
 
+std::string application::get_script() {
+  return application_["script"].get_string();
+}
+
+std::string application::get_post_script() {
+  return application_["post_script"].get_string();
+}
+
 }  // namespace framework
 }  // namespace core
 }  // namespace vortex

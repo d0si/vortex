@@ -45,10 +45,13 @@ void framework::setup() {
 }
 
 void framework::run() {
+  script_.exec(application_.get_script());
+  script_.exec(host_.get_script());
+  script_.exec(controller_.get_script());
 
-  controller_.run();
-
-  view_.echo(router_.get_controller());
+  script_.exec(application_.get_post_script());
+  script_.exec(host_.get_post_script());
+  script_.exec(controller_.get_post_script());
 
   view_.output();
   throw(0);

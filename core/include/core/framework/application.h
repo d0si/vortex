@@ -23,6 +23,8 @@ class application {
   std::string get_id();
   std::string get_title();
   maze::object get_config();
+  std::string get_script();
+  std::string get_post_script();
 };
 
 }  // namespace framework

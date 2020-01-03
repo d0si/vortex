@@ -28,9 +28,6 @@ void controller::find(std::string app_id, std::string name, std::string method) 
   }
 }
 
-void controller::run() {
-}
-
 std::string controller::get_id() {
   return controller_["_id"].get_object()["$oid"].get_string();
 }
@@ -45,6 +42,10 @@ maze::array controller::get_app_ids() {
 
 std::string controller::get_script() {
   return controller_["script"].get_string();
+}
+
+std::string controller::get_post_script() {
+  return controller_["post_script"].get_string();
 }
 
 std::string controller::get_content_type() {

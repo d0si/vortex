@@ -20,12 +20,12 @@ class controller {
   controller(framework* framework);
 
   void find(std::string app_id, std::string name, std::string method);
-  void run();
 
   std::string get_id();
   std::string get_name();
   maze::array get_app_ids();
   std::string get_script();
+  std::string get_post_script();
   std::string get_content_type();
   std::string get_method();
 };
