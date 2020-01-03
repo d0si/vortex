@@ -9,7 +9,7 @@ view::view(framework* framework) : framework_(framework) {
 }
 
 void view::output() {
-  rendered_ = parse_template();
+  rendered_ += parse_template();
 
   respond();
 }
