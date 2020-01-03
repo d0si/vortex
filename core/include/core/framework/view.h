@@ -2,6 +2,7 @@
 #define VORTEX_CORE_FRAMEWORK_VIEW_H
 
 #include <string>
+#include <maze/object.h>
 
 namespace vortex {
 namespace core {
@@ -14,6 +15,8 @@ class view {
   framework* framework_;
 
   std::string rendered_;
+  maze::object template_;
+  maze::object page_;
 
  public:
   view(framework* framework);
@@ -22,7 +25,7 @@ class view {
   void respond();
   void echo(std::string contents);
   void clear();
-  void parse(std::string code);
+  std::string parse(std::string code);
   void finish();
 
   void set_template(std::string name);
