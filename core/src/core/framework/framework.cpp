@@ -21,12 +21,16 @@ framework::framework(
     host_(this),
     application_(this),
     controller_(this),
-    view_(this) {
+    view_(this),
+    script_(this) {
   mongo_ = mongo::mongo(config_["mongo"].get_object());
 }
 
 void framework::setup() {
   host_.find(router_.get_hostname());
+
+  script_.setup();
+
   application_.find(host_.get_app_id());
 
   config_.apply(application_.get_config());
