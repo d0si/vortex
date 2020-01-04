@@ -83,9 +83,19 @@ public:
 
   application(vortex::core::framework::framework *framework) : framework_(framework) {}
 
+  std::string get_id() {
+    return framework_->application_.get_id();
+  }
+
+  std::string get_title() {
+    return framework_->application_.get_title();
+  }
+
   template<class Inspector>
   static void inspect(Inspector &i) {
     i.construct(&std::make_shared<view>);
+    i.method("get_id", &application::get_id);
+    i.method("get_title", &application::get_title);
   }
 };
 
