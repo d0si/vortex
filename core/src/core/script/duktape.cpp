@@ -53,9 +53,24 @@ public:
 
   router(vortex::core::framework::framework *framework) : framework_(framework) {}
 
+  std::string get_hostname() {
+    return framework_->router_.get_hostname();
+  }
+  
+  std::string get_lang() {
+    return framework_->router_.get_lang();
+  }
+
+  std::string get_controller() {
+    return framework_->router_.get_controller();
+  }
+
   template<class Inspector>
   static void inspect(Inspector &i) {
     i.construct(&std::make_shared<view>);
+    i.method("get_hostname", &router::get_hostname);
+    i.method("get_lang", &router::get_lang);
+    i.method("get_controller", &router::get_controller);
   }
 }
 
