@@ -72,7 +72,22 @@ public:
     i.method("get_lang", &router::get_lang);
     i.method("get_controller", &router::get_controller);
   }
-}
+};
+
+class application {
+private:
+  vortex::core::framework::framework *framework_;
+
+public:
+  application() {}
+
+  application(vortex::core::framework::framework *framework) : framework_(framework) {}
+
+  template<class Inspector>
+  static void inspect(Inspector &i) {
+    i.construct(&std::make_shared<view>);
+  }
+};
 
 }  // namespace duktape_bindings
 
@@ -94,9 +109,11 @@ void duktape::setup() {
   ctx_->registerClass<duktape_bindings::view>();
   auto view = std::make_shared<duktape_bindings::view>(framework_);
   auto router = std::make_shared<duktape_bindings::router>(framework_);
+  auto application = std::make_shared<duktape_bindings::application>(framework_);
 
   ctx_->addGlobal("__view", view);
   ctx_->addGlobal("__router", router);
+  ctx_->addGlobal("__application", application);
 
   exec("view=__view;router=__router;");
 }
