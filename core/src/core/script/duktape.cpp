@@ -67,7 +67,7 @@ public:
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<view>);
+    i.construct(&std::make_shared<router>);
     i.method("get_hostname", &router::get_hostname);
     i.method("get_lang", &router::get_lang);
     i.method("get_controller", &router::get_controller);
@@ -93,11 +93,14 @@ public:
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<view>);
+    i.construct(&std::make_shared<application>);
     i.method("get_id", &application::get_id);
     i.method("get_title", &application::get_title);
   }
 };
+
+class db;
+class collection;
 
 class mongo {
 private:
@@ -107,6 +110,36 @@ public:
   mongo() {}
 
   mongo(vortex::core::framework::framework *framework) : framework_(framework) {}
+
+  std::string get_default_db_name() {
+    return framework_->mongo_.get_default_db_name();
+  }
+
+  std::vector<std::string> list_databases() {
+    return framework_->mongo_.list_databases();
+  }
+
+  std::vector<std::string> list_collections(std::string database_name) {
+    return framework_->mongo_.list_collections(database_name);
+  }
+
+  void drop_database(std::string database_name) {
+    framework_->mongo_.drop_database(database_name);
+  }
+
+  void clone_database(std::string old_name, std::string new_name) {
+    framework_->mongo_.clone_database(old_name, new_name);
+  }
+
+  template<class Inspector>
+  static void inspect(Inspector &i) {
+    i.construct(&std::make_shared<mongo>);
+    i.method("get_default_db_name", &mongo::get_default_db_name);
+    i.method("list_databases", &mongo::list_databases);
+    i.method("list_collections", &mongo::list_collections);
+    i.method("drop_database", &mongo::drop_database);
+    i.method("clone_database", &mongo::clone_database);
+  }
 }
 
 }  // namespace duktape_bindings
@@ -132,12 +165,14 @@ void duktape::setup() {
   auto view = std::make_shared<duktape_bindings::view>(framework_);
   auto router = std::make_shared<duktape_bindings::router>(framework_);
   auto application = std::make_shared<duktape_bindings::application>(framework_);
+  auto mongo = std::make_shared<duktape_bindings::mongo>(framework_);
 
   ctx_->addGlobal("__view", view);
   ctx_->addGlobal("__router", router);
   ctx_->addGlobal("__application", application);
+  ctx_->addGlobal("__mongo", mongo);
 
-  exec("view=__view;router=__router;");
+  exec("view=__view;router=__router;application=__application;mongo=__mongo;");
 }
 
 void duktape::exec(std::string script) {
