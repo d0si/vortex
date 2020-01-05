@@ -99,11 +99,22 @@ public:
   }
 };
 
+class mongo {
+private:
+  vortex::core::framework::framework *framework_;
+
+public:
+  mongo() {}
+
+  mongo(vortex::core::framework::framework *framework) : framework_(framework) {}
+}
+
 }  // namespace duktape_bindings
 
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::view);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::router);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::application);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::mongo);
 
 namespace vortex {
 namespace core {
