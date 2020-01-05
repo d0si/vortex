@@ -103,6 +103,7 @@ public:
 
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::view);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::router);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::application);
 
 namespace vortex {
 namespace core {
