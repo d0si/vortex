@@ -99,8 +99,40 @@ public:
   }
 };
 
-class db;
-class collection;
+class collection {
+private:
+  vortex::core::framework::framework *framework_;
+  std::string db_name_;
+  std::string collection_name_;
+
+public:
+  collection() {}
+
+  collection(vortex::core::framework::framework *framework, std::string db_name, std::string collection_name)
+          : framework_(framework), db_name_(db_name), collection_name_(collection_name) {}
+
+  template<class Inspector>
+  static void inspect(Inspector &i) {
+    i.construct(&std::make_shared<collection>);
+  }
+};
+
+class db {
+private:
+  vortex::core::framework::framework *framework_;
+  std::string db_name_;
+
+public:
+  db() {}
+
+  db(vortex::core::framework::framework *framework, std::string db_name)
+          : framework_(framework), db_name_(db_name) {}
+
+  template<class Inspector>
+  static void inspect(Inspector &i) {
+    i.construct(&std::make_shared<db>);
+  }
+};
 
 class mongo {
 private:
@@ -128,11 +160,11 @@ public:
   }
 
   collection get_collection(std::string collection_name) {
-    return get_collection(get_default_db_name, collection_name);
+    return get_collection(get_default_db_name(), collection_name);
   }
 
   collection get_collection(std::string database_name, std::string collection_name) {
-    return collection(database_name, collection_name);
+    return collection(framework_, database_name, collection_name);
   }
 
   void drop_database(std::string database_name) {
@@ -150,44 +182,9 @@ public:
     i.method("list_databases", &mongo::list_databases);
     i.method("list_collections", &mongo::list_collections);
     i.method("get_db", &mongo::get_db);
-    i.method("get_collection", &mongo::get_collection);
+    // i.method("get_collection", &mongo::get_collection);
     i.method("drop_database", &mongo::drop_database);
     i.method("clone_database", &mongo::clone_database);
-  }
-};
-
-class db {
-private:
-  vortex::core::framework::framework *framework_;
-  std::string db_name_;
-
-public:
-  db() {}
-
-  db(vortex::core::framework::framework *framework, std::string db_name)
-    : framework_(framework), db_name_(db_name) {}
-
-  template<class Inspector>
-  static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<db>);
-  }
-};
-
-class collection {
-private:
-  vortex::core::framework::framework *framework_;
-  std::string db_name_;
-  std::string collection_name_;
-
-public:
-  collection() {}
-
-  collection(vortex::core::framework::framework *framework, std::string db_name, std::string collection_name)
-    : framework_(framework), db_name_(db_name), collection_name_(collection_name) {}
-
-  template<class Inspector>
-  static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<collection>);
   }
 };
 
@@ -214,8 +211,13 @@ duktape::~duktape() {
 void duktape::setup() {
   ctx_->registerClass<duktape_bindings::view>();
   auto view = std::make_shared<duktape_bindings::view>(framework_);
+  ctx_->registerClass<duktape_bindings::router>();
   auto router = std::make_shared<duktape_bindings::router>(framework_);
+  ctx_->registerClass<duktape_bindings::application>();
   auto application = std::make_shared<duktape_bindings::application>(framework_);
+  ctx_->registerClass<duktape_bindings::mongo>();
+  ctx_->registerClass<duktape_bindings::db>();
+  ctx_->registerClass<duktape_bindings::collection>();
   auto mongo = std::make_shared<duktape_bindings::mongo>(framework_);
 
   ctx_->addGlobal("__view", view);
