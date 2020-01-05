@@ -123,6 +123,10 @@ public:
     return framework_->mongo_.list_collections(database_name);
   }
 
+  db get_db(std::string database_name) {
+    return db(framework_, database_name);
+  }
+
   void drop_database(std::string database_name) {
     framework_->mongo_.drop_database(database_name);
   }
@@ -140,7 +144,19 @@ public:
     i.method("drop_database", &mongo::drop_database);
     i.method("clone_database", &mongo::clone_database);
   }
-}
+};
+
+class db {
+private:
+  vortex::core::framework::framework *framework_;
+  std::string db_name_;
+
+public:
+  db() {}
+
+  db(vortex::core::framework::framework *framework, std::string db_name)
+    : framework_(framework), db_name_(db_name) {}
+};
 
 }  // namespace duktape_bindings
 
@@ -148,6 +164,7 @@ DUK_CPP_DEF_CLASS_NAME(duktape_bindings::view);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::router);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::application);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::mongo);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::db);
 
 namespace vortex {
 namespace core {
