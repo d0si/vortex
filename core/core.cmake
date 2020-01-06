@@ -14,4 +14,6 @@ SET(core_SRC
 
     src/core/script/script.cpp
     src/core/script/duktape.cpp
+
+    src/core/util/time.cpp
 )
