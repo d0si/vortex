@@ -18,4 +18,5 @@ SET(core_SRC
     src/core/util/time.cpp
     src/core/util/random.cpp
     src/core/util/password.cpp
+    src/core/util/hash.cpp
 )
