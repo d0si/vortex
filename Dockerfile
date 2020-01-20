@@ -7,3 +7,7 @@ RUN mkdir /vortex \
 ADD ./ /vortex/
 
 WORKDIR /vortex
+
+RUN cd /vortex/build \
+    && cmake .. \
+    && make -j8
