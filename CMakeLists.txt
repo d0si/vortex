@@ -9,7 +9,6 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_BUILD_TYPE Debug)
 
 # Include dependency projects (should be added as submodules ASAP)
-add_subdirectory(libs/cpp_redis)
 add_subdirectory(libs/duktape-cpp)
 
 # Include subprojects
