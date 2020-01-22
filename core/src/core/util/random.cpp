@@ -1,6 +1,6 @@
 #include <core/util/random.h>
 #include <random>
-#include <fnctl.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 namespace vortex {
@@ -16,7 +16,7 @@ std::string random_string(unsigned int length, const std::string char_list) {
   s.reserve(length);
 
   while (length--)
-    s += charList[pick(rg)];
+    s += char_list[pick(rg)];
 
   return s;
 }

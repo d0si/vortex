@@ -1,3 +1,0 @@
-[submodule "libs/duktape-cpp"]
-	path = libs/duktape-cpp
-	url = https://github.com/vmanucharyan/duktape-cpp.git
