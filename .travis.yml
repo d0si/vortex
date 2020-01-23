@@ -1,0 +1,10 @@
+language: bash
+
+services:
+    - docker
+
+before_install:
+    - docker pull zigabobnar/cmake-cpp-vortex-builder:alpine
+
+script:
+    - docker build -t zigabobnar/vortex:latest .
