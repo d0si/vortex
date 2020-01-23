@@ -13,19 +13,26 @@ Vortex allows you to easily create web application using technology stacks you p
 
 ## Getting started
 ### Docker container
-*Work in progress* - The easiest way to use prebuilt version of this project is to use docker container (yet to be uploaded to Docker Hub when the image is ready to be used)
+The simplest way to start the project is using prebuilt docker images. You will need to pull the latest image using `docker pull zigabobnar/vortex:latest` and then run it with `docker run -it zigabobnar/vortex:latest /vortex/build/bin/vortex`. If you replace the last argument with e.g. `/bin/bash` you will have access to the container shell.
 
 
 ### Build locally
 To build the project yourself you will need:
 - **CMake** version 3.10 or higher
 - **C++ compiler** (gcc/MSVC)
-- **Boost** version 1.72.0 or higher
-- **Mongo C driver**
-- **Mongo C++ driver**
+- **Boost** version 1.72.0 or higher with development headers
+- **OpenSSL** development libraries
+- **Mongo C driver** (recommended version 1.16.0)
+- **Mongo C++ driver** (recommended version 3.4.0)
+- **nlohmann-json** header (recommended version 3.7.3)
+- **cpp_redis** with **tacopie**
+- **duktape** runtime (recommended version 2.5.0)
+- **duktape-cpp**
 
-Firstly you need to initialize CMake by navigating into project build subfolder and run `cmake ..`
+Please take a look at [ZigaBobnar/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/ZigaBobnar/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
 
-Build using `make` or `make -j8` replacing 8 with number of threads you want to use for building.
-
-Run executable `./vortex`
+Build steps:
+1. Create `build` folder inside project root and cd into it
+2. Initialize CMake project using `cmake ..` (Use `-DCMAKE_BUILD_TYPE=Release` argument  to build release binaries)
+3. Build using `make` or `make -j8` replacing 8 with number of build jobs (threads) you want to use for building.
+4. Run executable `./bin/vortex`
