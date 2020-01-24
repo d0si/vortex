@@ -25,6 +25,38 @@ std::string sha1(std::string value) {
     return output;
 }
 
+std::string sha256(std::string value) {
+    CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+
+    CryptoPP::SHA256 hash;
+    hash.CalculateDigest(digest, (const CryptoPP::byte*) value.c_str(), value.length());
+
+    CryptoPP::HexEncoder encoder(nullptr, false);
+    std::string output;
+
+    encoder.Attach(new CryptoPP::StringSink(output));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+
+    return output;
+}
+
+std::string sha512(std::string value) {
+    CryptoPP::byte digest[CryptoPP::SHA512::DIGESTSIZE];
+
+    CryptoPP::SHA512 hash;
+    hash.CalculateDigest(digest, (const CryptoPP::byte*) value.c_str(), value.length());
+
+    CryptoPP::HexEncoder encoder(nullptr, false);
+    std::string output;
+
+    encoder.Attach(new CryptoPP::StringSink(output));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+
+    return output;
+}
+
 std::string md5(std::string value) {
     CryptoPP::byte digest[CryptoPP::Weak::MD5::DIGESTSIZE];
 

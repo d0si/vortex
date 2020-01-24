@@ -9,6 +9,8 @@ namespace util {
 namespace hash {
 
 std::string sha1(std::string value);
+std::string sha256(std::string value);
+std::string sha512(std::string value);
 std::string md5(std::string value);
 
 }  // namespace hash
