@@ -10,7 +10,7 @@ namespace password {
 
 std::string hash_password(std::string password);
 std::string hash_password(std::string password, std::string salt, unsigned int iterations = 100000);
-bool verify_password(std::string password, std::string hash);
+bool verify_password(std::string password, std::string hashed_password);
 std::string generate_salt();
 
 }  // namespace password
