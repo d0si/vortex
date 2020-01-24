@@ -26,6 +26,7 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC cpp_redis
     PUBLIC duktape
     PUBLIC tacopie
+	PUBLIC cryptopp
 )
 
 target_compile_definitions(${PROJECT_NAME}
