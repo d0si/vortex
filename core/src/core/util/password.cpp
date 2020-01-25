@@ -4,7 +4,6 @@
 #include <cryptopp/base64.h>
 
 #define SALT_LENGTH 24
-#include <iostream>
 
 namespace vortex {
 namespace core {
