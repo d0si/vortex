@@ -28,6 +28,7 @@ To build the project yourself you will need:
 - **cpp_redis** with **tacopie**
 - **duktape** runtime (recommended version 2.5.0)
 - **duktape-cpp**
+- **crypto++** (recommended version 8.2.0)
 
 Please take a look at [ZigaBobnar/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/ZigaBobnar/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
 
