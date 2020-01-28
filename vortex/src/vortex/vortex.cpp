@@ -11,14 +11,94 @@ namespace vortex {
 
 maze::object config;
 
-void start_cli() {
-  load_config();
-  apply_config();
+void start_vortex(std::vector<std::string> args) {
+  for (size_t i = 1; i < args.size(); ++i) {
+    if (args[i] == "help" || args[i] == "--help" || args[i] == "-h") {
+      show_help();
+      return;
+    }
+  }
 
-  cli_interface();
+  if (args.size() <= 1) {
+    // No additional arguments were supplied
+  } else if (args[1] == "start") {
+    bool errors_detected = false;
+    int port = 8080;
+    std::string address = "0.0.0.0";
+
+    if (args.size() > 2) {
+      for (size_t i = 2; i < args.size(); ++i) {
+        std::string arg = args[i];
+        bool arg_has_error = false;
+
+        if (arg.length() > 2) {
+          if (arg.find("-p=") != std::string::npos || arg.find("--port=") != std::string::npos) {
+            size_t equals_pos = arg.find('=');
+            std::string port_str = arg.substr(equals_pos + 1, arg.length() - equals_pos);
+
+            try {
+              port = std::stoi(port_str);
+            } catch (std::invalid_argument) {
+              std::cout << "Invalid port: " << port_str << std::endl;
+              arg_has_error = true;
+            }
+          } else if (arg.find("-a=") != std::string::npos || arg.find("--address=") != std::string::npos) {
+            size_t equals_pos = arg.find('=');
+            std::string address_str = arg.substr(equals_pos + 1, arg.length() - equals_pos);
+
+            address = address_str;
+          } else {
+            arg_has_error = true;
+          }
+        } else {
+          arg_has_error = true;
+        }
+
+        if (arg_has_error) {
+          std::cout << "Invalid syntax for argument: " << arg << std::endl;
+          errors_detected = true;
+        }
+      }
+    } else {
+      
+    }
+
+    if (errors_detected) {
+      std::cout << "Errors were detected. Aborting..." << std::endl;
+      exit(1);
+    } else {
+      std::cout << "Port: " << port << std::endl << "Address: " << address << std::endl;
+    }
+
+  } else if (args[1] == "console") {
+    start_console();
+  }
 }
 
-void cli_interface() {
+void show_help() {
+  std::cout << "Vortex Help" << std::endl
+    << " Usage: ./vortex [command] [--arg1=val1 ...]" << std::endl
+    << std::endl
+    << std::endl
+    << " Available commands:" << std::endl
+    << "  (empty)        Tries to run the vortex servers from config file" << std::endl
+    << "    --config=[path/to/config.json]" << std::endl
+    << "    -c=[path/to/config.json]     Default: server_config.json" << std::endl
+    << std::endl
+    << "  start          Starts the vortex server" << std::endl
+    << "    --port=[port]" << std::endl
+    << "    -p=[port]                    Default: 8080" << std::endl
+    << "    --address=[ip]" << std::endl 
+    << "    -a=[ip]                      Default: 127.0.0.1" << std::endl
+    << "    --thread_count=[num]" << std::endl
+    << "    -t=[num]                     Default: 4" << std::endl
+    << std::endl
+    << "  console        Starts vortex shell in interactive mode" << std::endl
+    << std::endl
+    << "  help           Displays help" << std::endl;
+}
+
+void start_console() {
   while (true) {
     std::cout << "Vortex>";
 
@@ -34,6 +114,8 @@ void cli_interface() {
       exit(0);
     } else if (str == "save") {
       save_config();
+    } else if (str == "help") {
+      show_help();
     } else {
       std::cout << "'" << str << "' is not valid command. " << std::endl;
     }

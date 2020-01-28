@@ -1,6 +1,9 @@
 #ifndef VORTEX_VORTEX_VORTEX_H
 #define VORTEX_VORTEX_VORTEX_H
 
+#include <string>
+#include <vector>
+
 namespace maze {
 
 class object;
@@ -9,8 +12,10 @@ class object;
 
 namespace vortex {
 
-void start_cli();
-void cli_interface();
+void start_vortex(std::vector<std::string> args);
+void show_help();
+
+void start_console();
 
 void load_config();
 void apply_config();
