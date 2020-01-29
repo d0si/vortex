@@ -11,10 +11,19 @@ mongo::mongo() {
   client_ = mongocxx::client{ uri };
 }
 
-mongo::mongo(maze::object mongo_config) : mongo_config_(mongo_config) {
+mongo::mongo(const maze::object& mongo_config) {
+  set_config(mongo_config);
+  connect();
+}
+
+void mongo::connect() {
   mongocxx::uri uri{ get_connection_uri() };
 
   client_ = mongocxx::client{ uri };
+}
+
+void mongo::set_config(const maze::object& mongo_config) {
+  mongo_config_ = mongo_config;
 }
 
 std::string mongo::get_connection_uri() {
