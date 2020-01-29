@@ -16,6 +16,7 @@ class mongo {
  private:
   mongocxx::client client_;
   maze::object mongo_config_;
+  bool enabled = true;
 
  public:
   mongo();

@@ -6,9 +6,7 @@ namespace core {
 namespace mongo {
 
 mongo::mongo() {
-  mongocxx::uri uri{};
-
-  client_ = mongocxx::client{ uri };
+  connect();
 }
 
 mongo::mongo(const maze::object& mongo_config) {
@@ -17,13 +15,19 @@ mongo::mongo(const maze::object& mongo_config) {
 }
 
 void mongo::connect() {
-  mongocxx::uri uri{ get_connection_uri() };
+  if (enabled) {
+    mongocxx::uri uri{ get_connection_uri() };
 
-  client_ = mongocxx::client{ uri };
+    client_ = mongocxx::client{ uri };
+  }
 }
 
 void mongo::set_config(const maze::object& mongo_config) {
   mongo_config_ = mongo_config;
+
+  if (mongo_config_.is_bool("enabled")) {
+    enabled = mongo_config_["enabled"].get_bool();
+  }
 }
 
 std::string mongo::get_connection_uri() {

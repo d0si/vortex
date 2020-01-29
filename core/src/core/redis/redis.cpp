@@ -1,7 +1,5 @@
 #include <core/redis/redis.h>
 
-#include <iostream>
-
 namespace vortex {
 namespace core {
 namespace redis {
@@ -12,10 +10,6 @@ redis::redis() {
 
 redis::redis(const maze::object& redis_config) {
   set_config(redis_config);
-
-  if (redis_config_.is_bool("enabled")) {
-    enabled = redis_config_["enabled"].get_bool();
-  }
 }
 
 redis::~redis() {
@@ -44,6 +38,10 @@ void redis::connect() {
 
 void redis::set_config(const maze::object& redis_config) {
   redis_config_ = redis_config;
+
+  if (redis_config_.is_bool("enabled")) {
+    enabled = redis_config_["enabled"].get_bool();
+  }
 }
 
 std::string redis::get(std::string key) {
