@@ -1,4 +1,4 @@
-# Vortex Framework [![Build Status](https://travis-ci.com/ZigaBobnar/vortex.svg?branch=master)](https://travis-ci.com/ZigaBobnar/vortex)
+# Vortex Framework [![Build Status](https://travis-ci.com/d0si/vortex.svg?branch=master)](https://travis-ci.com/d0si/vortex)
 Vortex Framework project. Fast, extensible and easy to use backend framework
 
 Vortex allows you to easily create web application using technology stacks you prefer to use. It uses MVC like pattern using customizable router to parse request url and execute controller to return response as view.
@@ -13,7 +13,7 @@ Vortex allows you to easily create web application using technology stacks you p
 
 ## Getting started
 ### Docker container
-The simplest way to start the project is using prebuilt docker images. You will need to pull the latest image using `docker pull zigabobnar/vortex:latest` and then run it with `docker run -it zigabobnar/vortex:latest /vortex/build/bin/vortex`. If you replace the last argument with e.g. `/bin/bash` you will have access to the container shell.
+The simplest way to start the project is using prebuilt docker images. You will need to pull the latest image using `docker pull d0si/vortex:latest` and then run it with `docker run -it d0si/vortex:latest /vortex/build/bin/vortex`. If you replace the last argument with e.g. `/bin/bash` you will have access to the container shell.
 
 
 ### Build locally
@@ -30,7 +30,7 @@ To build the project yourself you will need:
 - **duktape-cpp**
 - **crypto++** (recommended version 8.2.0)
 
-Please take a look at [ZigaBobnar/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/ZigaBobnar/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
+Please take a look at [d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
 
 Build steps:
 1. Create `build` folder inside project root and cd into it
