@@ -181,9 +181,9 @@ void start_from_config(const std::string& config_file_name) {
 
     for (auto it = servers.begin(); it != servers.end(); it++) {
       if (it->is_int()) {
-        start_server(maze::object("port", it->get_int()));
+        start_http_server(maze::object("port", it->get_int()));
       } else if (it->is_object()) {
-        start_server(it->get_object());
+        start_http_server(it->get_object());
       } else {
         std::cout << "Server config is invalid: "
           << std::endl
