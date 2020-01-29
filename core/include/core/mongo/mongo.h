@@ -16,10 +16,14 @@ class mongo {
  private:
   mongocxx::client client_;
   maze::object mongo_config_;
+  bool enabled = true;
 
  public:
   mongo();
-  mongo(maze::object mongo_params);
+  mongo(const maze::object& mongo_config);
+
+  void connect();
+  void set_config(const maze::object& mongo_config);
 
   std::string get_connection_uri();
   std::string get_default_db_name();

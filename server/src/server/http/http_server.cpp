@@ -17,6 +17,8 @@ namespace http {
 
 void http_server::start(maze::object config) {
   config_ = config;
+
+  redis_.set_config(config_["redis"].get_object());
   redis_.connect();
 
   maze::object server_config;
