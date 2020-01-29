@@ -18,7 +18,7 @@ jobs:
     - name: Build the Docker image and publish to registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: zigabobnar/vortex
+        name: d0si/vortex
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         dockerfile: Dockerfile

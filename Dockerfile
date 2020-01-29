@@ -1,4 +1,4 @@
-FROM zigabobnar/cmake-cpp-vortex-builder:alpine
+FROM d0si/cmake-cpp-vortex-builder:alpine
 
 RUN mkdir /vortex \
     && mkdir /vortex/build \
