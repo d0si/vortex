@@ -13,7 +13,7 @@ std::string join(const std::vector<std::string>& values, const std::string& sepa
   return boost::algorithm::join(values, separator);
 }
 
-std::vector<std::string> join(const std::string& value, const std::string& delimiter) {
+std::vector<std::string> split(const std::string& value, const std::string& delimiter) {
   std::vector<std::string> results;
   return boost::algorithm::split(results, value, boost::is_any_of(delimiter));
 }
