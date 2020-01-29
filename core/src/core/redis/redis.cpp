@@ -1,11 +1,21 @@
 #include <core/redis/redis.h>
 
+#include <iostream>
+
 namespace vortex {
 namespace core {
 namespace redis {
 
 redis::redis() {
 
+}
+
+redis::redis(const maze::object& redis_config) {
+  set_config(redis_config);
+
+  if (redis_config_.is_bool("enabled")) {
+    enabled = redis_config_["enabled"].get_bool();
+  }
 }
 
 redis::~redis() {
@@ -16,11 +26,28 @@ redis::~redis() {
 }
 
 void redis::connect() {
-  client_.connect("127.0.0.1", 6379);
+  if (enabled) {
+    std::string address = "127.0.0.1";
+    int port = 6379;
+
+    if (redis_config_.is_string("address")) {
+      address = redis_config_["address"].get_string();
+    }
+
+    if (redis_config_.is_string("port")) {
+      port = redis_config_["port"].get_int();
+    }
+
+    client_.connect(address, port);
+  }
+}
+
+void redis::set_config(const maze::object& redis_config) {
+  redis_config_ = redis_config;
 }
 
 std::string redis::get(std::string key) {
-  if (client_.is_connected()) {
+  if (enabled && client_.is_connected()) {
     std::future<cpp_redis::reply> reply = client_.get(key);
     client_.sync_commit();
     reply.wait();
@@ -32,7 +59,7 @@ std::string redis::get(std::string key) {
 }
 
 void redis::set(std::string key, std::string value, int expire_seconds) {
-  if (client_.is_connected()) {
+  if (enabled && client_.is_connected()) {
     client_.set(key, value);
 
     client_.sync_commit();
@@ -44,7 +71,7 @@ void redis::set(std::string key, std::string value, int expire_seconds) {
 }
 
 bool redis::exists(std::string key) {
-  if (client_.is_connected()) {
+  if (enabled && client_.is_connected()) {
     std::vector<std::string> keys;
     keys.push_back(key);
 
@@ -59,7 +86,7 @@ bool redis::exists(std::string key) {
 }
 
 void redis::del(std::string key) {
-  if (client_.is_connected()) {
+  if (enabled && client_.is_connected()) {
     std::vector<std::string> keys;
     keys.push_back(key);
 
@@ -69,7 +96,7 @@ void redis::del(std::string key) {
 }
 
 void redis::expire(std::string key, int seconds) {
-  if (client_.is_connected()) {
+  if (enabled && client_.is_connected()) {
     client_.expire(key, seconds);
     client_.sync_commit();
   }
