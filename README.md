@@ -1,4 +1,4 @@
-# Vortex Framework [![Build Status](https://travis-ci.com/d0si/vortex.svg?branch=master)](https://travis-ci.com/d0si/vortex)
+# Vortex Framework [![Build Status](https://travis-ci.com/d0si/vortex.svg?branch=master)](https://travis-ci.com/d0si/vortex) ![Build Docker image](https://github.com/d0si/vortex/workflows/Build%20Docker%20image/badge.svg?branch=master)
 Vortex Framework project. Fast, extensible and easy to use backend framework
 
 Vortex allows you to easily create web application using technology stacks you prefer to use. It uses MVC like pattern using customizable router to parse request url and execute controller to return response as view.
