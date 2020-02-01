@@ -20,7 +20,7 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC vortex::maze
+    PUBLIC maze
     PUBLIC ${Boost_LIBRARIES}
     PUBLIC ${LIBMONGOCXX_LIBRARIES}
     PUBLIC cpp_redis
