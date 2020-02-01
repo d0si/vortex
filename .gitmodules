@@ -1,3 +1,3 @@
 [submodule "maze"]
 	path = maze
-	url = git@github.com:d0si/maze.git
+	url = https://github.com/d0si/maze.git
