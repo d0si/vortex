@@ -7,6 +7,7 @@
 #include <maze/array.h>
 #include <server/http/http_server.h>
 #include <core/util/string.h>
+#include <boost/filesystem.hpp>
 
 namespace util = vortex::core::util;
 
@@ -29,6 +30,7 @@ void start_vortex(std::vector<std::string> args) {
 
     int port = 8080;
     std::string address = "0.0.0.0";
+    std::string data_dir = "";
     int thread_count = 4;
     std::string type = "http";
 
@@ -51,6 +53,14 @@ void start_vortex(std::vector<std::string> args) {
 
             try {
               address = val[1];
+            } catch (std::invalid_argument) {
+              arg_has_error = true;
+            }
+          } else if (util::string::starts_with(arg, "-d=") || util::string::starts_with(arg, "--data_dir=")) {
+            std::vector<std::string> val = util::string::split(arg, "=");
+
+            try {
+              data_dir = val[1];
             } catch (std::invalid_argument) {
               arg_has_error = true;
             }
@@ -79,11 +89,30 @@ void start_vortex(std::vector<std::string> args) {
     if (errors_detected) {
       exit_with_error(1000);
     } else {
-      maze::object config("server",
-        maze::object("port", port)
-          .set("address", address)
-          ->set("thread_count", thread_count)
-          ->set("type", type));
+      maze::object config, server_config;
+      server_config.set("port", port);
+      server_config.set("address", address);
+      server_config.set("thread_count", thread_count);
+      server_config.set("type", type);
+      config.set("server", server_config);
+
+      if (data_dir.length() > 0) {
+        try {
+          boost::filesystem::path path_obj(data_dir);
+
+          if (boost::filesystem::exists(path_obj) && boost::filesystem::is_directory(path_obj)) {
+            data_dir = boost::filesystem::canonical(data_dir).string();
+            config.set("vortex", maze::object("data_dir", data_dir));
+          } else {
+            std::cout << "Given data_dir path is not a directory." << std::endl;
+            exit_with_error(1007);
+          }
+        }
+        catch (boost::filesystem::filesystem_error& e) {
+          std::cout << "data_dir filesystem error: " << e.what() << std::endl;
+          exit_with_error(1008);
+        }
+      }
 
       start_http_server(config);
     }
@@ -125,6 +154,8 @@ void show_help() {
     << "    -p=[port]                    Default: 8080" << std::endl
     << "    --address=[ip]" << std::endl 
     << "    -a=[ip]                      Default: 127.0.0.1" << std::endl
+    << "    --data_dir=[path/to/data]" << std::endl 
+    << "    -d=[path/to/data]            Default: (empty)" << std::endl
     << "    --thread_count=[num]" << std::endl
     << "    -t=[num]                     Default: 4" << std::endl
     << std::endl

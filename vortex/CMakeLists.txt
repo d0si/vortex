@@ -5,7 +5,7 @@ add_executable(${PROJECT_NAME}
     ${${PROJECT_NAME}_SRC}
 )
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}/include
