@@ -32,6 +32,8 @@ To build the project yourself you will need:
 
 Please take a look at [d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
 
+After cloning the repo you will need to also get submodules. Use `git submodule update --init --recursive` to clone them.
+
 Build steps:
 1. Create `build` folder inside project root and cd into it
 2. Initialize CMake project using `cmake ..` (Use `-DCMAKE_BUILD_TYPE=Release` argument  to build release binaries)
