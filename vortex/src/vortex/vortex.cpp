@@ -119,17 +119,21 @@ void start_vortex(std::vector<std::string> args) {
 
   } else if (args[1] == "console") {
     start_console();
-  } else if (util::string::starts_with(args[1], "-c=") || util::string::starts_with(args[1], "-config=")) {
+  } else if (util::string::starts_with(args[1], "-c=") || util::string::starts_with(args[1], "--config=")) {
     std::vector<std::string> val = util::string::split(args[1], "=");
 
+    std::string config_path;
     try {
-      std::string config = val[1];
+      config_path = val[1];
     } catch (...) {
       std::cout << "Invalid syntax for argument: " << args[1] << std::endl;
       exit_with_error(1001);
     }
+
+    start_from_config(config_path);
   } else {
-      std::cout << "Invalid command line arguments. Use ./vortex help to find more info on how to use the program." << args[1] << std::endl;
+      std::cout << "Invalid command line arguments. [" << args[1] << std::endl
+        << "Use ./vortex help to find more info on how to use the program." << std::endl;
       exit_with_error(1002);
   }
 }
