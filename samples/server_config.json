@@ -6,6 +6,9 @@
                 "port": 8080,
                 "thread_count": 2
             },
+            "vortex": {
+                "data_dir": "../samples/vortex_sample_data"
+            },
             "mongo": {
                 "enabled": false
             },

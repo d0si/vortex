@@ -36,4 +36,4 @@ Build steps:
 1. Create `build` folder inside project root and cd into it
 2. Initialize CMake project using `cmake ..` (Use `-DCMAKE_BUILD_TYPE=Release` argument  to build release binaries)
 3. Build using `make` or `make -j8` replacing 8 with number of build jobs (threads) you want to use for building.
-4. Run executable `./bin/vortex`
+4. Run executable with sample project `./bin/vortex --config=../samples/server_config.json`
