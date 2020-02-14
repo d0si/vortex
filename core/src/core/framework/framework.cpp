@@ -72,6 +72,10 @@ void framework::exit() {
   throw(0);
 }
 
+maze::object framework::get_config() {
+  return this->config_;
+}
+
 }  // namespace framework
 }  // namespace core
 }  // namespace vortex

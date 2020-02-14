@@ -43,6 +43,8 @@ class framework {
   void setup();
   void run();
   void exit();
+
+  maze::object get_config();
 };
 
 }  // namespace framework
