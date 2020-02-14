@@ -1,0 +1,17 @@
+{
+    "servers": [
+        {
+            "server": {
+                "ip": "0.0.0.0",
+                "port": 8080,
+                "thread_count": 2
+            },
+            "mongo": {
+                "enabled": false
+            },
+            "redis": {
+                "enabled": false
+            }
+        }
+    ]
+}
