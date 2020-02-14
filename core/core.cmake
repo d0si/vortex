@@ -6,6 +6,7 @@ SET(core_SRC
     src/core/framework/controller.cpp
     src/core/framework/view.cpp
 
+    src/core/storage/storage.cpp
     src/core/storage/mongo/mongo.cpp
     src/core/storage/mongo/db.cpp
     src/core/storage/mongo/collection.cpp
