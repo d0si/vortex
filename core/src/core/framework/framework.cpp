@@ -23,10 +23,19 @@ framework::framework(
     controller_(this),
     view_(this),
     script_(this) {
-  mongo_ = mongo::mongo(config_["mongo"].get_object());
+  mongo_ = storage::mongo::mongo(config_["mongo"].get_object());
 }
 
 void framework::setup() {
+  if (config_.is_object("vortex") && config_["vortex"].get_object().is_object("storage")) {
+    maze::object storage_config = config_["vortex"].get_object()["storage"];
+
+    std::string storage_type = "mongodb";
+    if (storage_config.is_string("type")) {
+      storage_type = storage_config["type"].get_string();
+    }
+  }
+
   host_.find(router_.get_hostname());
 
   script_.setup();

@@ -9,7 +9,7 @@
 #include <core/framework/application.h>
 #include <core/framework/controller.h>
 #include <core/framework/view.h>
-#include <core/mongo/mongo.h>
+#include <core/storage/mongo/mongo.h>
 #include <core/redis/redis.h>
 #include <core/script/script.h>
 
@@ -30,7 +30,7 @@ class framework {
   application application_;
   controller controller_;
   view view_;
-  mongo::mongo mongo_;
+  storage::mongo::mongo mongo_;
   script::script script_;
 
   framework(

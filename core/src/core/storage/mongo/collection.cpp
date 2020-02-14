@@ -1,9 +1,10 @@
-#include <core/mongo/collection.h>
+#include <core/storage/mongo/collection.h>
 #include <bsoncxx/json.hpp>
 #include <maze/element.h>
 
 namespace vortex {
 namespace core {
+namespace storage {
 namespace mongo {
 
 collection::collection(mongocxx::collection collection) : collection_(collection) {
@@ -91,5 +92,6 @@ void collection::replace_one(std::string json_query, std::string json_replacemen
 }
 
 }  // namespace mongo
+}  // namespace storage
 }  // namespace core
 }  // namespace vortex

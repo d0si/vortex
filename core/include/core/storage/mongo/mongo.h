@@ -1,15 +1,16 @@
-#ifndef VORTEX_CORE_MONGO_MONGO_H
-#define VORTEX_CORE_MONGO_MONGO_H
+#ifndef VORTEX_CORE_STORAGE_MONGO_MONGO_H
+#define VORTEX_CORE_STORAGE_MONGO_MONGO_H
 
 #include <string>
 #include <vector>
 #include <mongocxx/client.hpp>
 #include <maze/object.h>
-#include <core/mongo/db.h>
-#include <core/mongo/collection.h>
+#include <core/storage/mongo/db.h>
+#include <core/storage/mongo/collection.h>
 
 namespace vortex {
 namespace core {
+namespace storage {
 namespace mongo {
 
 class mongo {
@@ -40,7 +41,8 @@ class mongo {
 };
 
 }  // namespace mongo
+}  // namespace storage
 }  // namespace core
 }  // namespace vortex
 
-#endif  // VORTEX_CORE_MONGO_MONGO_H
+#endif  // VORTEX_CORE_STORAGE_MONGO_MONGO_H

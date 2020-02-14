@@ -6,9 +6,9 @@ SET(core_SRC
     src/core/framework/controller.cpp
     src/core/framework/view.cpp
 
-    src/core/mongo/mongo.cpp
-    src/core/mongo/db.cpp
-    src/core/mongo/collection.cpp
+    src/core/storage/mongo/mongo.cpp
+    src/core/storage/mongo/db.cpp
+    src/core/storage/mongo/collection.cpp
 
     src/core/redis/redis.cpp
 

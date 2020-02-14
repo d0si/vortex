@@ -1,8 +1,9 @@
-#include <core/mongo/mongo.h>
+#include <core/storage/mongo/mongo.h>
 #include <maze/element.h>
 
 namespace vortex {
 namespace core {
+namespace storage {
 namespace mongo {
 
 mongo::mongo() {
@@ -123,5 +124,6 @@ void mongo::clone_database(std::string old_name, std::string new_name) {
 }
 
 }  // namespace mongo
+}  // namespace storage
 }  // namespace core
 }  // namespace vortex

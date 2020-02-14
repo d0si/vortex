@@ -1,5 +1,5 @@
-#ifndef VORTEX_CORE_MONGO_COLLECTION_H
-#define VORTEX_CORE_MONGO_COLLECTION_H
+#ifndef VORTEX_CORE_STORAGE_MONGO_COLLECTION_H
+#define VORTEX_CORE_STORAGE_MONGO_COLLECTION_H
 
 #include <string>
 #include <mongocxx/collection.hpp>
@@ -8,6 +8,7 @@
 
 namespace vortex {
 namespace core {
+namespace storage {
 namespace mongo {
 
 class collection {
@@ -38,6 +39,7 @@ class collection {
 
 }  // namespace mongo
 }  // namespace core
+}  // namespace storage
 }  // namespace vortex
 
-#endif  // VORTEX_CORE_MONGO_COLLECTION_H
+#endif  // VORTEX_CORE_STORAGE_MONGO_COLLECTION_H

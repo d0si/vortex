@@ -1,13 +1,14 @@
-#ifndef VORTEX_CORE_MONGO_DB_H
-#define VORTEX_CORE_MONGO_DB_H
+#ifndef VORTEX_CORE_STORAGE_MONGO_DB_H
+#define VORTEX_CORE_STORAGE_MONGO_DB_H
 
 #include <string>
 #include <vector>
 #include <mongocxx/database.hpp>
-#include <core/mongo/collection.h>
+#include <core/storage/mongo/collection.h>
 
 namespace vortex {
 namespace core {
+namespace storage {
 namespace mongo {
 
 class mongo;
@@ -27,7 +28,8 @@ class db {
 };
 
 }  // namespace mongo
+}  // namespace storage
 }  // namespace core
 }  // namespace vortex
 
-#endif  // VORTEX_CORE_MONGO_DB_H
+#endif  // VORTEX_CORE_STORAGE_MONGO_DB_H

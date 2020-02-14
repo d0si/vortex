@@ -1,7 +1,8 @@
-#include <core/mongo/db.h>
+#include <core/storage/mongo/db.h>
 
 namespace vortex {
 namespace core {
+namespace storage {
 namespace mongo {
 
 db::db(mongocxx::database database) : database_(database) {
@@ -28,5 +29,6 @@ void db::drop_database() {
 }
 
 }  // namespace mongo
+}  // namespace storage
 }  // namespace core
 }  // namespace vortex
