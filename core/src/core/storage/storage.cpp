@@ -12,7 +12,7 @@ storage::storage(framework::framework* framework) : framework_(framework) {
     maze::object storage_config = this->framework_->get_config()["storage"].get_object();
 
     if (storage_config.is_string("backend")) {
-      this->backend_ backend = storage_config["backend"].get_string();
+      this->backend_ = storage_config["backend"].get_string();
     }
   }
 }
