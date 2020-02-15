@@ -7,7 +7,7 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-router::router(framework* framework) : framework_(framework) {
+Router::Router(Framework* framework) : framework_(framework) {
   lang_ = "en";
   controller_ = "index";
 
@@ -15,7 +15,7 @@ router::router(framework* framework) : framework_(framework) {
   request_uri_ = target.substr(1, target.length() - 1);
 }
 
-void router::setup() {
+void Router::setup() {
   maze::object router_config = framework_->config_["router"].get_object();
 
   if (router_config.is_object("routes")) {
@@ -189,19 +189,19 @@ void router::setup() {
   }
 }
 
-std::string router::get_hostname() {
+std::string Router::get_hostname() {
   return framework_->request_->base()[boost::beast::http::field::host].to_string();
 }
 
-std::string router::get_lang() {
+std::string Router::get_lang() {
   return lang_;
 }
 
-std::string router::get_controller() {
+std::string Router::get_controller() {
   return controller_;
 }
 
-std::vector<std::string> router::get_args() {
+std::vector<std::string> Router::get_args() {
   return args_;
 }
 

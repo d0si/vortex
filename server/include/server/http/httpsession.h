@@ -14,19 +14,19 @@ namespace vortex {
 namespace server {
 namespace http {
 
-class http_session : public std::enable_shared_from_this<http_session> {
+class HttpSession : public std::enable_shared_from_this<HttpSession> {
  private:
   boost::beast::tcp_stream stream_;
   boost::beast::flat_buffer buffer_;
   boost::beast::http::request<boost::beast::http::string_body> req_;
   boost::beast::http::response<boost::beast::http::string_body> res_;
   maze::object config_;
-  vortex::core::redis::redis* redis_;
+  vortex::core::redis::Redis* redis_;
 
  public:
-  explicit http_session(
+  explicit HttpSession(
     maze::object config,
-    vortex::core::redis::redis* redis,
+    vortex::core::redis::Redis* redis,
     boost::asio::ip::tcp::socket socket);
 
   void run();

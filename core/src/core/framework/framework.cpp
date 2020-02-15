@@ -5,9 +5,9 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-framework::framework(
+Framework::Framework(
   maze::object config,
-  redis::redis* redis,
+  redis::Redis* redis,
   std::string client_ip,
   boost::beast::http::request<boost::beast::http::string_body>* request,
   boost::beast::http::response<boost::beast::http::string_body>* response
@@ -23,10 +23,10 @@ framework::framework(
     controller_(this),
     view_(this),
     script_(this) {
-  mongo_ = storage::mongo::mongo(config_["mongo"].get_object());
+  mongo_ = storage::mongo::Mongo(config_["mongo"].get_object());
 }
 
-void framework::setup() {
+void Framework::setup() {
   if (config_.is_object("vortex") && config_["vortex"].get_object().is_object("storage")) {
     maze::object storage_config = config_["vortex"].get_object()["storage"];
 
@@ -53,7 +53,7 @@ void framework::setup() {
     request_->method_string().to_string());
 }
 
-void framework::run() {
+void Framework::run() {
   script_.exec(application_.get_script());
   script_.exec(host_.get_script());
   script_.exec(controller_.get_script());
@@ -66,13 +66,13 @@ void framework::run() {
   throw(0);
 }
 
-void framework::exit() {
+void Framework::exit() {
   view_.respond();
 
   throw(0);
 }
 
-maze::object framework::get_config() {
+maze::object Framework::get_config() {
   return this->config_;
 }
 

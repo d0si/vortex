@@ -5,16 +5,16 @@ namespace vortex {
 namespace core {
 namespace script {
 
-script::script(framework::framework *framework)
+Script::Script(framework::Framework *framework)
   : framework_(framework), duktape_(framework) {
 
 }
 
-void script::setup() {
+void Script::setup() {
   duktape_.setup();
 }
 
-void script::exec(std::string script) {
+void Script::exec(std::string script) {
   duktape_.exec(script);
 }
 

@@ -10,19 +10,19 @@ class Context;
 namespace vortex {
 namespace core {
 namespace framework {
-class framework;
+class Framework;
 }  // namespace framework
 
 namespace script {
 
-class duktape {
+class Duktape {
  private:
   duk::Context* ctx_;
-  framework::framework* framework_;
+  framework::Framework* framework_;
 
  public:
-  duktape(framework::framework* framework);
-  ~duktape();
+  Duktape(framework::Framework* framework);
+  ~Duktape();
 
   void setup();
   void exec(std::string script);

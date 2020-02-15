@@ -7,18 +7,18 @@
 namespace vortex {
 namespace core {
 namespace framework {
-class framework;
+class Framework;
 }
 
 namespace script {
 
-class script {
+class Script {
 private:
-  framework::framework* framework_;
-  duktape duktape_;
+  framework::Framework* framework_;
+  Duktape duktape_;
 
 public:
-  script(framework::framework* framework);
+  Script(framework::Framework* framework);
 
   void setup();
   void exec(std::string script);

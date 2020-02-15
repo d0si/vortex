@@ -8,16 +8,16 @@ namespace vortex {
 namespace core {
 namespace redis {
 
-class redis {
+class Redis {
  private:
   cpp_redis::client client_;
   maze::object redis_config_;
   bool enabled = true;
 
  public:
-  redis();
-  redis(const maze::object& redis_config);
-  ~redis();
+  Redis();
+  Redis(const maze::object& redis_config);
+  ~Redis();
 
   void connect();
   void set_config(const maze::object& redis_config);

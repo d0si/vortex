@@ -8,15 +8,15 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class framework;
+class Framework;
 
-class host {
+class Host {
  private:
-  framework* framework_;
+  Framework* framework_;
   maze::object host_;
 
  public:
-  host(framework* framework);
+  Host(Framework* framework);
 
   void find(std::string hostname);
 

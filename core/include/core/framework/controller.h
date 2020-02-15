@@ -9,15 +9,15 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class framework;
+class Framework;
 
-class controller {
+class Controller {
  private:
-  framework* framework_;
+  Framework* framework_;
   maze::object controller_;
 
  public:
-  controller(framework* framework);
+  Controller(Framework* framework);
 
   void find(std::string app_id, std::string name, std::string method);
 

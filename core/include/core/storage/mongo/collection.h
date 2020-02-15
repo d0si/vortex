@@ -11,12 +11,12 @@ namespace core {
 namespace storage {
 namespace mongo {
 
-class collection {
+class Collection {
  private:
   mongocxx::collection collection_;
 
  public:
-  collection(mongocxx::collection collection);
+  Collection(mongocxx::collection collection);
 
   maze::array find(maze::object query);
   maze::array find(std::string json_query);

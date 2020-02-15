@@ -8,18 +8,18 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class framework;
+class Framework;
 
-class view {
+class View {
  private:
-  framework* framework_;
+  Framework* framework_;
 
   std::string rendered_;
   maze::object template_;
   maze::object page_;
 
  public:
-  view(framework* framework);
+  View(Framework* framework);
 
   void output();
   void respond();

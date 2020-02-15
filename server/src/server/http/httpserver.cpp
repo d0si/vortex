@@ -1,10 +1,10 @@
-#include <server/http/http_server.h>
+#include <server/http/httpserver.h>
 #include <iostream>
 #include <thread>
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <server/http/http_listener.h>
+#include <server/http/httplistener.h>
 #include <maze/element.h>
 
 using std::string;
@@ -15,7 +15,7 @@ namespace vortex {
 namespace server {
 namespace http {
 
-void http_server::start(maze::object config) {
+void HttpServer::start(maze::object config) {
   config_ = config;
 
   redis_.set_config(config_["redis"].get_object());
@@ -57,7 +57,7 @@ void http_server::start(maze::object config) {
   try {
     boost::asio::io_context ioContext{ thread_count };
 
-    std::make_shared<http_listener>(
+    std::make_shared<HttpListener>(
       config_,
       &redis_,
       ioContext,

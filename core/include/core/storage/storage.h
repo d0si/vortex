@@ -7,18 +7,18 @@
 namespace vortex {
 namespace core {
 namespace framework {
-class framework;
+class Framework;
 }
 
 namespace storage {
 
-class storage {
+class Storage {
 private:
-  framework::framework* framework_;
+  framework::Framework* framework_;
   std::string backend_;
 
 public:
-  storage(framework::framework* framework);
+  Storage(framework::Framework* framework);
 
   const std::string get_backend();
 };

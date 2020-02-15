@@ -5,7 +5,7 @@
 #include <thread>
 #include <maze/object.h>
 #include <maze/array.h>
-#include <server/http/http_server.h>
+#include <server/http/httpserver.h>
 #include <core/util/string.h>
 #include <boost/filesystem.hpp>
 
@@ -270,7 +270,7 @@ void start_server(maze::object config) {
 }
 
 void start_http_server(maze::object config) {
-  server::http::http_server server;
+  server::http::HttpServer server;
 
   server.start(config);
 }

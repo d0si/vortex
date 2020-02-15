@@ -5,35 +5,35 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-view::view(framework* framework) : framework_(framework) {
+View::View(Framework* framework) : framework_(framework) {
 }
 
-void view::output() {
+void View::output() {
   rendered_ += parse_template();
 
   respond();
 }
 
-void view::respond() {
+void View::respond() {
   framework_->response_->body() = rendered_;
 }
 
-void view::echo(std::string contents) {
+void View::echo(std::string contents) {
   rendered_ += contents;
 }
 
-void view::clear() {
+void View::clear() {
   framework_->response_->body() = "";
   rendered_.clear();
 }
 
-void view::finish() {
+void View::finish() {
   template_.clear();
   page_.clear();
   respond();
 }
 
-std::string view::parse(std::string code) {
+std::string View::parse(std::string code) {
   std::string rendered;
 
   enum grabbing_stage {
@@ -140,7 +140,7 @@ std::string view::parse(std::string code) {
   return rendered;
 }
 
-void view::set_template(std::string name) {
+void View::set_template(std::string name) {
   maze::object query("name", name);
   query.set("app_ids", framework_->application_.get_id());
 
@@ -159,7 +159,7 @@ void view::set_template(std::string name) {
   }
 }
 
-std::string view::parse_template() {
+std::string View::parse_template() {
   if (template_.is_string("contents")) {
     return parse(template_["contents"].get_string());
   }
@@ -167,7 +167,7 @@ std::string view::parse_template() {
   return "";
 }
 
-void view::set_page(std::string name) {
+void View::set_page(std::string name) {
   maze::object query("name", name);
   query.set("app_ids", framework_->application_.get_id());
 
@@ -186,7 +186,7 @@ void view::set_page(std::string name) {
   }
 }
 
-std::string view::parse_page() {
+std::string View::parse_page() {
   if (template_.is_string("contents")) {
     return parse(template_["contents"].get_string());
   }

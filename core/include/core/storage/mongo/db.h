@@ -11,16 +11,16 @@ namespace core {
 namespace storage {
 namespace mongo {
 
-class mongo;
+class Mongo;
 
-class db {
+class Db {
  private:
   mongocxx::database database_;
 
  public:
-  db(mongocxx::database database);
+  Db(mongocxx::database database);
 
-  collection get_collection(std::string collection_name);
+  Collection get_collection(std::string collection_name);
 
   std::vector<std::string> list_collections();
 

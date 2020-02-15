@@ -13,15 +13,15 @@ namespace core {
 namespace storage {
 namespace mongo {
 
-class mongo {
+class Mongo {
  private:
   mongocxx::client client_;
   maze::object mongo_config_;
   bool enabled = true;
 
  public:
-  mongo();
-  mongo(const maze::object& mongo_config);
+  Mongo();
+  Mongo(const maze::object& mongo_config);
 
   void connect();
   void set_config(const maze::object& mongo_config);
@@ -29,9 +29,9 @@ class mongo {
   std::string get_connection_uri();
   std::string get_default_db_name();
 
-  db get_db(std::string database_name);
-  collection get_collection(std::string collection_name);
-  collection get_collection(std::string database_name, std::string collection_name);
+  Db get_db(std::string database_name);
+  Collection get_collection(std::string collection_name);
+  Collection get_collection(std::string database_name, std::string collection_name);
 
   std::vector<std::string> list_databases();
   std::vector<std::string> list_collections(std::string database_name);

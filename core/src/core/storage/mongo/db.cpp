@@ -5,15 +5,15 @@ namespace core {
 namespace storage {
 namespace mongo {
 
-db::db(mongocxx::database database) : database_(database) {
+Db::Db(mongocxx::database database) : database_(database) {
 
 }
 
-collection db::get_collection(std::string collection_name) {
-  return collection(database_[collection_name]);
+Collection Db::get_collection(std::string collection_name) {
+  return Collection(database_[collection_name]);
 }
 
-std::vector<std::string> db::list_collections() {
+std::vector<std::string> Db::list_collections() {
   std::vector<std::string> collections;
 
   auto colls = database_.list_collections();
@@ -24,7 +24,7 @@ std::vector<std::string> db::list_collections() {
   return collections;
 }
 
-void db::drop_database() {
+void Db::drop_database() {
   database_.drop();
 }
 

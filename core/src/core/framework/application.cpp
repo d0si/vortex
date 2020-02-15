@@ -6,10 +6,10 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-application::application(framework* framework) : framework_(framework) {
+Application::Application(Framework* framework) : framework_(framework) {
 }
 
-void application::find(std::string app_id) {
+void Application::find(std::string app_id) {
   std::string redis_key = "vortex.core.application.value." + app_id;
   if (framework_->redis_->exists(redis_key)) {
     application_ = maze::object::from_json(framework_->redis_->get(redis_key));
@@ -31,23 +31,23 @@ void application::find(std::string app_id) {
   }
 }
 
-std::string application::get_id() {
+std::string Application::get_id() {
   return application_["_id"].get_object()["$oid"].get_string();
 }
 
-std::string application::get_title() {
+std::string Application::get_title() {
   return application_["title"].get_string();
 }
 
-maze::object application::get_config() {
+maze::object Application::get_config() {
   return application_["config"].get_object();
 }
 
-std::string application::get_script() {
+std::string Application::get_script() {
   return application_["script"].get_string();
 }
 
-std::string application::get_post_script() {
+std::string Application::get_post_script() {
   return application_["post_script"].get_string();
 }
 

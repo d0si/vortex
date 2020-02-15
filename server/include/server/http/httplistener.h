@@ -10,17 +10,17 @@ namespace vortex {
 namespace server {
 namespace http {
 
-class http_listener : public std::enable_shared_from_this<http_listener> {
+class HttpListener : public std::enable_shared_from_this<HttpListener> {
  private:
   boost::asio::io_context& ioC_;
   boost::asio::ip::tcp::acceptor acceptor_;
   maze::object config_;
-  vortex::core::redis::redis* redis_;
+  vortex::core::redis::Redis* redis_;
 
  public:
-  http_listener(
+  HttpListener(
     maze::object config,
-    vortex::core::redis::redis* redis,
+    vortex::core::redis::Redis* redis,
     boost::asio::io_context& ioC,
     boost::asio::ip::tcp::endpoint endpoint);
 

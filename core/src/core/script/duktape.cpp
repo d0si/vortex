@@ -4,14 +4,14 @@
 
 namespace duktape_bindings {
 
-class view {
+class View {
 private:
-  vortex::core::framework::framework *framework_;
+  vortex::core::framework::Framework *framework_;
 
 public:
-  view() {}
+  View() {}
 
-  view(vortex::core::framework::framework *framework) : framework_(framework) {}
+  View(vortex::core::framework::Framework *framework) : framework_(framework) {}
 
   void echo(std::string content) {
     framework_->view_.echo(content);
@@ -35,23 +35,23 @@ public:
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<view>);
-    i.method("echo", &view::echo);
-    i.method("set_template", &view::set_template);
-    i.method("parse_template", &view::parse_template);
-    i.method("set_page", &view::set_page);
-    i.method("parse_page", &view::parse_page);
+    i.construct(&std::make_shared<View>);
+    i.method("echo", &View::echo);
+    i.method("set_template", &View::set_template);
+    i.method("parse_template", &View::parse_template);
+    i.method("set_page", &View::set_page);
+    i.method("parse_page", &View::parse_page);
   }
 };
 
-class router {
+class Router {
 private:
-  vortex::core::framework::framework *framework_;
+  vortex::core::framework::Framework *framework_;
 
 public:
-  router() {}
+  Router() {}
 
-  router(vortex::core::framework::framework *framework) : framework_(framework) {}
+  Router(vortex::core::framework::Framework *framework) : framework_(framework) {}
 
   std::string get_hostname() {
     return framework_->router_.get_hostname();
@@ -67,21 +67,21 @@ public:
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<router>);
-    i.method("get_hostname", &router::get_hostname);
-    i.method("get_lang", &router::get_lang);
-    i.method("get_controller", &router::get_controller);
+    i.construct(&std::make_shared<Router>);
+    i.method("get_hostname", &Router::get_hostname);
+    i.method("get_lang", &Router::get_lang);
+    i.method("get_controller", &Router::get_controller);
   }
 };
 
-class application {
+class Application {
 private:
-  vortex::core::framework::framework *framework_;
+  vortex::core::framework::Framework *framework_;
 
 public:
-  application() {}
+  Application() {}
 
-  application(vortex::core::framework::framework *framework) : framework_(framework) {}
+  Application(vortex::core::framework::Framework *framework) : framework_(framework) {}
 
   std::string get_id() {
     return framework_->application_.get_id();
@@ -93,55 +93,55 @@ public:
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<application>);
-    i.method("get_id", &application::get_id);
-    i.method("get_title", &application::get_title);
+    i.construct(&std::make_shared<Application>);
+    i.method("get_id", &Application::get_id);
+    i.method("get_title", &Application::get_title);
   }
 };
 
-class collection {
+class Collection {
 private:
-  vortex::core::framework::framework *framework_;
+  vortex::core::framework::Framework *framework_;
   std::string db_name_;
   std::string collection_name_;
 
 public:
-  collection() {}
+  Collection() {}
 
-  collection(vortex::core::framework::framework *framework, std::string db_name, std::string collection_name)
+  Collection(vortex::core::framework::Framework *framework, std::string db_name, std::string collection_name)
           : framework_(framework), db_name_(db_name), collection_name_(collection_name) {}
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<collection>);
+    i.construct(&std::make_shared<Collection>);
   }
 };
 
-class db {
+class Db {
 private:
-  vortex::core::framework::framework *framework_;
+  vortex::core::framework::Framework *framework_;
   std::string db_name_;
 
 public:
-  db() {}
+  Db() {}
 
-  db(vortex::core::framework::framework *framework, std::string db_name)
+  Db(vortex::core::framework::Framework *framework, std::string db_name)
           : framework_(framework), db_name_(db_name) {}
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<db>);
+    i.construct(&std::make_shared<Db>);
   }
 };
 
-class mongo {
+class Mongo {
 private:
-  vortex::core::framework::framework *framework_;
+  vortex::core::framework::Framework *framework_;
 
 public:
-  mongo() {}
+  Mongo() {}
 
-  mongo(vortex::core::framework::framework *framework) : framework_(framework) {}
+  Mongo(vortex::core::framework::Framework *framework) : framework_(framework) {}
 
   std::string get_default_db_name() {
     return framework_->mongo_.get_default_db_name();
@@ -155,16 +155,16 @@ public:
     return framework_->mongo_.list_collections(database_name);
   }
 
-  db get_db(std::string database_name) {
-    return db(framework_, database_name);
+  Db get_db(std::string database_name) {
+    return Db(framework_, database_name);
   }
 
-  collection get_collection(std::string collection_name) {
+  Collection get_collection(std::string collection_name) {
     return get_collection(get_default_db_name(), collection_name);
   }
 
-  collection get_collection(std::string database_name, std::string collection_name) {
-    return collection(framework_, database_name, collection_name);
+  Collection get_collection(std::string database_name, std::string collection_name) {
+    return Collection(framework_, database_name, collection_name);
   }
 
   void drop_database(std::string database_name) {
@@ -177,48 +177,48 @@ public:
 
   template<class Inspector>
   static void inspect(Inspector &i) {
-    i.construct(&std::make_shared<mongo>);
-    i.method("get_default_db_name", &mongo::get_default_db_name);
-    i.method("list_databases", &mongo::list_databases);
-    i.method("list_collections", &mongo::list_collections);
-    i.method("get_db", &mongo::get_db);
-    // i.method("get_collection", &mongo::get_collection);
-    i.method("drop_database", &mongo::drop_database);
-    i.method("clone_database", &mongo::clone_database);
+    i.construct(&std::make_shared<Mongo>);
+    i.method("get_default_db_name", &Mongo::get_default_db_name);
+    i.method("list_databases", &Mongo::list_databases);
+    i.method("list_collections", &Mongo::list_collections);
+    i.method("get_db", &Mongo::get_db);
+    // i.method("get_collection", &Mongo::get_collection);
+    i.method("drop_database", &Mongo::drop_database);
+    i.method("clone_database", &Mongo::clone_database);
   }
 };
 
 }  // namespace duktape_bindings
 
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::view);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::router);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::application);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::mongo);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::db);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::collection);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::View);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Router);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Application);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Mongo);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Db);
+DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Collection);
 
 namespace vortex {
 namespace core {
 namespace script {
-duktape::duktape(framework::framework* framework) : framework_(framework) {
+Duktape::Duktape(framework::Framework* framework) : framework_(framework) {
   ctx_ = new duk::Context();
 }
 
-duktape::~duktape() {
+Duktape::~Duktape() {
   delete ctx_;
 }
 
-void duktape::setup() {
-  ctx_->registerClass<duktape_bindings::view>();
-  auto view = std::make_shared<duktape_bindings::view>(framework_);
-  ctx_->registerClass<duktape_bindings::router>();
-  auto router = std::make_shared<duktape_bindings::router>(framework_);
-  ctx_->registerClass<duktape_bindings::application>();
-  auto application = std::make_shared<duktape_bindings::application>(framework_);
-  ctx_->registerClass<duktape_bindings::mongo>();
-  ctx_->registerClass<duktape_bindings::db>();
-  ctx_->registerClass<duktape_bindings::collection>();
-  auto mongo = std::make_shared<duktape_bindings::mongo>(framework_);
+void Duktape::setup() {
+  ctx_->registerClass<duktape_bindings::View>();
+  auto view = std::make_shared<duktape_bindings::View>(framework_);
+  ctx_->registerClass<duktape_bindings::Router>();
+  auto router = std::make_shared<duktape_bindings::Router>(framework_);
+  ctx_->registerClass<duktape_bindings::Application>();
+  auto application = std::make_shared<duktape_bindings::Application>(framework_);
+  ctx_->registerClass<duktape_bindings::Mongo>();
+  ctx_->registerClass<duktape_bindings::Db>();
+  ctx_->registerClass<duktape_bindings::Collection>();
+  auto mongo = std::make_shared<duktape_bindings::Mongo>(framework_);
 
   ctx_->addGlobal("__view", view);
   ctx_->addGlobal("__router", router);
@@ -228,7 +228,7 @@ void duktape::setup() {
   exec("view=__view;router=__router;application=__application;mongo=__mongo;");
 }
 
-void duktape::exec(std::string script) {
+void Duktape::exec(std::string script) {
   if (script.length() > 0) {
     try {
       ctx_->evalStringNoRes(script.c_str());

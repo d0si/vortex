@@ -1,4 +1,4 @@
-#include <server/http/http_session.h>
+#include <server/http/httpsession.h>
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
@@ -14,29 +14,29 @@ namespace vortex {
 namespace server {
 namespace http {
 
-http_session::http_session(
+HttpSession::HttpSession(
   maze::object config,
-  vortex::core::redis::redis* redis,
+  vortex::core::redis::Redis* redis,
   tcp::socket socket)
     : config_(config), redis_(redis), stream_(std::move(socket)) {
 
 }
 
-void http_session::run() {
+void HttpSession::run() {
   do_read();
 }
 
-void http_session::do_read() {
+void HttpSession::do_read() {
   req_ = {};
 
   stream_.expires_after(std::chrono::seconds(30));
 
   beast::http::async_read(stream_, buffer_, req_, beast::bind_front_handler(
-      &http_session::on_read,
+      &HttpSession::on_read,
       shared_from_this()));
 }
 
-void http_session::on_read(error_code ec, std::size_t bytes_transferred) {
+void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
   boost::ignore_unused(bytes_transferred);
 
   if (ec == beast::http::error::end_of_stream) {
@@ -67,10 +67,10 @@ void http_session::on_read(error_code ec, std::size_t bytes_transferred) {
   res_.set(boost::beast::http::field::content_type, "text/html");
   res_.result(boost::beast::http::status::ok);
 
-  core::framework::framework* framework = nullptr;
+  core::framework::Framework* framework = nullptr;
 
   try {
-    framework = new core::framework::framework(
+    framework = new core::framework::Framework(
       config_,
       redis_,
       stream_.socket().remote_endpoint().address().to_string(),
@@ -107,7 +107,7 @@ void http_session::on_read(error_code ec, std::size_t bytes_transferred) {
   send();
 }
 
-void http_session::on_write(
+void HttpSession::on_write(
     bool close,
     error_code ec,
     std::size_t bytes_transferred) {
@@ -126,15 +126,15 @@ void http_session::on_write(
   do_read();
 }
 
-void http_session::do_close() {
+void HttpSession::do_close() {
   error_code ec;
 
   stream_.socket().shutdown(tcp::socket::shutdown_send, ec);
 }
 
-void http_session::send() {
+void HttpSession::send() {
   beast::http::async_write(stream_, res_, beast::bind_front_handler(
-    &http_session::on_write,
+    &HttpSession::on_write,
     shared_from_this(),
     res_.need_eof()));
 }

@@ -1,9 +1,9 @@
-#include <server/http/http_listener.h>
+#include <server/http/httplistener.h>
 #include <iostream>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/bind_handler.hpp>
-#include <server/http/http_session.h>
+#include <server/http/httpsession.h>
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -14,9 +14,9 @@ namespace vortex {
 namespace server {
 namespace http {
 
-http_listener::http_listener(
+HttpListener::HttpListener(
   maze::object config,
-  vortex::core::redis::redis* redis,
+  vortex::core::redis::Redis* redis,
   asio::io_context& ioC,
   tcp::endpoint endpoint)
     : config_(config), redis_(redis), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
@@ -52,7 +52,7 @@ http_listener::http_listener(
   }
 }
 
-void http_listener::run() {
+void HttpListener::run() {
   if (!acceptor_.is_open()) {
     return;
   }
@@ -60,19 +60,19 @@ void http_listener::run() {
   do_accept();
 }
 
-void http_listener::do_accept() {
+void HttpListener::do_accept() {
   acceptor_.async_accept(
     asio::make_strand(ioC_),
     beast::bind_front_handler(
-      &http_listener::on_accept,
+      &HttpListener::on_accept,
       shared_from_this()));
 }
 
-void http_listener::on_accept(error_code ec, tcp::socket socket) {
+void HttpListener::on_accept(error_code ec, tcp::socket socket) {
   if (ec) {
     std::cout << "Listener accept failed. " << ec.message() << std::endl;
   } else {
-    std::make_shared<http_session>(
+    std::make_shared<HttpSession>(
       config_,
       redis_,
       std::move(socket))

@@ -8,10 +8,10 @@ namespace vortex {
 namespace server {
 namespace http {
 
-class http_server {
+class HttpServer {
  private:
   maze::object config_;
-  vortex::core::redis::redis redis_;
+  vortex::core::redis::Redis redis_;
 
  public:
   void start(maze::object config);

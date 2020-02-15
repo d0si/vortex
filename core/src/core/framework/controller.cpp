@@ -6,10 +6,10 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-controller::controller(framework* framework) : framework_(framework) {
+Controller::Controller(Framework* framework) : framework_(framework) {
 }
 
-void controller::find(std::string app_id, std::string name, std::string method) {
+void Controller::find(std::string app_id, std::string name, std::string method) {
   maze::object query;
   query["$or"] = maze::object("$or", maze::array()
     << maze::object("app_id", app_id)
@@ -28,31 +28,31 @@ void controller::find(std::string app_id, std::string name, std::string method) 
   }
 }
 
-std::string controller::get_id() {
+std::string Controller::get_id() {
   return controller_["_id"].get_object()["$oid"].get_string();
 }
 
-std::string controller::get_name() {
+std::string Controller::get_name() {
   return controller_["name"].get_string();
 }
 
-maze::array controller::get_app_ids() {
+maze::array Controller::get_app_ids() {
   return controller_["app_ids"].get_array();
 }
 
-std::string controller::get_script() {
+std::string Controller::get_script() {
   return controller_["script"].get_string();
 }
 
-std::string controller::get_post_script() {
+std::string Controller::get_post_script() {
   return controller_["post_script"].get_string();
 }
 
-std::string controller::get_content_type() {
+std::string Controller::get_content_type() {
   return controller_["content_type"].get_string();
 }
 
-std::string controller::get_method() {
+std::string Controller::get_method() {
   return controller_["method"].get_string();
 }
 

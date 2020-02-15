@@ -5,7 +5,7 @@ namespace vortex {
 namespace core {
 namespace storage {
 
-storage::storage(framework::framework* framework) : framework_(framework) {
+Storage::Storage(framework::Framework* framework) : framework_(framework) {
   this->backend_ = "mongo";
 
   if (this->framework_->get_config().is_object("storage")) {
@@ -17,7 +17,7 @@ storage::storage(framework::framework* framework) : framework_(framework) {
   }
 }
 
-const std::string storage::get_backend() {
+const std::string Storage::get_backend() {
   return this->backend_;
 }
 

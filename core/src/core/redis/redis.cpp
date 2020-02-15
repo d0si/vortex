@@ -4,22 +4,22 @@ namespace vortex {
 namespace core {
 namespace redis {
 
-redis::redis() {
+Redis::Redis() {
 
 }
 
-redis::redis(const maze::object& redis_config) {
+Redis::Redis(const maze::object& redis_config) {
   set_config(redis_config);
 }
 
-redis::~redis() {
+Redis::~Redis() {
   if (client_.is_connected()) {
     client_.sync_commit();
     client_.disconnect();
   }
 }
 
-void redis::connect() {
+void Redis::connect() {
   if (enabled) {
     std::string address = "127.0.0.1";
     int port = 6379;
@@ -36,7 +36,7 @@ void redis::connect() {
   }
 }
 
-void redis::set_config(const maze::object& redis_config) {
+void Redis::set_config(const maze::object& redis_config) {
   redis_config_ = redis_config;
 
   if (redis_config_.is_bool("enabled")) {
@@ -44,7 +44,7 @@ void redis::set_config(const maze::object& redis_config) {
   }
 }
 
-std::string redis::get(std::string key) {
+std::string Redis::get(std::string key) {
   if (enabled && client_.is_connected()) {
     std::future<cpp_redis::reply> reply = client_.get(key);
     client_.sync_commit();
@@ -56,7 +56,7 @@ std::string redis::get(std::string key) {
   }
 }
 
-void redis::set(std::string key, std::string value, int expire_seconds) {
+void Redis::set(std::string key, std::string value, int expire_seconds) {
   if (enabled && client_.is_connected()) {
     client_.set(key, value);
 
@@ -68,7 +68,7 @@ void redis::set(std::string key, std::string value, int expire_seconds) {
   }
 }
 
-bool redis::exists(std::string key) {
+bool Redis::exists(std::string key) {
   if (enabled && client_.is_connected()) {
     std::vector<std::string> keys;
     keys.push_back(key);
@@ -83,7 +83,7 @@ bool redis::exists(std::string key) {
   }
 }
 
-void redis::del(std::string key) {
+void Redis::del(std::string key) {
   if (enabled && client_.is_connected()) {
     std::vector<std::string> keys;
     keys.push_back(key);
@@ -93,7 +93,7 @@ void redis::del(std::string key) {
   }
 }
 
-void redis::expire(std::string key, int seconds) {
+void Redis::expire(std::string key, int seconds) {
   if (enabled && client_.is_connected()) {
     client_.expire(key, seconds);
     client_.sync_commit();

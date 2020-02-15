@@ -17,25 +17,25 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-class framework {
+class Framework {
  public:
   std::string client_ip_;
   boost::beast::http::request<boost::beast::http::string_body>* request_;
   boost::beast::http::response<boost::beast::http::string_body>* response_;
   maze::object config_;
-  redis::redis* redis_;
+  redis::Redis* redis_;
 
-  router router_;
-  host host_;
-  application application_;
-  controller controller_;
-  view view_;
-  storage::mongo::mongo mongo_;
-  script::script script_;
+  Router router_;
+  Host host_;
+  Application application_;
+  Controller controller_;
+  View view_;
+  storage::mongo::Mongo mongo_;
+  script::Script script_;
 
-  framework(
+  Framework(
     maze::object config,
-    redis::redis* redis,
+    redis::Redis* redis,
     std::string client_ip,
     boost::beast::http::request<boost::beast::http::string_body>* request,
     boost::beast::http::response<boost::beast::http::string_body>* response);

@@ -1,5 +1,5 @@
 SET(server_SRC
-    src/server/http/http_server.cpp
-    src/server/http/http_listener.cpp
-    src/server/http/http_session.cpp
+    src/server/http/httpserver.cpp
+    src/server/http/httplistener.cpp
+    src/server/http/httpsession.cpp
 )

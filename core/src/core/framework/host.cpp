@@ -6,10 +6,10 @@ namespace vortex {
 namespace core {
 namespace framework {
 
-host::host(framework* framework) : framework_(framework) {
+Host::Host(Framework* framework) : framework_(framework) {
 }
 
-void host::find(std::string hostname) {
+void Host::find(std::string hostname) {
   std::string redis_key = "vortex.core.host.value." + hostname;
   if (framework_->redis_->exists(redis_key)) {
     host_ = maze::object::from_json(framework_->redis_->get(redis_key));
@@ -31,27 +31,27 @@ void host::find(std::string hostname) {
   }
 }
 
-std::string host::get_id() {
+std::string Host::get_id() {
     return host_["_id"].get_object()["$oid"].get_string();
 }
 
-std::string host::get_hostname() {
+std::string Host::get_hostname() {
     return host_["hostname"].get_string();
 }
 
-std::string host::get_app_id() {
+std::string Host::get_app_id() {
     return host_["app_id"].get_string();
 }
 
-maze::object host::get_config() {
+maze::object Host::get_config() {
   return host_["config"].get_object();
 }
 
-std::string host::get_script() {
+std::string Host::get_script() {
   return host_["script"].get_string();
 }
 
-std::string host::get_post_script() {
+std::string Host::get_post_script() {
   return host_["post_script"].get_string();
 }
 
