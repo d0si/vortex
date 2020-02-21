@@ -14,6 +14,6 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     vortex::core
     vortex::server
-    pthread
+#    pthread
     ${Boost_LIBRARIES}
 )

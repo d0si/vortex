@@ -16,11 +16,13 @@ Mongo::Mongo(const maze::object& mongo_config) {
 }
 
 void Mongo::connect() {
+#ifdef VORTEX_HAS_FEATURE_MONGO
   if (enabled) {
     mongocxx::uri uri{ get_connection_uri() };
 
     client_ = mongocxx::client{ uri };
   }
+#endif
 }
 
 void Mongo::set_config(const maze::object& mongo_config) {
@@ -71,7 +73,11 @@ std::string Mongo::get_default_db_name() {
 }
 
 Db Mongo::get_db(std::string database_name) {
+#ifdef VORTEX_HAS_FEATURE_MONGO
   return Db(client_[database_name]);
+#else
+  return Db();
+#endif
 }
 
 Collection Mongo::get_collection(std::string collection_name) {
@@ -79,16 +85,22 @@ Collection Mongo::get_collection(std::string collection_name) {
 }
 
 Collection Mongo::get_collection(std::string database_name, std::string collection_name) {
+#ifdef VORTEX_HAS_FEATURE_MONGO
   return Collection(client_[database_name][collection_name]);
+#else
+  return Collection();
+#endif
 }
 
 std::vector<std::string> Mongo::list_databases() {
   std::vector<std::string> databases;
 
+#ifdef VORTEX_HAS_FEATURE_MONGO
   auto dbs = client_.list_databases();
   for (auto it = dbs.begin(); it != dbs.end(); it++) {
     databases.push_back((*it)["name"].get_utf8().value.to_string());
   }
+#endif
 
   return databases;
 }

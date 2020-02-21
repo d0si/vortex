@@ -1,7 +1,11 @@
 #include <core/util/random.h>
 #include <random>
 #include <fcntl.h>
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#include <io.h>
+#else
 #include <unistd.h>
+#endif
 
 namespace vortex {
 namespace core {

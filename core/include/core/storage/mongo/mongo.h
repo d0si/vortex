@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
+#ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/client.hpp>
+#endif
 #include <maze/object.h>
 #include <core/storage/mongo/db.h>
 #include <core/storage/mongo/collection.h>
@@ -15,7 +17,9 @@ namespace mongo {
 
 class Mongo {
  private:
+#ifdef VORTEX_HAS_FEATURE_MONGO
   mongocxx::client client_;
+#endif
   maze::object mongo_config_;
   bool enabled = true;
 

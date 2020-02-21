@@ -1,7 +1,9 @@
 #ifndef VORTEX_CORE_REDIS_REDIS_H
 #define VORTEX_CORE_REDIS_REDIS_H
 
+#ifdef VORTEX_HAS_FEATURE_REDIS
 #include <cpp_redis/cpp_redis>
+#endif
 #include <maze/object.h>
 
 namespace vortex {
@@ -10,7 +12,9 @@ namespace redis {
 
 class Redis {
  private:
+#ifdef VORTEX_HAS_FEATURE_REDIS
   cpp_redis::client client_;
+#endif
   maze::object redis_config_;
   bool enabled = true;
 

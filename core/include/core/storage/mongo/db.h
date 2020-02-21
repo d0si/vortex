@@ -3,7 +3,9 @@
 
 #include <string>
 #include <vector>
+#ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/database.hpp>
+#endif
 #include <core/storage/mongo/collection.h>
 
 namespace vortex {
@@ -15,10 +17,15 @@ class Mongo;
 
 class Db {
  private:
+#ifdef VORTEX_HAS_FEATURE_MONGO
   mongocxx::database database_;
+#endif
 
  public:
+  Db();
+#ifdef VORTEX_HAS_FEATURE_MONGO
   Db(mongocxx::database database);
+#endif
 
   Collection get_collection(std::string collection_name);
 

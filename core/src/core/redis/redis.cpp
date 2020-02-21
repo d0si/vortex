@@ -13,13 +13,16 @@ Redis::Redis(const maze::object& redis_config) {
 }
 
 Redis::~Redis() {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (client_.is_connected()) {
     client_.sync_commit();
     client_.disconnect();
   }
+#endif
 }
 
 void Redis::connect() {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (enabled) {
     std::string address = "127.0.0.1";
     int port = 6379;
@@ -34,6 +37,7 @@ void Redis::connect() {
 
     client_.connect(address, port);
   }
+#endif
 }
 
 void Redis::set_config(const maze::object& redis_config) {
@@ -45,6 +49,7 @@ void Redis::set_config(const maze::object& redis_config) {
 }
 
 std::string Redis::get(std::string key) {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (enabled && client_.is_connected()) {
     std::future<cpp_redis::reply> reply = client_.get(key);
     client_.sync_commit();
@@ -54,9 +59,13 @@ std::string Redis::get(std::string key) {
   } else {
     return "";
   }
+#else
+  return "";
+#endif
 }
 
 void Redis::set(std::string key, std::string value, int expire_seconds) {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (enabled && client_.is_connected()) {
     client_.set(key, value);
 
@@ -66,9 +75,11 @@ void Redis::set(std::string key, std::string value, int expire_seconds) {
       expire(key, expire_seconds);
     }
   }
+#endif
 }
 
 bool Redis::exists(std::string key) {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (enabled && client_.is_connected()) {
     std::vector<std::string> keys;
     keys.push_back(key);
@@ -81,9 +92,13 @@ bool Redis::exists(std::string key) {
   } else {
     return false;
   }
+#else
+  return false;
+#endif
 }
 
 void Redis::del(std::string key) {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (enabled && client_.is_connected()) {
     std::vector<std::string> keys;
     keys.push_back(key);
@@ -91,13 +106,16 @@ void Redis::del(std::string key) {
     client_.del(keys);
     client_.sync_commit();
   }
+#endif
 }
 
 void Redis::expire(std::string key, int seconds) {
+#ifdef VORTEX_HAS_FEATURE_REDIS
   if (enabled && client_.is_connected()) {
     client_.expire(key, seconds);
     client_.sync_commit();
   }
+#endif
 }
 
 }  // namespace redis

@@ -3,7 +3,9 @@
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
 #include <core/framework/framework.h>
+#ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
+#endif
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -82,10 +84,12 @@ void HttpSession::on_read(error_code ec, std::size_t bytes_transferred) {
     framework->run();
   } catch (int e) {
 
+#ifdef VORTEX_HAS_FEATURE_MONGO
   } catch (mongocxx::exception::runtime_error e) {
     res_.result(boost::beast::http::status::internal_server_error);
     std::string what = e.what();
     res_.body() = "MongoDb exception: " + what;
+#endif
   } catch (...) {
     res_.result(boost::beast::http::status::internal_server_error);
     res_.body() = "Internal server error";

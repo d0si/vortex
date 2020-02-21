@@ -1,8 +1,9 @@
 #include <core/util/password.h>
 #include <core/util/random.h>
+#ifdef VORTEX_HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>
 #include <cryptopp/base64.h>
-
+#endif
 #define SALT_LENGTH 24
 
 namespace vortex {
@@ -15,6 +16,7 @@ std::string hash_password(std::string password) {
 }
 
 std::string hash_password(std::string password, std::string salt, unsigned int iterations) {
+#ifdef VORTEX_HAS_FEATURE_CRYPTOPP
   if (salt.empty()) {
     salt = generate_salt();
   }
@@ -45,6 +47,9 @@ std::string hash_password(std::string password, std::string salt, unsigned int i
   encoder.MessageEnd();
 
   return "$v1$" + salt + "$" + hash_output;
+#else
+  throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+#endif
 }
 
 bool verify_password(std::string password, std::string hashed_password) {
@@ -80,6 +85,7 @@ bool verify_password(std::string password, std::string hashed_password) {
 }
 
 std::string generate_salt() {
+#ifdef VORTEX_HAS_FEATURE_CRYPTOPP
   CryptoPP::byte salt[SALT_LENGTH];
 
   if (util::random::rand_bytes(salt, SALT_LENGTH) != 0) {
@@ -96,6 +102,9 @@ std::string generate_salt() {
   encoder.MessageEnd();
 
   return salt_str;
+#else
+  throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+#endif
 }
 
 }  // namespace password

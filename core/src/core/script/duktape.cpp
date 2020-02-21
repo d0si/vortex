@@ -1,7 +1,10 @@
 #include <core/script/duktape.h>
+#ifdef VORTEX_HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
+#endif
 #include <core/framework/framework.h>
 
+#ifdef VORTEX_HAS_FEATURE_DUKTAPE
 namespace duktape_bindings {
 
 class View {
@@ -197,18 +200,27 @@ DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Mongo);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Db);
 DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Collection);
 
+#endif  // VORTEX_HAS_FEATURE_CRYPTOPP
+
 namespace vortex {
 namespace core {
 namespace script {
 Duktape::Duktape(framework::Framework* framework) : framework_(framework) {
+#ifdef VORTEX_HAS_FEATURE_DUKTAPE
   ctx_ = new duk::Context();
+#endif
 }
 
 Duktape::~Duktape() {
-  delete ctx_;
+#ifdef VORTEX_HAS_FEATURE_DUKTAPE
+  if (ctx_ != nullptr) {
+    delete ctx_;
+  }
+#endif
 }
 
 void Duktape::setup() {
+#ifdef VORTEX_HAS_FEATURE_DUKTAPE
   ctx_->registerClass<duktape_bindings::View>();
   auto view = std::make_shared<duktape_bindings::View>(framework_);
   ctx_->registerClass<duktape_bindings::Router>();
@@ -226,9 +238,11 @@ void Duktape::setup() {
   ctx_->addGlobal("__mongo", mongo);
 
   exec("view=__view;router=__router;application=__application;mongo=__mongo;");
+#endif
 }
 
 void Duktape::exec(std::string script) {
+#ifdef VORTEX_HAS_FEATURE_DUKTAPE
   if (script.length() > 0) {
     try {
       ctx_->evalStringNoRes(script.c_str());
@@ -243,6 +257,7 @@ void Duktape::exec(std::string script) {
       framework_->exit();
     }
   }
+#endif
 }
 
 }  // namespace script
