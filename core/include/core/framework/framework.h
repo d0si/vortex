@@ -14,41 +14,39 @@
 #include <core/script/script.h>
 
 namespace vortex {
-namespace core {
-namespace framework {
+	namespace core {
+		namespace framework {
+			class Framework {
+			public:
+				std::string client_ip_;
+				boost::beast::http::request<boost::beast::http::string_body>* request_;
+				boost::beast::http::response<boost::beast::http::string_body>* response_;
+				maze::object config_;
+				redis::Redis* redis_;
 
-class Framework {
- public:
-  std::string client_ip_;
-  boost::beast::http::request<boost::beast::http::string_body>* request_;
-  boost::beast::http::response<boost::beast::http::string_body>* response_;
-  maze::object config_;
-  redis::Redis* redis_;
+				Router router_;
+				Host host_;
+				Application application_;
+				Controller controller_;
+				View view_;
+				storage::mongo::Mongo mongo_;
+				script::Script script_;
 
-  Router router_;
-  Host host_;
-  Application application_;
-  Controller controller_;
-  View view_;
-  storage::mongo::Mongo mongo_;
-  script::Script script_;
+				Framework(
+					maze::object config,
+					redis::Redis* redis,
+					std::string client_ip,
+					boost::beast::http::request<boost::beast::http::string_body>* request,
+					boost::beast::http::response<boost::beast::http::string_body>* response);
 
-  Framework(
-    maze::object config,
-    redis::Redis* redis,
-    std::string client_ip,
-    boost::beast::http::request<boost::beast::http::string_body>* request,
-    boost::beast::http::response<boost::beast::http::string_body>* response);
+				void setup();
+				void run();
+				void exit();
 
-  void setup();
-  void run();
-  void exit();
-
-  maze::object get_config();
-};
-
-}  // namespace framework
-}  // namespace core
+				maze::object get_config();
+			};
+		}  // namespace framework
+	}  // namespace core
 }  // namespace vortex
 
 #endif  // VORTEX_CORE_FRAMEWORK_FRAMEWORK_H

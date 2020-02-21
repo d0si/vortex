@@ -7,22 +7,20 @@
 #include <core/storage/interface/icollection.h>
 
 namespace vortex {
-namespace core {
-namespace storage {
-namespace interface {
+	namespace core {
+		namespace storage {
+			namespace interface {
+				class IBackend {
+				public:
+					IBackend();
+					IBackend(const maze::object& config);
 
-class IBackend {
-public:
-  IBackend();
-  IBackend(const maze::object& config);
-
-  IDatabase get_database(std::string database_name);
-  ICollection get_collection(std::string database_name, std::string collection_name);
-};
-
-}  // namespace interface
-}  // namespace storage
-}  // namespace core
+					IDatabase get_database(std::string database_name);
+					ICollection get_collection(std::string database_name, std::string collection_name);
+				};
+			}  // namespace interface
+		}  // namespace storage
+	}  // namespace core
 }  // namespace vortex
 
 #endif  // VORTEX_CORE_STORAGE_INTERFACE_IBACKEND_H

@@ -7,94 +7,92 @@
 #endif
 
 namespace vortex {
-namespace core {
-namespace util {
-namespace hash {
+	namespace core {
+		namespace util {
+			namespace hash {
+				std::string sha1(const std::string& value) {
+					return sha1((const unsigned char*)value.c_str(), value.length());
+				}
 
-std::string sha1(const std::string& value) {
-    return sha1((const unsigned char*)value.c_str(), value.length());
-}
-
-std::string sha1(unsigned char* value, size_t length) {
+				std::string sha1(unsigned char* value, size_t length) {
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-    unsigned char digest[CryptoPP::SHA1::DIGESTSIZE];
+					unsigned char digest[CryptoPP::SHA1::DIGESTSIZE];
 
-    CryptoPP::SHA1 hash;
-    hash.CalculateDigest(digest, value, length);
+					CryptoPP::SHA1 hash;
+					hash.CalculateDigest(digest, value, length);
 
-    return hex_encode(digest, CryptoPP::SHA1::DIGESTSIZE);
+					return hex_encode(digest, CryptoPP::SHA1::DIGESTSIZE);
 #else
-    throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-}
+				}
 
-std::string sha256(const std::string& value) {
-    return sha256((const unsigned char*)value.c_str(), value.length());
-}
+				std::string sha256(const std::string& value) {
+					return sha256((const unsigned char*)value.c_str(), value.length());
+				}
 
-std::string sha256(const unsigned char* value, const size_t length) {
+				std::string sha256(const unsigned char* value, const size_t length) {
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-    unsigned char digest[CryptoPP::SHA256::DIGESTSIZE];
+					unsigned char digest[CryptoPP::SHA256::DIGESTSIZE];
 
-    CryptoPP::SHA256 hash;
-    hash.CalculateDigest(digest, value, length);
+					CryptoPP::SHA256 hash;
+					hash.CalculateDigest(digest, value, length);
 
-    return hex_encode(digest, CryptoPP::SHA256::DIGESTSIZE);
+					return hex_encode(digest, CryptoPP::SHA256::DIGESTSIZE);
 #else
-throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-}
+				}
 
-std::string sha512(const std::string value) {
-    return sha512((const unsigned char*)value.c_str(), value.length());
-}
+				std::string sha512(const std::string value) {
+					return sha512((const unsigned char*)value.c_str(), value.length());
+				}
 
-std::string sha512(const unsigned char* value, const size_t length) {
+				std::string sha512(const unsigned char* value, const size_t length) {
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-    unsigned char digest[CryptoPP::SHA512::DIGESTSIZE];
+					unsigned char digest[CryptoPP::SHA512::DIGESTSIZE];
 
-    CryptoPP::SHA512 hash;
-    hash.CalculateDigest(digest, value, length);
+					CryptoPP::SHA512 hash;
+					hash.CalculateDigest(digest, value, length);
 
-    return hex_encode(digest, CryptoPP::SHA512::DIGESTSIZE);
+					return hex_encode(digest, CryptoPP::SHA512::DIGESTSIZE);
 #else
-throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-}
+				}
 
-std::string md5(const std::string value) {
-    return md5((const unsigned char*)value.c_str(), value.length());
-}
+				std::string md5(const std::string value) {
+					return md5((const unsigned char*)value.c_str(), value.length());
+				}
 
-std::string md5(const unsigned char* value, const size_t length) {
+				std::string md5(const unsigned char* value, const size_t length) {
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-    unsigned char digest[CryptoPP::Weak::MD5::DIGESTSIZE];
+					unsigned char digest[CryptoPP::Weak::MD5::DIGESTSIZE];
 
-    CryptoPP::Weak::MD5 hash;
-    hash.CalculateDigest(digest, value, length);
+					CryptoPP::Weak::MD5 hash;
+					hash.CalculateDigest(digest, value, length);
 
-    return hex_encode(digest, CryptoPP::Weak::MD5::DIGESTSIZE);
+					return hex_encode(digest, CryptoPP::Weak::MD5::DIGESTSIZE);
 #else
-throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-}
+				}
 
-std::string hex_encode(const unsigned char* value, size_t length) {
+				std::string hex_encode(const unsigned char* value, size_t length) {
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-    CryptoPP::HexEncoder encoder(nullptr, false);
-    std::string output;
+					CryptoPP::HexEncoder encoder(nullptr, false);
+					std::string output;
 
-    encoder.Attach(new CryptoPP::StringSink(output));
-    encoder.Put(value, length);
-    encoder.MessageEnd();
+					encoder.Attach(new CryptoPP::StringSink(output));
+					encoder.Put(value, length);
+					encoder.MessageEnd();
 
-    return output;
+					return output;
 #else
-throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-}
-
-}  // namespace hash
-}  // namespace util
-}  // namespace core
+				}
+			}  // namespace hash
+		}  // namespace util
+	}  // namespace core
 }  // namespace vortex
