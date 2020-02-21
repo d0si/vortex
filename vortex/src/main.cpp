@@ -3,12 +3,12 @@
 #include <mongocxx/instance.hpp>
 #endif
 
-int main(int argc, char **args) {
+int main(int argc, char** args) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-  mongocxx::instance instance{};
+	mongocxx::instance instance{};
 #endif
 
-  vortex::start_vortex(std::vector<std::string>(args, args + argc));
+	vortex::start_vortex(std::vector<std::string>(args, args + argc));
 
-  return 0;
+	return 0;
 }
