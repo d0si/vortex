@@ -11,77 +11,76 @@ using asio::ip::tcp;
 using boost::system::error_code;
 
 namespace vortex {
-namespace server {
-namespace http {
+	namespace server {
+		namespace http {
+			HttpListener::HttpListener(
+				maze::object config,
+				vortex::core::redis::Redis* redis,
+				asio::io_context& ioC,
+				tcp::endpoint endpoint)
+				: config_(config), redis_(redis), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
+				error_code ec;
 
-HttpListener::HttpListener(
-  maze::object config,
-  vortex::core::redis::Redis* redis,
-  asio::io_context& ioC,
-  tcp::endpoint endpoint)
-    : config_(config), redis_(redis), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
-  error_code ec;
+				acceptor_.open(endpoint.protocol(), ec);
+				if (ec) {
+					std::cout << "Listener open failed. " << ec.message() << std::endl;
 
-  acceptor_.open(endpoint.protocol(), ec);
-  if (ec) {
-    std::cout << "Listener open failed. " << ec.message() << std::endl;
+					return;
+				}
 
-    return;
-  }
+				acceptor_.set_option(asio::socket_base::reuse_address(true), ec);
+				if (ec) {
+					std::cout << "Listener set option REUSE_ADDRESS failed. "
+						<< ec.message() << std::endl;
 
-  acceptor_.set_option(asio::socket_base::reuse_address(true), ec);
-  if (ec) {
-    std::cout << "Listener set option REUSE_ADDRESS failed. "
-      << ec.message() << std::endl;
+					return;
+				}
 
-    return;
-  }
+				acceptor_.bind(endpoint, ec);
+				if (ec) {
+					std::cout << "Listener bind failed. " << ec.message() << std::endl;
 
-  acceptor_.bind(endpoint, ec);
-  if (ec) {
-    std::cout << "Listener bind failed. " << ec.message() << std::endl;
+					return;
+				}
 
-    return;
-  }
+				acceptor_.listen(asio::socket_base::max_listen_connections, ec);
+				if (ec) {
+					std::cout << "Listener listen failed. " << ec.message() << std::endl;
 
-  acceptor_.listen(asio::socket_base::max_listen_connections, ec);
-  if (ec) {
-    std::cout << "Listener listen failed. " << ec.message() << std::endl;
+					return;
+				}
+			}
 
-    return;
-  }
-}
+			void HttpListener::run() {
+				if (!acceptor_.is_open()) {
+					return;
+				}
 
-void HttpListener::run() {
-  if (!acceptor_.is_open()) {
-    return;
-  }
+				do_accept();
+			}
 
-  do_accept();
-}
+			void HttpListener::do_accept() {
+				acceptor_.async_accept(
+					asio::make_strand(ioC_),
+					beast::bind_front_handler(
+						&HttpListener::on_accept,
+						shared_from_this()));
+			}
 
-void HttpListener::do_accept() {
-  acceptor_.async_accept(
-    asio::make_strand(ioC_),
-    beast::bind_front_handler(
-      &HttpListener::on_accept,
-      shared_from_this()));
-}
+			void HttpListener::on_accept(error_code ec, tcp::socket socket) {
+				if (ec) {
+					std::cout << "Listener accept failed. " << ec.message() << std::endl;
+				}
+				else {
+					std::make_shared<HttpSession>(
+						config_,
+						redis_,
+						std::move(socket))
+						->run();
+				}
 
-void HttpListener::on_accept(error_code ec, tcp::socket socket) {
-  if (ec) {
-    std::cout << "Listener accept failed. " << ec.message() << std::endl;
-  } else {
-    std::make_shared<HttpSession>(
-      config_,
-      redis_,
-      std::move(socket))
-      ->run();
-  }
-
-  do_accept();
-}
-
-}  // namespace http
-}  // namespace server
+				do_accept();
+			}
+		}  // namespace http
+	}  // namespace server
 }  // namespace vortex

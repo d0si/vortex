@@ -11,37 +11,35 @@
 #include <core/redis/redis.h>
 
 namespace vortex {
-namespace server {
-namespace http {
+	namespace server {
+		namespace http {
+			class HttpSession : public std::enable_shared_from_this<HttpSession> {
+			private:
+				boost::beast::tcp_stream stream_;
+				boost::beast::flat_buffer buffer_;
+				boost::beast::http::request<boost::beast::http::string_body> req_;
+				boost::beast::http::response<boost::beast::http::string_body> res_;
+				maze::object config_;
+				vortex::core::redis::Redis* redis_;
 
-class HttpSession : public std::enable_shared_from_this<HttpSession> {
- private:
-  boost::beast::tcp_stream stream_;
-  boost::beast::flat_buffer buffer_;
-  boost::beast::http::request<boost::beast::http::string_body> req_;
-  boost::beast::http::response<boost::beast::http::string_body> res_;
-  maze::object config_;
-  vortex::core::redis::Redis* redis_;
+			public:
+				explicit HttpSession(
+					maze::object config,
+					vortex::core::redis::Redis* redis,
+					boost::asio::ip::tcp::socket socket);
 
- public:
-  explicit HttpSession(
-    maze::object config,
-    vortex::core::redis::Redis* redis,
-    boost::asio::ip::tcp::socket socket);
-
-  void run();
-  void do_read();
-  void on_read(boost::system::error_code ec, std::size_t bytes_transferred);
-  void on_write(
-    bool close,
-    boost::system::error_code ec,
-    std::size_t bytes_transferred);
-  void do_close();
-  void send();
-};
-
-}  // namespace http
-}  // namespace server
+				void run();
+				void do_read();
+				void on_read(boost::system::error_code ec, std::size_t bytes_transferred);
+				void on_write(
+					bool close,
+					boost::system::error_code ec,
+					std::size_t bytes_transferred);
+				void do_close();
+				void send();
+			};
+		}  // namespace http
+	}  // namespace server
 }  // namespace vortex
 
 #endif  // VORTEX_SERVER_HTTP_HTTP_SESSION_H
