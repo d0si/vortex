@@ -1,4 +1,5 @@
 #include <core/util/password.h>
+#include <stdexcept>
 #include <core/util/random.h>
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>
@@ -47,7 +48,7 @@ namespace Vortex {
 
 					return "$v1$" + salt + "$" + hash_output;
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 
@@ -89,7 +90,7 @@ namespace Vortex {
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
 					CryptoPP::byte salt[SALT_LENGTH];
 
-					if (util::random::rand_bytes(salt, SALT_LENGTH) != 0) {
+					if (Util::Random::rand_bytes(salt, SALT_LENGTH) != 0) {
 						return "";
 					}
 
@@ -104,7 +105,7 @@ namespace Vortex {
 
 					return salt_str;
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 			}  // namespace Password

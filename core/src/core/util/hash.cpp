@@ -1,4 +1,5 @@
 #include <core/util/hash.h>
+#include <stdexcept>
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>
 #include <cryptopp/hex.h>
@@ -23,7 +24,7 @@ namespace Vortex {
 
 					return hex_encode(digest, CryptoPP::SHA1::DIGESTSIZE);
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 
@@ -40,7 +41,7 @@ namespace Vortex {
 
 					return hex_encode(digest, CryptoPP::SHA256::DIGESTSIZE);
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 
@@ -57,7 +58,7 @@ namespace Vortex {
 
 					return hex_encode(digest, CryptoPP::SHA512::DIGESTSIZE);
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 
@@ -74,7 +75,7 @@ namespace Vortex {
 
 					return hex_encode(digest, CryptoPP::Weak::MD5::DIGESTSIZE);
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 
@@ -89,7 +90,7 @@ namespace Vortex {
 
 					return output;
 #else
-					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
 			}  // namespace Hash
