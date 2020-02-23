@@ -3,10 +3,10 @@
 
 #include <string>
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace hash {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace Hash {
 				std::string sha1(const std::string& value);
 				std::string sha1(const unsigned char* value, const size_t length);
 				std::string sha256(const std::string& value);
@@ -17,9 +17,9 @@ namespace vortex {
 				std::string md5(const unsigned char* value, const size_t length);
 
 				std::string hex_encode(const unsigned char* value, const size_t length);
-			}  // namespace hash
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Hash
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_UTIL_HASH_H

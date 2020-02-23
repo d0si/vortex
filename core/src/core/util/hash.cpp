@@ -6,10 +6,10 @@
 #include <cryptopp/md5.h>
 #endif
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace hash {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace Hash {
 				std::string sha1(const std::string& value) {
 					return sha1((const unsigned char*)value.c_str(), value.length());
 				}
@@ -92,7 +92,7 @@ namespace vortex {
 					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
-			}  // namespace hash
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Hash
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex

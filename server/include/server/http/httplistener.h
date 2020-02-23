@@ -4,7 +4,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <maze/object.h>
-#include <core/redis/redis.h>
+#include <core/cache/redis.h>
 
 namespace vortex {
 	namespace server {
@@ -14,12 +14,12 @@ namespace vortex {
 				boost::asio::io_context& ioC_;
 				boost::asio::ip::tcp::acceptor acceptor_;
 				maze::object config_;
-				vortex::core::redis::Redis* redis_;
+				Vortex::Core::Cache::Redis* redis_;
 
 			public:
 				HttpListener(
 					maze::object config,
-					vortex::core::redis::Redis* redis,
+					Vortex::Core::Cache::Redis* redis,
 					boost::asio::io_context& ioC,
 					boost::asio::ip::tcp::endpoint endpoint);
 

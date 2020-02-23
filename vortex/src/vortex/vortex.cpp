@@ -9,7 +9,7 @@
 #include <core/util/string.h>
 #include <boost/filesystem.hpp>
 
-namespace util = vortex::core::util;
+namespace Util = Vortex::Core::Util;
 
 namespace vortex {
 
@@ -41,8 +41,8 @@ namespace vortex {
 					bool arg_has_error = false;
 
 					if (arg.length() > 2) {
-						if (util::string::starts_with(arg, "-p=") || util::string::starts_with(arg, "--port=")) {
-							std::vector<std::string> val = util::string::split(arg, "=");
+						if (Util::String::starts_with(arg, "-p=") || Util::String::starts_with(arg, "--port=")) {
+							std::vector<std::string> val = Util::String::split(arg, "=");
 
 							try {
 								port = std::stoi(val[1]);
@@ -51,8 +51,8 @@ namespace vortex {
 								arg_has_error = true;
 							}
 						}
-						else if (util::string::starts_with(arg, "-a=") || util::string::starts_with(arg, "--address=")) {
-							std::vector<std::string> val = util::string::split(arg, "=");
+						else if (Util::String::starts_with(arg, "-a=") || Util::String::starts_with(arg, "--address=")) {
+							std::vector<std::string> val = Util::String::split(arg, "=");
 
 							try {
 								address = val[1];
@@ -61,8 +61,8 @@ namespace vortex {
 								arg_has_error = true;
 							}
 						}
-						else if (util::string::starts_with(arg, "-d=") || util::string::starts_with(arg, "--data_dir=")) {
-							std::vector<std::string> val = util::string::split(arg, "=");
+						else if (Util::String::starts_with(arg, "-d=") || Util::String::starts_with(arg, "--data_dir=")) {
+							std::vector<std::string> val = Util::String::split(arg, "=");
 
 							try {
 								data_dir = val[1];
@@ -71,8 +71,8 @@ namespace vortex {
 								arg_has_error = true;
 							}
 						}
-						else if (util::string::starts_with(arg, "-t=") || util::string::starts_with(arg, "--thread_count=")) {
-							std::vector<std::string> val = util::string::split(arg, "=");
+						else if (Util::String::starts_with(arg, "-t=") || Util::String::starts_with(arg, "--thread_count=")) {
+							std::vector<std::string> val = Util::String::split(arg, "=");
 
 							try {
 								thread_count = stoi(val[1]);
@@ -133,8 +133,8 @@ namespace vortex {
 		else if (args[1] == "console") {
 			start_console();
 		}
-		else if (util::string::starts_with(args[1], "-c=") || util::string::starts_with(args[1], "--config=")) {
-			std::vector<std::string> val = util::string::split(args[1], "=");
+		else if (Util::String::starts_with(args[1], "-c=") || Util::String::starts_with(args[1], "--config=")) {
+			std::vector<std::string> val = Util::String::split(args[1], "=");
 
 			std::string config_path;
 			try {

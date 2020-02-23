@@ -8,10 +8,10 @@
 #include <maze/array.h>
 #include <maze/object.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			namespace mongo {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			namespace Mongo {
 				class Collection {
 				private:
 #ifdef VORTEX_HAS_FEATURE_MONGO
@@ -42,9 +42,9 @@ namespace vortex {
 					void replace_one(maze::object query, maze::object replacement_value);
 					void replace_one(std::string json_query, std::string json_replacement_value);
 				};
-			}  // namespace mongo
-		}  // namespace core
-	}  // namespace storage
-}  // namespace vortex
+			}  // namespace Mongo
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_STORAGE_MONGO_COLLECTION_H

@@ -1,14 +1,14 @@
-#ifndef VORTEX_CORE_REDIS_REDIS_H
-#define VORTEX_CORE_REDIS_REDIS_H
+#ifndef VORTEX_CORE_CACHE_REDIS_H
+#define VORTEX_CORE_CACHE_REDIS_H
 
 #ifdef VORTEX_HAS_FEATURE_REDIS
 #include <cpp_redis/cpp_redis>
 #endif
 #include <maze/object.h>
 
-namespace vortex {
-	namespace core {
-		namespace redis {
+namespace Vortex {
+	namespace Core {
+		namespace Cache {
 			class Redis {
 			private:
 #ifdef VORTEX_HAS_FEATURE_REDIS
@@ -30,8 +30,8 @@ namespace vortex {
 				void del(std::string key);
 				void expire(std::string key, int seconds);
 			};
-		}  // namespace redis
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Cache
+	}  // namespace Core
+}  // namespace Vortex
 
-#endif  // VORTEX_CORE_REDIS_REDIS_H
+#endif  // VORTEX_CORE_CACHE_REDIS_H

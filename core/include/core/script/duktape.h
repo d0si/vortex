@@ -7,27 +7,25 @@ namespace duk {
 	class Context;
 }
 
-namespace vortex {
-	namespace core {
-		namespace framework {
-			class Framework;
-		}  // namespace framework
+namespace Vortex {
+	namespace Core {
+		class Framework;
 
-		namespace script {
+		namespace Script {
 			class Duktape {
 			private:
 				duk::Context* ctx_;
-				framework::Framework* framework_;
+				Framework* framework_;
 
 			public:
-				Duktape(framework::Framework* framework);
+				Duktape(Framework* framework);
 				~Duktape();
 
 				void setup();
 				void exec(std::string script);
 			};
-		}  // namespace script
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Script
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_SCRIPT_DUKTAPE_H

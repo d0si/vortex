@@ -1,10 +1,10 @@
 #include <core/storage/mongo/mongo.h>
 #include <maze/element.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			namespace mongo {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			namespace Mongo {
 				Mongo::Mongo() {
 					connect();
 				}
@@ -136,7 +136,7 @@ namespace vortex {
 						new_collection.insert_many(old_values);
 					}
 				}
-			}  // namespace mongo
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Mongo
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex

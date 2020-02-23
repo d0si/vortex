@@ -7,10 +7,10 @@
 #include <unistd.h>
 #endif
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace random {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace Random {
 				std::string random_string(unsigned int length, const std::string char_list) {
 					thread_local static std::mt19937 rg{ std::random_device{}() };
 					thread_local static std::uniform_int_distribution<std::string::size_type> pick(0, char_list.length() - 2);
@@ -47,7 +47,7 @@ namespace vortex {
 					close(fd);
 					return 0;
 				}
-			}  // namespace random
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Random
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex

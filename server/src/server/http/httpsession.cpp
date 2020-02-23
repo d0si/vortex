@@ -2,7 +2,7 @@
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
-#include <core/framework/framework.h>
+#include <core/framework.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
@@ -17,7 +17,7 @@ namespace vortex {
 		namespace http {
 			HttpSession::HttpSession(
 				maze::object config,
-				vortex::core::redis::Redis* redis,
+				Vortex::Core::Cache::Redis* redis,
 				tcp::socket socket)
 				: config_(config), redis_(redis), stream_(std::move(socket)) {
 
@@ -68,10 +68,10 @@ namespace vortex {
 				res_.set(boost::beast::http::field::content_type, "text/html");
 				res_.result(boost::beast::http::status::ok);
 
-				core::framework::Framework* framework = nullptr;
+				Vortex::Core::Framework* framework = nullptr;
 
 				try {
-					framework = new core::framework::Framework(
+					framework = new Vortex::Core::Framework(
 						config_,
 						redis_,
 						stream_.socket().remote_endpoint().address().to_string(),

@@ -4,25 +4,23 @@
 #include <string>
 #include <maze/object.h>
 
-namespace vortex {
-	namespace core {
-		namespace framework {
-			class Framework;
-		}
+namespace Vortex {
+	namespace Core {
+		class Framework;
 
-		namespace storage {
+		namespace Storage {
 			class Storage {
 			private:
-				framework::Framework* framework_;
+				Framework* framework_;
 				std::string backend_;
 
 			public:
-				Storage(framework::Framework* framework);
+				Storage(Framework* framework);
 
 				const std::string get_backend();
 			};
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_STORAGE_STORAGE_H

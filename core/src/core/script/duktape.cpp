@@ -2,18 +2,18 @@
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
-#include <core/framework/framework.h>
+#include <core/framework.h>
 
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
-namespace duktape_bindings {
+namespace DuktapeBindings {
 	class View {
 	private:
-		vortex::core::framework::Framework* framework_;
+		vortex::core::Framework* framework_;
 
 	public:
 		View() {}
 
-		View(vortex::core::framework::Framework* framework) : framework_(framework) {}
+		View(vortex::core::Framework* framework) : framework_(framework) {}
 
 		void echo(std::string content) {
 			framework_->view_.echo(content);
@@ -48,12 +48,12 @@ namespace duktape_bindings {
 
 	class Router {
 	private:
-		vortex::core::framework::Framework* framework_;
+		vortex::core::Framework* framework_;
 
 	public:
 		Router() {}
 
-		Router(vortex::core::framework::Framework* framework) : framework_(framework) {}
+		Router(vortex::core::Framework* framework) : framework_(framework) {}
 
 		std::string get_hostname() {
 			return framework_->router_.get_hostname();
@@ -78,12 +78,12 @@ namespace duktape_bindings {
 
 	class Application {
 	private:
-		vortex::core::framework::Framework* framework_;
+		vortex::core::Framework* framework_;
 
 	public:
 		Application() {}
 
-		Application(vortex::core::framework::Framework* framework) : framework_(framework) {}
+		Application(vortex::core::Framework* framework) : framework_(framework) {}
 
 		std::string get_id() {
 			return framework_->application_.get_id();
@@ -103,14 +103,14 @@ namespace duktape_bindings {
 
 	class Collection {
 	private:
-		vortex::core::framework::Framework* framework_;
+		vortex::core::Framework* framework_;
 		std::string db_name_;
 		std::string collection_name_;
 
 	public:
 		Collection() {}
 
-		Collection(vortex::core::framework::Framework* framework, std::string db_name, std::string collection_name)
+		Collection(vortex::core::Framework* framework, std::string db_name, std::string collection_name)
 			: framework_(framework), db_name_(db_name), collection_name_(collection_name) {}
 
 		template<class Inspector>
@@ -121,13 +121,13 @@ namespace duktape_bindings {
 
 	class Db {
 	private:
-		vortex::core::framework::Framework* framework_;
+		vortex::core::Framework* framework_;
 		std::string db_name_;
 
 	public:
 		Db() {}
 
-		Db(vortex::core::framework::Framework* framework, std::string db_name)
+		Db(vortex::core::Framework* framework, std::string db_name)
 			: framework_(framework), db_name_(db_name) {}
 
 		template<class Inspector>
@@ -138,12 +138,12 @@ namespace duktape_bindings {
 
 	class Mongo {
 	private:
-		vortex::core::framework::Framework* framework_;
+		vortex::core::Framework* framework_;
 
 	public:
 		Mongo() {}
 
-		Mongo(vortex::core::framework::Framework* framework) : framework_(framework) {}
+		Mongo(vortex::core::Framework* framework) : framework_(framework) {}
 
 		std::string get_default_db_name() {
 			return framework_->mongo_.get_default_db_name();
@@ -200,10 +200,10 @@ DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Collection);
 
 #endif  // VORTEX_HAS_FEATURE_CRYPTOPP
 
-namespace vortex {
-	namespace core {
-		namespace script {
-			Duktape::Duktape(framework::Framework* framework) : framework_(framework) {
+namespace Vortex {
+	namespace Core {
+		namespace Script {
+			Duktape::Duktape(Framework* framework) : framework_(framework) {
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 				ctx_ = new duk::Context();
 #endif
@@ -219,16 +219,16 @@ namespace vortex {
 
 			void Duktape::setup() {
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
-				ctx_->registerClass<duktape_bindings::View>();
-				auto view = std::make_shared<duktape_bindings::View>(framework_);
-				ctx_->registerClass<duktape_bindings::Router>();
-				auto router = std::make_shared<duktape_bindings::Router>(framework_);
-				ctx_->registerClass<duktape_bindings::Application>();
-				auto application = std::make_shared<duktape_bindings::Application>(framework_);
-				ctx_->registerClass<duktape_bindings::Mongo>();
-				ctx_->registerClass<duktape_bindings::Db>();
-				ctx_->registerClass<duktape_bindings::Collection>();
-				auto mongo = std::make_shared<duktape_bindings::Mongo>(framework_);
+				ctx_->registerClass<DuktapeBindings::View>();
+				auto view = std::make_shared<DuktapeBindings::View>(framework_);
+				ctx_->registerClass<DuktapeBindings::Router>();
+				auto router = std::make_shared<DuktapeBindings::Router>(framework_);
+				ctx_->registerClass<DuktapeBindings::Application>();
+				auto application = std::make_shared<DuktapeBindings::Application>(framework_);
+				ctx_->registerClass<DuktapeBindings::Mongo>();
+				ctx_->registerClass<DuktapeBindings::Db>();
+				ctx_->registerClass<DuktapeBindings::Collection>();
+				auto mongo = std::make_shared<DuktapeBindings::Mongo>(framework_);
 
 				ctx_->addGlobal("__view", view);
 				ctx_->addGlobal("__router", router);
@@ -259,6 +259,6 @@ namespace vortex {
 				}
 #endif
 			}
-		}  // namespace script
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Script
+	}  // namespace Core
+}  // namespace Vortex

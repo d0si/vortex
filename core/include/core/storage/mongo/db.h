@@ -8,10 +8,10 @@
 #endif
 #include <core/storage/mongo/collection.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			namespace mongo {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			namespace Mongo {
 				class Mongo;
 
 				class Db {
@@ -32,9 +32,9 @@ namespace vortex {
 
 					void drop_database();
 				};
-			}  // namespace mongo
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Mongo
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_STORAGE_MONGO_DB_H

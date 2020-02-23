@@ -4,26 +4,24 @@
 #include <string>
 #include <core/script/duktape.h>
 
-namespace vortex {
-	namespace core {
-		namespace framework {
-			class Framework;
-		}
+namespace Vortex {
+	namespace Core {
+		class Framework;
 
-		namespace script {
+		namespace Script {
 			class Script {
 			private:
-				framework::Framework* framework_;
+				Framework* framework_;
 				Duktape duktape_;
 
 			public:
-				Script(framework::Framework* framework);
+				Script(Framework* framework);
 
 				void setup();
 				void exec(std::string script);
 			};
-		}  // namespace script
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Script
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_SCRIPT_SCRIPT_H

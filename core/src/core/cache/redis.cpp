@@ -1,8 +1,8 @@
-#include <core/redis/redis.h>
+#include <core/cache/redis.h>
 
-namespace vortex {
-	namespace core {
-		namespace redis {
+namespace Vortex {
+	namespace Core {
+		namespace Cache {
 			Redis::Redis() {
 
 			}
@@ -118,6 +118,6 @@ namespace vortex {
 				}
 #endif
 			}
-		}  // namespace redis
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Cache
+	}  // namespace Core
+}  // namespace Vortex

@@ -1,10 +1,10 @@
 #include <core/storage/storage.h>
-#include <core/framework/framework.h>
+#include <core/framework.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			Storage::Storage(framework::Framework* framework) : framework_(framework) {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			Storage::Storage(Framework* framework) : framework_(framework) {
 				this->backend_ = "mongo";
 
 				if (this->framework_->get_config().is_object("storage")) {
@@ -19,6 +19,6 @@ namespace vortex {
 			const std::string Storage::get_backend() {
 				return this->backend_;
 			}
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex

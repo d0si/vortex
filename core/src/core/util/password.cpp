@@ -6,10 +6,10 @@
 #endif
 #define SALT_LENGTH 24
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace password {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace Password {
 				std::string hash_password(std::string password) {
 					return hash_password(password, generate_salt());
 				}
@@ -107,7 +107,7 @@ namespace vortex {
 					throw std::exception("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
 				}
-			}  // namespace password
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Password
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex

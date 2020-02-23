@@ -2,7 +2,7 @@
 #define VORTEX_SERVER_HTTP_HTTP_SERVER_H
 
 #include <maze/object.h>
-#include <core/redis/redis.h>
+#include <core/cache/redis.h>
 
 namespace vortex {
 	namespace server {
@@ -10,7 +10,7 @@ namespace vortex {
 			class HttpServer {
 			private:
 				maze::object config_;
-				vortex::core::redis::Redis redis_;
+				Vortex::Core::Cache::Redis redis_;
 
 			public:
 				void start(maze::object config);

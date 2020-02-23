@@ -1,17 +1,17 @@
 SET(core_SRC
-    src/core/framework/framework.cpp
-    src/core/framework/router.cpp
-    src/core/framework/host.cpp
-    src/core/framework/application.cpp
-    src/core/framework/controller.cpp
-    src/core/framework/view.cpp
+    src/core/framework.cpp
+    src/core/router.cpp
+    src/core/host.cpp
+    src/core/application.cpp
+    src/core/controller.cpp
+    src/core/view.cpp
 
     src/core/storage/storage.cpp
     src/core/storage/mongo/mongo.cpp
     src/core/storage/mongo/db.cpp
     src/core/storage/mongo/collection.cpp
 
-    src/core/redis/redis.cpp
+    src/core/cache/redis.cpp
 
     src/core/script/script.cpp
     src/core/script/duktape.cpp

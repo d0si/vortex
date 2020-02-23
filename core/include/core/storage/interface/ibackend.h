@@ -6,10 +6,10 @@
 #include <core/storage/interface/idatabase.h>
 #include <core/storage/interface/icollection.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			namespace interface {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			namespace Interface {
 				class IBackend {
 				public:
 					IBackend();
@@ -18,9 +18,9 @@ namespace vortex {
 					IDatabase get_database(std::string database_name);
 					ICollection get_collection(std::string database_name, std::string collection_name);
 				};
-			}  // namespace interface
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Interface
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_STORAGE_INTERFACE_IBACKEND_H

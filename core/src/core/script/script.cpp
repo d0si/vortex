@@ -1,10 +1,10 @@
 #include <core/script/script.h>
-#include <core/framework/framework.h>
+#include <core/framework.h>
 
-namespace vortex {
-	namespace core {
-		namespace script {
-			Script::Script(framework::Framework* framework)
+namespace Vortex {
+	namespace Core {
+		namespace Script {
+			Script::Script(Framework* framework)
 				: framework_(framework), duktape_(framework) {
 
 			}
@@ -16,6 +16,6 @@ namespace vortex {
 			void Script::exec(std::string script) {
 				duktape_.exec(script);
 			}
-		}  // namespace script
-	}  // namespace core
-}  // namespace vortex
+		}  // namespace Script
+	}  // namespace Core
+}  // namespace Vortex

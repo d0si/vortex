@@ -1,10 +1,10 @@
 #include <core/util/time.h>
 #include <time.h>
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace time {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace Time {
 				int get_now() {
 					return ::time(nullptr);
 				}
@@ -28,7 +28,7 @@ namespace vortex {
 				std::string get_now_string() {
 					return to_string(get_now());
 				}
-			}  // namespace time
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Time
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex

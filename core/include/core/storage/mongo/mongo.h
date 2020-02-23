@@ -10,10 +10,10 @@
 #include <core/storage/mongo/db.h>
 #include <core/storage/mongo/collection.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			namespace mongo {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			namespace Mongo {
 				class Mongo {
 				private:
 #ifdef VORTEX_HAS_FEATURE_MONGO
@@ -42,9 +42,9 @@ namespace vortex {
 					void drop_database(std::string database_name);
 					void clone_database(std::string old_name, std::string new_name);
 				};
-			}  // namespace mongo
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Mongo
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_STORAGE_MONGO_MONGO_H

@@ -4,10 +4,10 @@
 #endif
 #include <maze/element.h>
 
-namespace vortex {
-	namespace core {
-		namespace storage {
-			namespace mongo {
+namespace Vortex {
+	namespace Core {
+		namespace Storage {
+			namespace Mongo {
 				Collection::Collection() {
 
 				}
@@ -109,7 +109,7 @@ namespace vortex {
 					collection_.replace_one(bsoncxx::from_json(json_query), bsoncxx::from_json(json_replacement_value));
 #endif
 				}
-			}  // namespace mongo
-		}  // namespace storage
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace Mongo
+		}  // namespace Storage
+	}  // namespace Core
+}  // namespace Vortex

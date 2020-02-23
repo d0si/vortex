@@ -15,7 +15,7 @@ namespace vortex {
 		namespace http {
 			HttpListener::HttpListener(
 				maze::object config,
-				vortex::core::redis::Redis* redis,
+				Vortex::Core::Cache::Redis* redis,
 				asio::io_context& ioC,
 				tcp::endpoint endpoint)
 				: config_(config), redis_(redis), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {

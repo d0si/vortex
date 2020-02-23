@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace string {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace String {
 				std::string join(const std::vector<std::string>& values, const std::string& separator);
 				std::vector<std::string> split(const std::string& value, const std::string& delimiter);
 
@@ -18,9 +18,9 @@ namespace vortex {
 				bool contains(const std::string& value, const std::string& search);
 				bool starts_with(const std::string& value, const std::string& search);
 				bool ends_with(const std::string& value, const std::string& search);
-			}  // namespace string
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace String
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex
 
 #endif  // VORTEX_CORE_UTIL_STRING_H

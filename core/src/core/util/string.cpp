@@ -1,10 +1,10 @@
 #include <core/util/string.h>
 #include <boost/algorithm/string.hpp>
 
-namespace vortex {
-	namespace core {
-		namespace util {
-			namespace string {
+namespace Vortex {
+	namespace Core {
+		namespace Util {
+			namespace String {
 				std::string join(const std::vector<std::string>& values, const std::string& separator) {
 					if (values.size() == 0)
 						return std::string();
@@ -40,7 +40,7 @@ namespace vortex {
 				bool ends_with(const std::string& value, const std::string& search) {
 					return boost::algorithm::ends_with(value, search);
 				}
-			}  // namespace string
-		}  // namespace util
-	}  // namespace core
-}  // namespace vortex
+			}  // namespace String
+		}  // namespace Util
+	}  // namespace Core
+}  // namespace Vortex
