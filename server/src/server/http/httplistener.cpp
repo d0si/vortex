@@ -10,9 +10,9 @@ namespace beast = boost::beast;
 using asio::ip::tcp;
 using boost::system::error_code;
 
-namespace vortex {
-	namespace server {
-		namespace http {
+namespace Vortex {
+	namespace Server {
+		namespace Http {
 			HttpListener::HttpListener(
 				maze::object config,
 				Vortex::Core::Cache::Redis* redis,
@@ -81,6 +81,6 @@ namespace vortex {
 
 				do_accept();
 			}
-		}  // namespace http
-	}  // namespace server
-}  // namespace vortex
+		}  // namespace Http
+	}  // namespace Server
+}  // namespace Vortex

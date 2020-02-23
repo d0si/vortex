@@ -11,9 +11,9 @@ using std::string;
 using std::vector;
 namespace ip = boost::asio::ip;
 
-namespace vortex {
-	namespace server {
-		namespace http {
+namespace Vortex {
+	namespace Server {
+		namespace Http {
 			void HttpServer::start(maze::object config) {
 				config_ = config;
 
@@ -84,6 +84,6 @@ namespace vortex {
 					std::cout << "Server failed to start. " << e.what() << std::endl;
 				}
 			}
-		}  // namespace http
-	}  // namespace server
-}  // namespace vortex
+		}  // namespace Http
+	}  // namespace Server
+}  // namespace Vortex

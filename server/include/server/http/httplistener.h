@@ -6,9 +6,9 @@
 #include <maze/object.h>
 #include <core/cache/redis.h>
 
-namespace vortex {
-	namespace server {
-		namespace http {
+namespace Vortex {
+	namespace Server {
+		namespace Http {
 			class HttpListener : public std::enable_shared_from_this<HttpListener> {
 			private:
 				boost::asio::io_context& ioC_;
@@ -29,8 +29,8 @@ namespace vortex {
 					boost::system::error_code ec,
 					boost::asio::ip::tcp::socket socket);
 			};
-		}  // namespace http
-	}  // namespace server
-}  // namespace vortex
+		}  // namespace Http
+	}  // namespace Server
+}  // namespace Vortex
 
 #endif  // VORTEX_SERVER_HTTP_HTTP_LISTENER_H

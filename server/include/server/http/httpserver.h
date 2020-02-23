@@ -4,9 +4,9 @@
 #include <maze/object.h>
 #include <core/cache/redis.h>
 
-namespace vortex {
-	namespace server {
-		namespace http {
+namespace Vortex {
+	namespace Server {
+		namespace Http {
 			class HttpServer {
 			private:
 				maze::object config_;
@@ -15,8 +15,8 @@ namespace vortex {
 			public:
 				void start(maze::object config);
 			};
-		}  // namespace http
-	}  // namespace server
-}  // namespace vortex
+		}  // namespace Http
+	}  // namespace Server
+}  // namespace Vortex
 
 #endif  // VORTEX_SERVER_HTTP_HTTP_SERVER_H

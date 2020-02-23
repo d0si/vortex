@@ -298,7 +298,7 @@ namespace vortex {
 	}
 
 	void start_http_server(maze::object config) {
-		server::http::HttpServer server;
+		Vortex::Server::Http::HttpServer server;
 
 		server.start(config);
 	}
