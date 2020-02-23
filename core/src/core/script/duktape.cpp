@@ -8,12 +8,12 @@
 namespace DuktapeBindings {
 	class View {
 	private:
-		vortex::core::Framework* framework_;
+		Vortex::Core::Framework* framework_;
 
 	public:
 		View() {}
 
-		View(vortex::core::Framework* framework) : framework_(framework) {}
+		View(Vortex::Core::Framework* framework) : framework_(framework) {}
 
 		void echo(std::string content) {
 			framework_->view_.echo(content);
@@ -48,12 +48,12 @@ namespace DuktapeBindings {
 
 	class Router {
 	private:
-		vortex::core::Framework* framework_;
+		Vortex::Core::Framework* framework_;
 
 	public:
 		Router() {}
 
-		Router(vortex::core::Framework* framework) : framework_(framework) {}
+		Router(Vortex::Core::Framework* framework) : framework_(framework) {}
 
 		std::string get_hostname() {
 			return framework_->router_.get_hostname();
@@ -78,12 +78,12 @@ namespace DuktapeBindings {
 
 	class Application {
 	private:
-		vortex::core::Framework* framework_;
+		Vortex::Core::Framework* framework_;
 
 	public:
 		Application() {}
 
-		Application(vortex::core::Framework* framework) : framework_(framework) {}
+		Application(Vortex::Core::Framework* framework) : framework_(framework) {}
 
 		std::string get_id() {
 			return framework_->application_.get_id();
@@ -103,14 +103,14 @@ namespace DuktapeBindings {
 
 	class Collection {
 	private:
-		vortex::core::Framework* framework_;
+		Vortex::Core::Framework* framework_;
 		std::string db_name_;
 		std::string collection_name_;
 
 	public:
 		Collection() {}
 
-		Collection(vortex::core::Framework* framework, std::string db_name, std::string collection_name)
+		Collection(Vortex::Core::Framework* framework, std::string db_name, std::string collection_name)
 			: framework_(framework), db_name_(db_name), collection_name_(collection_name) {}
 
 		template<class Inspector>
@@ -121,13 +121,13 @@ namespace DuktapeBindings {
 
 	class Db {
 	private:
-		vortex::core::Framework* framework_;
+		Vortex::Core::Framework* framework_;
 		std::string db_name_;
 
 	public:
 		Db() {}
 
-		Db(vortex::core::Framework* framework, std::string db_name)
+		Db(Vortex::Core::Framework* framework, std::string db_name)
 			: framework_(framework), db_name_(db_name) {}
 
 		template<class Inspector>
@@ -138,12 +138,12 @@ namespace DuktapeBindings {
 
 	class Mongo {
 	private:
-		vortex::core::Framework* framework_;
+		Vortex::Core::Framework* framework_;
 
 	public:
 		Mongo() {}
 
-		Mongo(vortex::core::Framework* framework) : framework_(framework) {}
+		Mongo(Vortex::Core::Framework* framework) : framework_(framework) {}
 
 		std::string get_default_db_name() {
 			return framework_->mongo_.get_default_db_name();
@@ -191,12 +191,12 @@ namespace DuktapeBindings {
 	};
 }  // namespace duktape_bindings
 
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::View);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Router);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Application);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Mongo);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Db);
-DUK_CPP_DEF_CLASS_NAME(duktape_bindings::Collection);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::View);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Router);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Application);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Mongo);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Db);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Collection);
 
 #endif  // VORTEX_HAS_FEATURE_CRYPTOPP
 
