@@ -10,6 +10,9 @@ SET(core_SRC
     src/core/storage/mongo/mongo.cpp
     src/core/storage/mongo/db.cpp
     src/core/storage/mongo/collection.cpp
+    src/core/storage/filesystem/filesystem.cpp
+    src/core/storage/filesystem/database.cpp
+    src/core/storage/filesystem/collection.cpp
 
     src/core/cache/redis.cpp
 
