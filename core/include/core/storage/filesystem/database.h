@@ -5,7 +5,7 @@ namespace Vortex {
 	namespace Core {
 		namespace Storage {
 			namespace Filesystem {
-				class Db {
+				class Database {
 
 				};
 			}  // namespace Filesystem
