@@ -1,6 +1,6 @@
 #include <Core/Util/Password.h>
 #include <stdexcept>
-#include <core/util/random.h>
+#include <Core/Util/Random.h>
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>
 #include <cryptopp/base64.h>
