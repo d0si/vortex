@@ -5,7 +5,7 @@
 #include <thread>
 #include <maze/object.h>
 #include <maze/array.h>
-#include <server/http/httpserver.h>
+#include <Server/Http/HttpServer.h>
 #include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
 

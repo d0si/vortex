@@ -1,10 +1,10 @@
-#include <server/http/httpserver.h>
+#include <Server/Http/HttpServer.h>
 #include <iostream>
 #include <thread>
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <server/http/httplistener.h>
+#include <Server/Http/HttpListener.h>
 #include <maze/element.h>
 
 using std::string;
