@@ -1,4 +1,4 @@
-#include <vortex/vortex.h>
+#include <Vortex/Vortex.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>

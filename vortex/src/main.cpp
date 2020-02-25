@@ -1,4 +1,4 @@
-#include <vortex/vortex.h>
+#include <Vortex/Vortex.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/instance.hpp>
 #endif
