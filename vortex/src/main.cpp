@@ -8,7 +8,7 @@ int main(int argc, char** args) {
 	mongocxx::instance instance{};
 #endif
 
-	vortex::start_vortex(std::vector<std::string>(args, args + argc));
+	Vortex::start_vortex(std::vector<std::string>(args, args + argc));
 
 	return 0;
 }

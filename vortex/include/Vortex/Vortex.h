@@ -8,7 +8,7 @@ namespace maze {
 	class object;
 }
 
-namespace vortex {
+namespace Vortex {
 	void start_vortex(std::vector<std::string> args);
 	void show_help();
 	void exit_with_error(int error_code);
@@ -20,6 +20,6 @@ namespace vortex {
 	void start_server(maze::object config);
 
 	void start_http_server(maze::object config);
-}  // namespace vortex
+}  // namespace Vortex
 
 #endif  // VORTEX_VORTEX_VORTEX_H

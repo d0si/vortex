@@ -11,7 +11,7 @@
 
 namespace Util = Vortex::Core::Util;
 
-namespace vortex {
+namespace Vortex {
 
 	void start_vortex(std::vector<std::string> args) {
 		for (size_t i = 1; i < args.size(); ++i) {
@@ -303,4 +303,4 @@ namespace vortex {
 		server.start(config);
 	}
 
-}  // namespace vortex
+}  // namespace Vortex
