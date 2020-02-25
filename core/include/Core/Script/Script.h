@@ -2,7 +2,7 @@
 #define VORTEX_CORE_SCRIPT_SCRIPT_H
 
 #include <string>
-#include <core/script/duktape.h>
+#include <Core/Script/Duktape.h>
 
 namespace Vortex {
 	namespace Core {

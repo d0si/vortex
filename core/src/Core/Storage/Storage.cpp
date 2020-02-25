@@ -1,5 +1,5 @@
-#include <core/storage/storage.h>
-#include <core/framework.h>
+#include <Core/Storage/Storage.h>
+#include <Core/Framework.h>
 
 namespace Vortex {
 	namespace Core {

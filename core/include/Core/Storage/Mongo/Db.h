@@ -6,7 +6,7 @@
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/database.hpp>
 #endif
-#include <core/storage/mongo/collection.h>
+#include <Core/Storage/Mongo/Collection.h>
 
 namespace Vortex {
 	namespace Core {

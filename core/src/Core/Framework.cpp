@@ -1,4 +1,4 @@
-#include <core/framework.h>
+#include <Core/Framework.h>
 #include <maze/element.h>
 
 namespace Vortex {

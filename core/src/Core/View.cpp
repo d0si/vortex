@@ -1,5 +1,5 @@
-#include <core/view.h>
-#include <core/framework.h>
+#include <Core/View.h>
+#include <Core/Framework.h>
 
 namespace Vortex {
 	namespace Core {

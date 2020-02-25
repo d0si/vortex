@@ -4,7 +4,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <maze/object.h>
-#include <core/cache/redis.h>
+#include <Core/Cache/Redis.h>
 
 namespace Vortex {
 	namespace Server {

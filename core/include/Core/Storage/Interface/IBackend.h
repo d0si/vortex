@@ -3,8 +3,8 @@
 
 #include <string>
 #include <maze/object.h>
-#include <core/storage/interface/idatabase.h>
-#include <core/storage/interface/icollection.h>
+#include <Core/Storage/Interface/IDatabase.h>
+#include <Core/Storage/Interface/ICollection.h>
 
 namespace Vortex {
 	namespace Core {

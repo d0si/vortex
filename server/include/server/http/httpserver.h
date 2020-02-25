@@ -2,7 +2,7 @@
 #define VORTEX_SERVER_HTTP_HTTP_SERVER_H
 
 #include <maze/object.h>
-#include <core/cache/redis.h>
+#include <Core/Cache/Redis.h>
 
 namespace Vortex {
 	namespace Server {

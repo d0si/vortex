@@ -4,14 +4,14 @@
 #include <string>
 #include <boost/beast/http.hpp>
 #include <maze/object.h>
-#include <core/router.h>
-#include <core/host.h>
-#include <core/application.h>
-#include <core/controller.h>
-#include <core/view.h>
-#include <core/storage/mongo/mongo.h>
-#include <core/cache/redis.h>
-#include <core/script/script.h>
+#include <Core/Router.h>
+#include <Core/Host.h>
+#include <Core/Application.h>
+#include <Core/Controller.h>
+#include <Core/View.h>
+#include <Core/Storage/Mongo/Mongo.h>
+#include <Core/Cache/Redis.h>
+#include <Core/Script/Script.h>
 
 namespace Vortex {
 	namespace Core {

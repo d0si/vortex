@@ -1,8 +1,8 @@
-#include <core/script/duktape.h>
+#include <Core/Script/Duktape.h>
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
-#include <core/framework.h>
+#include <Core/Framework.h>
 
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 namespace DuktapeBindings {

@@ -1,4 +1,4 @@
-#include <core/util/string.h>
+#include <Core/Util/String.h>
 #include <boost/algorithm/string.hpp>
 
 namespace Vortex {

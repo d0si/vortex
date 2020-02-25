@@ -1,27 +1,27 @@
 SET(core_SRC
-    src/core/framework.cpp
-    src/core/router.cpp
-    src/core/host.cpp
-    src/core/application.cpp
-    src/core/controller.cpp
-    src/core/view.cpp
+    src/Core/Framework.cpp
+    src/Core/Router.cpp
+    src/Core/Host.cpp
+    src/Core/Application.cpp
+    src/Core/Controller.cpp
+    src/Core/View.cpp
 
-    src/core/storage/storage.cpp
-    src/core/storage/mongo/mongo.cpp
-    src/core/storage/mongo/db.cpp
-    src/core/storage/mongo/collection.cpp
-    src/core/storage/filesystem/filesystem.cpp
-    src/core/storage/filesystem/database.cpp
-    src/core/storage/filesystem/collection.cpp
+    src/Core/Storage/Storage.cpp
+    src/Core/Storage/Mongo/Mongo.cpp
+    src/Core/Storage/Mongo/Db.cpp
+    src/Core/Storage/Mongo/Collection.cpp
+    src/Core/Storage/Filesystem/Filesystem.cpp
+    src/Core/Storage/Filesystem/Database.cpp
+    src/Core/Storage/Filesystem/Collection.cpp
 
-    src/core/cache/redis.cpp
+    src/Core/Cache/Redis.cpp
 
-    src/core/script/script.cpp
-    src/core/script/duktape.cpp
+    src/Core/Script/Script.cpp
+    src/Core/Script/Duktape.cpp
 
-    src/core/util/time.cpp
-    src/core/util/random.cpp
-    src/core/util/password.cpp
-    src/core/util/string.cpp
-    src/core/util/hash.cpp
+    src/Core/Util/Time.cpp
+    src/Core/Util/Random.cpp
+    src/Core/Util/Password.cpp
+    src/Core/Util/String.cpp
+    src/Core/Util/Hash.cpp
 )

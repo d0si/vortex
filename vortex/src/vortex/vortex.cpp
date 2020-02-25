@@ -6,7 +6,7 @@
 #include <maze/object.h>
 #include <maze/array.h>
 #include <server/http/httpserver.h>
-#include <core/util/string.h>
+#include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
 
 namespace Util = Vortex::Core::Util;

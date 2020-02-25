@@ -8,7 +8,7 @@
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <maze/object.h>
-#include <core/cache/redis.h>
+#include <Core/Cache/Redis.h>
 
 namespace Vortex {
 	namespace Server {

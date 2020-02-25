@@ -1,5 +1,5 @@
-#include <core/router.h>
-#include <core/framework.h>
+#include <Core/Router.h>
+#include <Core/Framework.h>
 #include <maze/object.h>
 #include <maze/element.h>
 

@@ -1,5 +1,5 @@
-#include <core/script/script.h>
-#include <core/framework.h>
+#include <Core/Script/Script.h>
+#include <Core/Framework.h>
 
 namespace Vortex {
 	namespace Core {

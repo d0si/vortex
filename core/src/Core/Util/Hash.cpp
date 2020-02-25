@@ -1,4 +1,4 @@
-#include <core/util/hash.h>
+#include <Core/Util/Hash.h>
 #include <stdexcept>
 #ifdef VORTEX_HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>

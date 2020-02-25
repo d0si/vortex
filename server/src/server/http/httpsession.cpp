@@ -2,7 +2,7 @@
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
-#include <core/framework.h>
+#include <Core/Framework.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
