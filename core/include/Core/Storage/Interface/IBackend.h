@@ -16,8 +16,6 @@ namespace Vortex {
 					IBackend(const maze::object& config) {};
 					virtual ~IBackend() {};
 
-					virtual bool run_command() = 0;
-
 					virtual IDatabase get_database(std::string database_name) = 0;
 					virtual ICollection get_collection(std::string database_name, std::string collection_name) = 0;
 				};
