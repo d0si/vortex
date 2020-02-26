@@ -12,12 +12,35 @@ namespace Vortex {
 			namespace Interface {
 				class IBackend {
 				public:
-					IBackend();
-					IBackend(const maze::object& config);
+					IBackend() {};
+					IBackend(const maze::object& config) {};
+					virtual ~IBackend() {};
 
-					IDatabase get_database(std::string database_name);
-					ICollection get_collection(std::string database_name, std::string collection_name);
+					virtual bool run_command() = 0;
+
+					virtual IDatabase get_database(std::string database_name) = 0;
+					virtual ICollection get_collection(std::string database_name, std::string collection_name) = 0;
 				};
+
+				typedef IBackend* (*GetBackendInstanceFunc)();
+
+				struct BackendDetails {
+					const char* class_name;
+					const char* backend_name;
+					GetBackendInstanceFunc get_backend_instance;
+				};
+
+#define VORTEX_STORAGE_BACKEND(class_type, backend_name)		\
+Vortex::Core::Storage::Interface::IBackend* get_backend() {		\
+	static class_type instance;									\
+	return &instance;											\
+}																\
+Vortex::Core::Storage::Interface::BackendDetails exports = {	\
+	#class_type,												\
+	backend_name,												\
+	get_backend,												\
+};
+
 			}  // namespace Interface
 		}  // namespace Storage
 	}  // namespace Core
