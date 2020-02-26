@@ -7,7 +7,7 @@ namespace Vortex {
 			namespace Interface {
 				class ICollection {
 				public:
-					ICollection();
+					//ICollection();
 				};
 			}  // namespace Interface
 		}  // namespace Storage

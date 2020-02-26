@@ -2,7 +2,8 @@
 #define VORTEX_CORE_STORAGE_STORAGE_H
 
 #include <string>
-#include <maze/object.h>
+#include <vector>
+#include <Core/Storage/Interface/IBackend.h>
 
 namespace Vortex {
 	namespace Core {
@@ -12,12 +13,14 @@ namespace Vortex {
 			class Storage {
 			private:
 				Framework* framework_;
-				std::string backend_;
+				std::vector<std::pair<std::string, Interface::IBackend*>> available_backends_;
+				std::string default_backend_;
 
 			public:
 				Storage(Framework* framework);
 
-				const std::string get_backend();
+				Interface::IBackend* get_backend();
+				Interface::IBackend* get_backend(std::string backend_name);
 			};
 		}  // namespace Storage
 	}  // namespace Core

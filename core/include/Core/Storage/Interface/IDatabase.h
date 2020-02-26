@@ -7,7 +7,7 @@ namespace Vortex {
 			namespace Interface {
 				class IDatabase {
 				public:
-					IDatabase();
+					//IDatabase();
 				};
 			}  // namespace Interface
 		}  // namespace Storage
