@@ -4,8 +4,6 @@ namespace Vortex {
 	namespace Core {
 		namespace Storage {
 			namespace Mongo {
-				VORTEX_STORAGE_BACKEND(MongoBackend, "Mongo")
-
 				MongoBackend::MongoBackend() {
 
 				}
@@ -14,12 +12,25 @@ namespace Vortex {
 
 				}
 
-				Storage::Interface::IDatabase MongoBackend::get_database(std::string database_name) {
-					return Storage::Interface::IDatabase();
+				void MongoBackend::insert(std::string database, std::string collection, std::string value) {
+
 				}
 
-				Storage::Interface::ICollection MongoBackend::get_collection(std::string database_name, std::string collection_name) {
-					return Storage::Interface::ICollection();
+				std::string MongoBackend::find(std::string database, std::string collection, std::string query) {
+					return "";
+				}
+
+				void MongoBackend::update(std::string database, std::string collection, std::string query, std::string new_value) {
+
+				}
+
+				void MongoBackend::remove(std::string database, std::string collection, std::string query) {
+
+				}
+
+				Storage::Interface::IBackend* get_backend() {
+					static MongoBackend instance;
+					return &instance;
 				}
 			}  // namespace Mongo
 		}  // namespace Storage

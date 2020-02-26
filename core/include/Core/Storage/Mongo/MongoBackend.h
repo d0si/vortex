@@ -12,8 +12,18 @@ namespace Vortex {
 					MongoBackend();
 					~MongoBackend();
 
-					virtual Storage::Interface::IDatabase get_database(std::string database_name);
-					virtual Storage::Interface::ICollection get_collection(std::string database_name, std::string collection_name);
+					virtual void insert(std::string database, std::string collection, std::string value);
+					virtual std::string find(std::string database, std::string collection, std::string query);
+					virtual void update(std::string database, std::string collection, std::string query, std::string new_value);
+					virtual void remove(std::string database, std::string collection, std::string query);
+				};
+
+				Storage::Interface::IBackend* get_backend();
+
+				Storage::Interface::BackendDetails exports = {
+					"MongoBackend",
+					"Mongo",
+					get_backend
 				};
 			}  // namespace Mongo
 		}  // namespace Storage

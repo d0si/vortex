@@ -16,8 +16,11 @@ namespace Vortex {
 					IBackend(const maze::object& config) {};
 					virtual ~IBackend() {};
 
-					virtual IDatabase get_database(std::string database_name) = 0;
-					virtual ICollection get_collection(std::string database_name, std::string collection_name) = 0;
+					// Basic CRUD methods
+					virtual void insert(std::string database, std::string collection, std::string value) = 0;
+					virtual std::string find(std::string database, std::string collection, std::string query) = 0;
+					virtual void update(std::string database, std::string collection, std::string query, std::string new_value) = 0;
+					virtual void remove(std::string database, std::string collection, std::string query) = 0;
 				};
 
 				typedef IBackend* (*GetBackendInstanceFunc)();
@@ -27,18 +30,6 @@ namespace Vortex {
 					const char* backend_name;
 					GetBackendInstanceFunc get_backend_instance;
 				};
-
-#define VORTEX_STORAGE_BACKEND(class_type, backend_name)		\
-Vortex::Core::Storage::Interface::IBackend* get_backend() {		\
-	static class_type instance;									\
-	return &instance;											\
-}																\
-Vortex::Core::Storage::Interface::BackendDetails exports = {	\
-	#class_type,												\
-	backend_name,												\
-	get_backend,												\
-};
-
 			}  // namespace Interface
 		}  // namespace Storage
 	}  // namespace Core
