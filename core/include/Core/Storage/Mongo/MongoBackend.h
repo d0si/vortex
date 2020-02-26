@@ -7,7 +7,7 @@ namespace Vortex {
 	namespace Core {
 		namespace Storage {
 			namespace Mongo {
-				class MongoBackend : public Storage::Interface::IBackend {
+				class MongoBackend : public Core::Storage::Interface::IBackend {
 				public:
 					MongoBackend();
 					~MongoBackend();
@@ -18,9 +18,9 @@ namespace Vortex {
 					virtual void remove(std::string database, std::string collection, std::string query);
 				};
 
-				Storage::Interface::IBackend* get_backend();
+				Core::Storage::Interface::IBackend* get_backend();
 
-				Storage::Interface::BackendDetails exports = {
+				static const Core::Storage::Interface::BackendDetails exports = {
 					"MongoBackend",
 					"Mongo",
 					get_backend
