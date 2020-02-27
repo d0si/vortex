@@ -20,20 +20,12 @@ namespace Vortex {
 			application_(this),
 			controller_(this),
 			view_(this),
+			storage_(this),
 			script_(this) {
 			mongo_ = Storage::Mongo::Mongo(config_["mongo"].get_object());
 		}
 
 		void Framework::setup() {
-			if (config_.is_object("vortex") && config_["vortex"].get_object().is_object("storage")) {
-				maze::object storage_config = config_["vortex"].get_object()["storage"];
-
-				std::string storage_type = "mongodb";
-				if (storage_config.is_string("type")) {
-					storage_type = storage_config["type"].get_string();
-				}
-			}
-
 			host_.find(router_.get_hostname());
 
 			script_.setup();

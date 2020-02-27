@@ -15,9 +15,15 @@ namespace Vortex {
 			}
 
 			if (application_.is_empty()) {
-				application_ = framework_->mongo_
+				maze::object query;
+				query.set("_id", maze::object("$oid", app_id));
+
+				application_ = maze::array::from_json(framework_->storage_.get_backend()
+					->find("vortex", "apps", query.to_json()))
+					.get(0).get_object();
+				/*application_ = framework_->mongo_
 					.get_collection("apps")
-					.find_by_id(app_id);
+					.find_by_id(app_id);*/
 
 				if (!application_.is_empty()) {
 					framework_->redis_->set(redis_key, application_.to_json(0));

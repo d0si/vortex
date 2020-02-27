@@ -15,9 +15,12 @@ namespace Vortex {
 			}
 
 			if (host_.is_empty()) {
-				host_ = framework_->mongo_
+				host_ = maze::array::from_json(framework_->storage_.get_backend()
+					->find("vortex", "hosts", maze::object("hostname", hostname).to_json()))
+					.get(0).get_object();
+				/*host_ = framework_->mongo_
 					.get_collection("hosts")
-					.find_one(maze::object("hostname", hostname));
+					.find_one(maze::object("hostname", hostname));*/
 
 				if (!host_.is_empty()) {
 					framework_->redis_->set(redis_key, host_.to_json(0));
