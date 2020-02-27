@@ -14,6 +14,7 @@ SET(core_SRC
     src/Core/Storage/Filesystem/Filesystem.cpp
     src/Core/Storage/Filesystem/Database.cpp
     src/Core/Storage/Filesystem/Collection.cpp
+    src/Core/Storage/Filesystem/FilesystemBackend.cpp
 
     src/Core/Cache/Redis.cpp
 
