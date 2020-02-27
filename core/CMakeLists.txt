@@ -33,7 +33,7 @@ if (VORTEX_ENABLE_FEATURE_MONGO)
     )
 
     target_compile_definitions(${PROJECT_NAME}
-        PRIVATE VORTEX_HAS_FEATURE_MONGO=1
+        PUBLIC VORTEX_HAS_FEATURE_MONGO=1
     )
 endif()
 
@@ -42,6 +42,18 @@ if (VORTEX_ENABLE_FEATURE_REDIS)
         PUBLIC ${CMAKE_SOURCE_DIR}/libs/cpp_redis/includes
         PUBLIC ${CMAKE_SOURCE_DIR}/libs/cpp_redis/tacopie/includes
     )
+
+    if (VCPKG_TOOLCHAIN)
+        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+            target_link_directories(${PROJECT_NAME}
+                PUBLIC ${PACKAGE_PREFIX_DIR}/debug/lib
+            )
+        else()
+            target_link_directories(${PROJECT_NAME}
+                PUBLIC ${PACKAGE_PREFIX_DIR}/lib
+            )
+        endif()
+    endif()
 
     target_link_libraries(${PROJECT_NAME}
         PUBLIC cpp_redis
@@ -63,17 +75,19 @@ if (VORTEX_ENABLE_FEATURE_DUKTAPE)
     )
     
     target_compile_definitions(${PROJECT_NAME}
-        PRIVATE VORTEX_HAS_FEATURE_DUKTAPE=1
+        PUBLIC VORTEX_HAS_FEATURE_DUKTAPE=1
     )
 endif()
 
 if (VORTEX_ENABLE_FEATURE_CRYPTOPP)
+    find_package(cryptopp CONFIG REQUIRED)
+
     target_link_libraries(${PROJECT_NAME}
-	    PUBLIC cryptopp
+	    PUBLIC cryptopp-static
     )
 
     target_compile_definitions(${PROJECT_NAME}
-        PRIVATE VORTEX_HAS_FEATURE_CRYPTOPP=1
+        PUBLIC VORTEX_HAS_FEATURE_CRYPTOPP=1
     )
 endif()
 
