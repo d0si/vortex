@@ -8,7 +8,7 @@
             },
             "storage": {
                 "data_dir": "../samples/vortex_sample_data",
-                "backend": "data_dir"
+                "backend": "Filesystem"
             },
             "mongo": {
                 "enabled": false
