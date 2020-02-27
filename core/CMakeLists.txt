@@ -80,11 +80,17 @@ if (VORTEX_ENABLE_FEATURE_DUKTAPE)
 endif()
 
 if (VORTEX_ENABLE_FEATURE_CRYPTOPP)
-    find_package(cryptopp CONFIG REQUIRED)
+    if (VCPKG_TOOLCHAIN)
+        find_package(cryptopp CONFIG REQUIRED)
 
-    target_link_libraries(${PROJECT_NAME}
-	    PUBLIC cryptopp-static
-    )
+        target_link_libraries(${PROJECT_NAME}
+	        PUBLIC cryptopp-static
+        )
+    else()
+        target_link_libraries(${PROJECT_NAME}
+	        PUBLIC cryptopp
+        )
+    endif()
 
     target_compile_definitions(${PROJECT_NAME}
         PUBLIC VORTEX_HAS_FEATURE_CRYPTOPP=1
