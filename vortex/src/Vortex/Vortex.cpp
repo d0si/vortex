@@ -8,12 +8,19 @@
 #include <Server/Http/HttpServer.h>
 #include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
+#ifdef VORTEX_HAS_FEATURE_MONGO
+#include <mongocxx/instance.hpp>
+#endif
 
 namespace Util = Vortex::Core::Util;
 
 namespace Vortex {
 
 	void start_vortex(std::vector<std::string> args) {
+#ifdef VORTEX_HAS_FEATURE_MONGO
+		mongocxx::instance instance{};
+#endif
+
 		for (size_t i = 1; i < args.size(); ++i) {
 			if (args[i] == "help" || args[i] == "--help" || args[i] == "-h") {
 				show_help();
