@@ -86,11 +86,16 @@ namespace Vortex {
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
 				}
-				catch (mongocxx::exception::runtime_error e) {
+				catch (mongocxx::exception e) {
 					res_.result(boost::beast::http::status::internal_server_error);
 					std::string what = e.what();
 					res_.body() = "MongoDb exception: " + what;
 #endif
+				}
+				catch (std::runtime_error e) {
+					res_.result(boost::beast::http::status::internal_server_error);
+					std::string what = e.what();
+					res_.body() = "Runtime error: " + what;
 				}
 				catch (...) {
 					res_.result(boost::beast::http::status::internal_server_error);
