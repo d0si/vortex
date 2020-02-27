@@ -46,11 +46,11 @@ if (VORTEX_ENABLE_FEATURE_REDIS)
     if (VCPKG_TOOLCHAIN)
         if (CMAKE_BUILD_TYPE STREQUAL "Debug")
             target_link_directories(${PROJECT_NAME}
-                PUBLIC ${PACKAGE_PREFIX_DIR}/debug/lib
+                PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib
             )
         else()
             target_link_directories(${PROJECT_NAME}
-                PUBLIC ${PACKAGE_PREFIX_DIR}/lib
+                PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib
             )
         endif()
     endif()
