@@ -18,13 +18,20 @@ namespace Vortex {
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
 				Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::exports.get_backend_instance());
+				mongo_backend->get_client()->set_config(framework_->config_["storage"].get_object()["mongo"].get_object());
 
-				this->available_backends_.push_back(std::make_pair<std::string, Interface::IBackend*>(
-					Core::Storage::Mongo::exports.backend_name,
-					static_cast<Core::Storage::Interface::IBackend*>(mongo_backend)
-					));
+				if (mongo_backend->get_client()->is_enabled()) {
+					mongo_backend->get_client()->connect();
 
-				this->default_backend_ = Core::Storage::Mongo::exports.backend_name;
+					this->available_backends_.push_back(std::make_pair<std::string, Interface::IBackend*>(
+						Core::Storage::Mongo::exports.backend_name,
+						static_cast<Core::Storage::Interface::IBackend*>(mongo_backend)
+						));
+
+					this->default_backend_ = Core::Storage::Mongo::exports.backend_name;
+				} else {
+					this->default_backend_ = Core::Storage::Filesystem::exports.backend_name;
+				}
 #else
 				this->default_backend_ = Core::Storage::Filesystem::exports.backend_name;
 #endif

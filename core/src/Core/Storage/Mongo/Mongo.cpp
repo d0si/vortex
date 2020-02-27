@@ -136,6 +136,10 @@ namespace Vortex {
 						new_collection.insert_many(old_values);
 					}
 				}
+
+				const bool Mongo::is_enabled() const {
+					return this->enabled;
+				}
 			}  // namespace Mongo
 		}  // namespace Storage
 	}  // namespace Core

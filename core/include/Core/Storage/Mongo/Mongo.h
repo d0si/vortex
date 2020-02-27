@@ -41,6 +41,8 @@ namespace Vortex {
 
 					void drop_database(std::string database_name);
 					void clone_database(std::string old_name, std::string new_name);
+
+					const bool is_enabled() const;
 				};
 			}  // namespace Mongo
 		}  // namespace Storage
