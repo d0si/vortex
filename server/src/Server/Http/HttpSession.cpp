@@ -97,6 +97,11 @@ namespace Vortex {
 					std::string what = e.what();
 					res_.body() = "Runtime error: " + what;
 				}
+				catch (std::exception e) {
+					res_.result(boost::beast::http::status::internal_server_error);
+					std::string what = e.what();
+					res_.body() = "Runtime error: " + what;
+				}
 				catch (...) {
 					res_.result(boost::beast::http::status::internal_server_error);
 					res_.body() = "Internal server error";
