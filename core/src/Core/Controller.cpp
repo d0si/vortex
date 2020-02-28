@@ -1,4 +1,5 @@
 #include <Core/Controller.h>
+#include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
 #include <maze/element.h>
 
@@ -16,10 +17,12 @@ namespace Vortex {
 			query["name"] = name;
 			query["method"] = method;
 
-			controller_ = framework_->mongo_
+			controller_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				->find("vortex", "controllers", query.to_json()))
+				.get(0).get_object();
+			/*controller_ = framework_->mongo_
 				.get_collection("controllers")
-				.find_one(query);
-
+				.find_one(query);*/
 
 			if (controller_.is_empty()) {
 				framework_->view_.echo("Controller " + name + " not found.");

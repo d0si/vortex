@@ -1,4 +1,5 @@
 #include <Core/Router.h>
+#include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
 #include <maze/element.h>
 
@@ -15,7 +16,7 @@ namespace Vortex {
 			}
 
 			if (host_.is_empty()) {
-				host_ = maze::array::from_json(framework_->storage_.get_backend()
+				host_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
 					->find("vortex", "hosts", maze::object("hostname", hostname).to_json()))
 					.get(0).get_object();
 				/*host_ = framework_->mongo_

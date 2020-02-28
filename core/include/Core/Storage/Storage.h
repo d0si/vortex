@@ -7,17 +7,19 @@
 
 namespace Vortex {
 	namespace Core {
-		class Framework;
-
 		namespace Storage {
 			class Storage {
 			private:
-				Framework* framework_;
 				std::vector<std::pair<std::string, Interface::IBackend*>> available_backends_;
 				std::string default_backend_;
+				maze::object storage_config_;
+				bool initialized_ = false;
 
 			public:
-				Storage(Framework* framework);
+				Storage();
+
+				void initialize(maze::object storage_config);
+				const bool is_initialized() const;
 
 				Interface::IBackend* get_backend();
 				Interface::IBackend* get_backend(std::string backend_name);

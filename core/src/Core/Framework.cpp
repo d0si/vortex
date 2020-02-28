@@ -20,9 +20,8 @@ namespace Vortex {
 			application_(this),
 			controller_(this),
 			view_(this),
-			storage_(this),
 			script_(this) {
-			mongo_ = Storage::Mongo::Mongo(config_["mongo"].get_object());
+
 		}
 
 		void Framework::setup() {

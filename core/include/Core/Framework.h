@@ -9,8 +9,6 @@
 #include <Core/Application.h>
 #include <Core/Controller.h>
 #include <Core/View.h>
-#include <Core/Storage/Mongo/Mongo.h>
-#include <Core/Storage/Storage.h>
 #include <Core/Cache/Redis.h>
 #include <Core/Script/Script.h>
 
@@ -29,8 +27,6 @@ namespace Vortex {
 			Application application_;
 			Controller controller_;
 			View view_;
-			Storage::Mongo::Mongo mongo_;
-			Storage::Storage storage_;
 			Script::Script script_;
 
 			Framework(

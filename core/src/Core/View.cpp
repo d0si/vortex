@@ -1,4 +1,5 @@
 #include <Core/View.h>
+#include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
 
 namespace Vortex {
@@ -157,14 +158,20 @@ namespace Vortex {
 			maze::object query("name", name);
 			query.set("app_ids", framework_->application_.get_id());
 
-			template_ = framework_->mongo_.get_collection("templates")
-				.find_one(query);
+			template_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				->find("vortex", "templates", query.to_json()))
+				.get(0).get_object();
+			/*template_ = framework_->mongo_.get_collection("templates")
+				.find_one(query);*/
 
 			if (template_.is_empty()) {
 				query.set_null("app_ids");
 
-				template_ = framework_->mongo_.get_collection("templates")
-					.find_one(query);
+				template_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->find("vortex", "templates", query.to_json()))
+					.get(0).get_object();
+				/*template_ = framework_->mongo_.get_collection("templates")
+					.find_one(query);*/
 			}
 
 			if (template_.is_empty()) {
@@ -184,14 +191,20 @@ namespace Vortex {
 			maze::object query("name", name);
 			query.set("app_ids", framework_->application_.get_id());
 
-			page_ = framework_->mongo_.get_collection("pages")
-				.find_one(query);
+			page_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				->find("vortex", "pages", query.to_json()))
+				.get(0).get_object();
+			/*page_ = framework_->mongo_.get_collection("pages")
+				.find_one(query);*/
 
 			if (page_.is_empty()) {
 				query.set_null("app_ids");
 
-				page_ = framework_->mongo_.get_collection("pages")
-					.find_one(query);
+				page_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->find("vortex", "apps", query.to_json()))
+					.get(0).get_object();
+				/*page_ = framework_->mongo_.get_collection("pages")
+					.find_one(query);*/
 			}
 
 			if (page_.is_empty()) {

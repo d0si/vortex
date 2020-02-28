@@ -1,4 +1,5 @@
 #include <Core/Application.h>
+#include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
 #include <maze/element.h>
 
@@ -18,7 +19,7 @@ namespace Vortex {
 				maze::object query;
 				query.set("_id", maze::object("$oid", app_id));
 
-				application_ = maze::array::from_json(framework_->storage_.get_backend()
+				application_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
 					->find("vortex", "apps", query.to_json()))
 					.get(0).get_object();
 				/*application_ = framework_->mongo_

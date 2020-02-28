@@ -1,5 +1,6 @@
 SET(core_SRC
     src/Core/Framework.cpp
+    src/Core/CommonRuntime.cpp
     src/Core/Router.cpp
     src/Core/Host.cpp
     src/Core/Application.cpp

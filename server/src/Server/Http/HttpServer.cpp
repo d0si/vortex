@@ -6,6 +6,7 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <Server/Http/HttpListener.h>
 #include <maze/element.h>
+#include <Core/CommonRuntime.h>
 
 using std::string;
 using std::vector;
@@ -15,7 +16,11 @@ namespace Vortex {
 	namespace Server {
 		namespace Http {
 			void HttpServer::start(maze::object config) {
-				config_ = config;
+				this->config_ = config;
+
+				if (!Core::CommonRuntime::Instance.get_storage()->is_initialized()) {
+					Core::CommonRuntime::Instance.get_storage()->initialize(config["storage"].get_object());
+				}
 
 				redis_.set_config(config_["redis"].get_object());
 				redis_.connect();
