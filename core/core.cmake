@@ -17,6 +17,8 @@ SET(core_SRC
     src/Core/Storage/Filesystem/Collection.cpp
     src/Core/Storage/Filesystem/FilesystemBackend.cpp
 
+    src/Core/GraphQL/GraphQL.cpp
+
     src/Core/Cache/Redis.cpp
 
     src/Core/Script/Script.cpp

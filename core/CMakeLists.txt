@@ -9,6 +9,31 @@ add_library(vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 find_package(Boost REQUIRED COMPONENTS system)
 
+# libgraphqlparser
+if (VCPKG_TOOLCHAIN)
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        target_link_directories(${PROJECT_NAME}
+            PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib
+        )
+    else()
+        target_link_directories(${PROJECT_NAME}
+            PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib
+        )
+    endif()
+
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC graphqlparser
+    )
+
+    target_include_directories(${PROJECT_NAME}
+        PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include
+    )
+    
+    target_compile_definitions(${PROJECT_NAME}
+        PUBLIC VORTEX_HAS_FEATURE_GRAPHQL=1
+    )
+endif()
+
 if (VORTEX_ENABLE_FEATURE_MONGO)
     find_package(libmongocxx REQUIRED)
 endif()
