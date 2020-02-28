@@ -101,7 +101,7 @@ namespace DuktapeBindings {
 		}
 	};
 
-	class Collection {
+	/*class Collection {
 	private:
 		Vortex::Core::Framework* framework_;
 		std::string db_name_;
@@ -188,15 +188,15 @@ namespace DuktapeBindings {
 			i.method("drop_database", &Mongo::drop_database);
 			i.method("clone_database", &Mongo::clone_database);
 		}
-	};
+	};*/
 }  // namespace duktape_bindings
 
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::View);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Router);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Application);
-DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Mongo);
+/*DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Mongo);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Db);
-DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Collection);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Collection);*/
 
 #endif  // VORTEX_HAS_FEATURE_CRYPTOPP
 
@@ -225,15 +225,15 @@ namespace Vortex {
 				auto router = std::make_shared<DuktapeBindings::Router>(framework_);
 				ctx_->registerClass<DuktapeBindings::Application>();
 				auto application = std::make_shared<DuktapeBindings::Application>(framework_);
-				ctx_->registerClass<DuktapeBindings::Mongo>();
+				/*ctx_->registerClass<DuktapeBindings::Mongo>();
 				ctx_->registerClass<DuktapeBindings::Db>();
 				ctx_->registerClass<DuktapeBindings::Collection>();
-				auto mongo = std::make_shared<DuktapeBindings::Mongo>(framework_);
+				auto mongo = std::make_shared<DuktapeBindings::Mongo>(framework_);*/
 
 				ctx_->addGlobal("__view", view);
 				ctx_->addGlobal("__router", router);
 				ctx_->addGlobal("__application", application);
-				ctx_->addGlobal("__mongo", mongo);
+				// ctx_->addGlobal("__mongo", mongo);
 
 				exec("view=__view;router=__router;application=__application;mongo=__mongo;");
 #endif
