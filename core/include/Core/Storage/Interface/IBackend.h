@@ -2,7 +2,7 @@
 #define VORTEX_CORE_STORAGE_INTERFACE_IBACKEND_H
 
 #include <string>
-#include <maze/object.h>
+#include <Maze/Object.hpp>
 #include <Core/Storage/Interface/IDatabase.h>
 #include <Core/Storage/Interface/ICollection.h>
 
@@ -13,7 +13,7 @@ namespace Vortex {
 				class IBackend {
 				public:
 					IBackend() {};
-					IBackend(const maze::object& config) {};
+					IBackend(const Maze::Object& config) {};
 					virtual ~IBackend() {};
 
 					// Basic CRUD methods

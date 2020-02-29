@@ -3,8 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
-#include <maze/object.h>
-#include <maze/array.h>
+#include <Maze/Object.hpp>
+#include <Maze/Array.hpp>
 #include <Server/Http/HttpServer.h>
 #include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
@@ -107,7 +107,7 @@ namespace Vortex {
 				exit_with_error(1000);
 			}
 			else {
-				maze::object config, server_config;
+				Maze::Object config, server_config;
 				server_config.set("port", port);
 				server_config.set("address", address);
 				server_config.set("thread_count", thread_count);
@@ -120,7 +120,7 @@ namespace Vortex {
 
 						if (boost::filesystem::exists(path_obj) && boost::filesystem::is_directory(path_obj)) {
 							data_dir = boost::filesystem::canonical(data_dir).string();
-							config.set("vortex", maze::object("data_dir", data_dir));
+							config.set("vortex", Maze::Object("data_dir", data_dir));
 						}
 						else {
 							std::cout << "Given data_dir path is not a directory." << std::endl;
@@ -218,7 +218,7 @@ namespace Vortex {
 	}
 
 	void start_from_config(const std::string& config_file_name) {
-		maze::object config;
+		Maze::Object config;
 
 		std::ifstream config_file(config_file_name);
 		if (config_file.is_open()) {
@@ -226,7 +226,7 @@ namespace Vortex {
 			buffer << config_file.rdbuf();
 
 			try {
-				config = maze::object::from_json(buffer.str());
+				config = Maze::Object::from_json(buffer.str());
 			}
 			catch (...) {
 				std::cout << "Unable to parse " << config_file_name << "." << std::endl;
@@ -241,11 +241,11 @@ namespace Vortex {
 		}
 
 		if (config.is_array("servers") && !config["servers"].get_array().is_empty()) {
-			maze::array servers = config["servers"];
+			Maze::Array servers = config["servers"];
 
 			for (auto it = servers.begin(); it != servers.end(); it++) {
 				if (it->is_int()) {
-					start_http_server(maze::object("port", it->get_int()));
+					start_http_server(Maze::Object("port", it->get_int()));
 				}
 				else if (it->is_object()) {
 					start_http_server(it->get_object());
@@ -266,12 +266,12 @@ namespace Vortex {
 	}
 
 	void start_server() {
-		start_server(maze::object());
+		start_server(Maze::Object());
 	}
 
-	void start_server(maze::object config) {
+	void start_server(Maze::Object config) {
 		if (config.is_object("server")) {
-			maze::object server_config = config["server"];
+			Maze::Object server_config = config["server"];
 
 			if (server_config.is_string("type")) {
 				std::string type = server_config["type"];
@@ -304,7 +304,7 @@ namespace Vortex {
 		server_thread.detach();
 	}
 
-	void start_http_server(maze::object config) {
+	void start_http_server(Maze::Object config) {
 		Vortex::Server::Http::HttpServer server;
 
 		server.start(config);

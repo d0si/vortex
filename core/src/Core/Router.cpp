@@ -1,7 +1,7 @@
 #include <Core/Router.h>
 #include <Core/Framework.h>
-#include <maze/object.h>
-#include <maze/element.h>
+#include <Maze/Object.hpp>
+#include <Maze/Element.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -14,17 +14,17 @@ namespace Vortex {
 		}
 
 		void Router::setup() {
-			maze::object router_config = framework_->config_["router"].get_object();
+			Maze::Object router_config = framework_->config_["router"].get_object();
 
 			if (router_config.is_object("routes")) {
-				maze::object routes = router_config["routes"].get_object();
+				Maze::Object routes = router_config["routes"].get_object();
 
 				for (auto route = routes.begin(); route != routes.end(); route++) {
 					std::string route_url = route->first;
 
 					if (route->second.is_object() &&
 						request_uri_.substr(0, route_url.length()) == route_url) {
-						maze::object route_obj = route->second;
+						Maze::Object route_obj = route->second;
 
 						if (route_obj.is_string("default_lang")) {
 							lang_ = route_obj["default_lang"].get_string();
@@ -40,9 +40,9 @@ namespace Vortex {
 			}
 
 			if (!router_config.is_array("url_schemes")) {
-				router_config.set("url_schemes", maze::array()
+				router_config.set("url_schemes", Maze::Array()
 					<< "lang"
-					<< maze::object("type", "controller").set("default_value", "index")
+					<< Maze::Object("type", "controller").set("default_value", "index")
 					<< "controller"
 					<< "args");
 			}
@@ -72,7 +72,7 @@ namespace Vortex {
 			int parts_count = request_uri_parts.size();
 
 			std::vector<std::string> controller_parts;
-			maze::array url_schemes = router_config["url_schemes"].get_array();
+			Maze::Array url_schemes = router_config["url_schemes"].get_array();
 			for (auto url_scheme = url_schemes.begin(); url_scheme != url_schemes.end(); url_scheme++) {
 				if (url_scheme->is_string()) {
 					std::string type = url_scheme->get_string();
@@ -93,7 +93,7 @@ namespace Vortex {
 					}
 				}
 				else if (url_scheme->is_object()) {
-					maze::object scheme = url_scheme->get_object();
+					Maze::Object scheme = url_scheme->get_object();
 
 					if (scheme.is_string("type")) {
 						std::string type = scheme["type"].get_string();

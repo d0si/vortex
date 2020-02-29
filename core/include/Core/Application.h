@@ -2,7 +2,7 @@
 #define VORTEX_CORE_FRAMEWORK_APPLICATION_H
 
 #include <string>
-#include <maze/object.h>
+#include <Maze/Object.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -11,7 +11,7 @@ namespace Vortex {
 		class Application {
 		private:
 			Framework* framework_;
-			maze::object application_;
+			Maze::Object application_;
 
 		public:
 			Application(Framework* framework);
@@ -20,7 +20,7 @@ namespace Vortex {
 
 			std::string get_id();
 			std::string get_title();
-			maze::object get_config();
+			Maze::Object get_config();
 			std::string get_script();
 			std::string get_post_script();
 		};

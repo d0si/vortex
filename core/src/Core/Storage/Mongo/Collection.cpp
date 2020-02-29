@@ -2,7 +2,7 @@
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <bsoncxx/json.hpp>
 #endif
-#include <maze/element.h>
+#include <Maze/Element.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -18,47 +18,47 @@ namespace Vortex {
 				}
 #endif
 
-				maze::array Collection::find(maze::object query) {
+				Maze::Array Collection::find(Maze::Object query) {
 					return find(query.to_json());
 				}
 
-				maze::array Collection::find(std::string json_query) {
-					maze::array results;
+				Maze::Array Collection::find(std::string json_query) {
+					Maze::Array results;
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
 					auto values = collection_.find(bsoncxx::from_json(json_query));
 					for (auto it = values.begin(); it != values.end(); it++) {
-						results << maze::object::from_json(bsoncxx::to_json(*it));
+						results << Maze::Object::from_json(bsoncxx::to_json(*it));
 					}
 #endif
 
 					return results;
 				}
 
-				maze::object Collection::find_by_id(std::string oid) {
-					maze::object query;
-					query.set("_id", maze::object("$oid", oid));
+				Maze::Object Collection::find_by_id(std::string oid) {
+					Maze::Object query;
+					query.set("_id", Maze::Object("$oid", oid));
 
 					return find_one(query);
 				}
 
-				maze::object Collection::find_one(maze::object query) {
+				Maze::Object Collection::find_one(Maze::Object query) {
 					return find_one(query.to_json());
 				}
 
-				maze::object Collection::find_one(std::string json_query) {
+				Maze::Object Collection::find_one(std::string json_query) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
 					auto value = collection_.find_one(bsoncxx::from_json(json_query));
 
 					if (value) {
-						return maze::object::from_json(bsoncxx::to_json(value.value()));
+						return Maze::Object::from_json(bsoncxx::to_json(value.value()));
 					}
 #endif
 
-					return maze::object();
+					return Maze::Object();
 				}
 
-				void Collection::delete_one(maze::object query) {
+				void Collection::delete_one(Maze::Object query) {
 					delete_one(query.to_json());
 				}
 
@@ -68,7 +68,7 @@ namespace Vortex {
 #endif
 				}
 
-				void Collection::insert_one(maze::object value) {
+				void Collection::insert_one(Maze::Object value) {
 					insert_one(value.to_json());
 				}
 
@@ -78,7 +78,7 @@ namespace Vortex {
 #endif
 				}
 
-				void Collection::insert_many(maze::array values) {
+				void Collection::insert_many(Maze::Array values) {
 					std::vector<std::string> json_values;
 
 					for (auto it = values.begin(); it != values.end(); it++) {
@@ -100,7 +100,7 @@ namespace Vortex {
 #endif
 				}
 
-				void Collection::replace_one(maze::object query, maze::object replacement_value) {
+				void Collection::replace_one(Maze::Object query, Maze::Object replacement_value) {
 					replace_one(query.to_json(), replacement_value.to_json());
 				}
 

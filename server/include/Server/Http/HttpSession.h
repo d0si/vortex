@@ -7,7 +7,7 @@
 #include <boost/beast/core/flat_buffer.hpp>
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
-#include <maze/object.h>
+#include <Maze/Object.hpp>
 #include <Core/Cache/Redis.h>
 
 namespace Vortex {
@@ -19,12 +19,12 @@ namespace Vortex {
 				boost::beast::flat_buffer buffer_;
 				boost::beast::http::request<boost::beast::http::string_body> req_;
 				boost::beast::http::response<boost::beast::http::string_body> res_;
-				maze::object config_;
+				Maze::Object config_;
 				Vortex::Core::Cache::Redis* redis_;
 
 			public:
 				explicit HttpSession(
-					maze::object config,
+					Maze::Object config,
 					Vortex::Core::Cache::Redis* redis,
 					boost::asio::ip::tcp::socket socket);
 

@@ -1,10 +1,10 @@
 #include <Core/Framework.h>
-#include <maze/element.h>
+#include <Maze/Element.hpp>
 
 namespace Vortex {
 	namespace Core {
 		Framework::Framework(
-			maze::object config,
+			Maze::Object config,
 			Cache::Redis* redis,
 			std::string client_ip,
 			boost::beast::http::request<boost::beast::http::string_body>* request,
@@ -61,7 +61,7 @@ namespace Vortex {
 			throw(0);
 		}
 
-		maze::object Framework::get_config() {
+		Maze::Object Framework::get_config() {
 			return this->config_;
 		}
 	}  // namespace Core

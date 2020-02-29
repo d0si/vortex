@@ -1,5 +1,5 @@
 #include <Core/Storage/Filesystem/FilesystemBackend.h>
-#include <maze/array.h>
+#include <Maze/Array.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -18,26 +18,26 @@ namespace Vortex {
 				}
 
 				std::string FilesystemBackend::find(std::string database, std::string collection, std::string query) {
-					maze::array results;
+					Maze::Array results;
 
 					if (database == "vortex") {
 						if (collection == "hosts") {
-							maze::object host("hostname", "localhost");
+							Maze::Object host("hostname", "localhost");
 							host.set("app_id", "0");
 							host.set("script", "view.echo('Default host script.')");
 
 							results.push(host);
 						}
 						else if (collection == "apps") {
-							maze::object app("hostname", "localhost");
+							Maze::Object app("hostname", "localhost");
 							app.set("title", "Default application");
 							app.set("script", "view.echo('Default application script.')");
 
 							results.push(app);
 						}
 						else if (collection == "controllers") {
-							maze::object app("name", "index");
-							app.set("app_ids", maze::array().push(0));
+							Maze::Object app("name", "index");
+							app.set("app_ids", Maze::Array().push(0));
 							app.set("script", "view.echo('Default controller script.')");
 
 							results.push(app);

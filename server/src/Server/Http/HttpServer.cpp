@@ -5,7 +5,6 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <Server/Http/HttpListener.h>
-#include <maze/element.h>
 #include <Core/CommonRuntime.h>
 
 using std::string;
@@ -15,7 +14,7 @@ namespace ip = boost::asio::ip;
 namespace Vortex {
 	namespace Server {
 		namespace Http {
-			void HttpServer::start(maze::object config) {
+			void HttpServer::start(Maze::Object config) {
 				this->config_ = config;
 
 				if (!Core::CommonRuntime::Instance.get_storage()->is_initialized()) {
@@ -25,7 +24,7 @@ namespace Vortex {
 				redis_.set_config(config_["redis"].get_object());
 				redis_.connect();
 
-				maze::object server_config;
+				Maze::Object server_config;
 				if (config_.is_object("server")) {
 					server_config = config_["server"].get_object();
 				}

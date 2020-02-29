@@ -1,7 +1,7 @@
 #include <Core/Application.h>
 #include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
-#include <maze/element.h>
+#include <Maze/Element.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -12,14 +12,14 @@ namespace Vortex {
 		void Application::find(std::string app_id) {
 			std::string redis_key = "vortex.core.application.value." + app_id;
 			if (framework_->redis_->exists(redis_key)) {
-				application_ = maze::object::from_json(framework_->redis_->get(redis_key));
+				application_ = Maze::Object::from_json(framework_->redis_->get(redis_key));
 			}
 
 			if (application_.is_empty()) {
-				maze::object query;
-				query.set("_id", maze::object("$oid", app_id));
+				Maze::Object query;
+				query.set("_id", Maze::Object("$oid", app_id));
 
-				application_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				application_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
 					->find("vortex", "apps", query.to_json()))
 					.get(0).get_object();
 				/*application_ = framework_->mongo_
@@ -45,7 +45,7 @@ namespace Vortex {
 			return application_["title"].get_string();
 		}
 
-		maze::object Application::get_config() {
+		Maze::Object Application::get_config() {
 			return application_["config"].get_object();
 		}
 

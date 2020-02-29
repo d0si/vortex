@@ -14,7 +14,7 @@ namespace Vortex {
 	namespace Server {
 		namespace Http {
 			HttpListener::HttpListener(
-				maze::object config,
+				Maze::Object config,
 				Vortex::Core::Cache::Redis* redis,
 				asio::io_context& ioC,
 				tcp::endpoint endpoint)

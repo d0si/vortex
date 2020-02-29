@@ -2,8 +2,8 @@
 #define VORTEX_CORE_FRAMEWORK_CONTROLLER_H
 
 #include <string>
-#include <maze/object.h>
-#include <maze/array.h>
+#include <Maze/Object.hpp>
+#include <Maze/Array.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -12,7 +12,7 @@ namespace Vortex {
 		class Controller {
 		private:
 			Framework* framework_;
-			maze::object controller_;
+			Maze::Object controller_;
 
 		public:
 			Controller(Framework* framework);
@@ -21,7 +21,7 @@ namespace Vortex {
 
 			std::string get_id();
 			std::string get_name();
-			maze::array get_app_ids();
+			Maze::Array get_app_ids();
 			std::string get_script();
 			std::string get_post_script();
 			std::string get_content_type();

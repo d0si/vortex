@@ -1,7 +1,7 @@
 #include <Core/Controller.h>
 #include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
-#include <maze/element.h>
+#include <Maze/Element.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -10,14 +10,14 @@ namespace Vortex {
 		}
 
 		void Controller::find(std::string app_id, std::string name, std::string method) {
-			maze::object query;
-			query["$or"] = maze::object("$or", maze::array()
-				<< maze::object("app_id", app_id)
-				<< maze::object("app_id", maze::element::get_null()));
+			Maze::Object query;
+			query["$or"] = Maze::Object("$or", Maze::Array()
+				<< Maze::Object("app_id", app_id)
+				<< Maze::Object("app_id", Maze::Element::get_null()));
 			query["name"] = name;
 			query["method"] = method;
 
-			controller_ = maze::array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+			controller_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
 				->find("vortex", "controllers", query.to_json()))
 				.get(0).get_object();
 			/*controller_ = framework_->mongo_
@@ -38,7 +38,7 @@ namespace Vortex {
 			return controller_["name"].get_string();
 		}
 
-		maze::array Controller::get_app_ids() {
+		Maze::Array Controller::get_app_ids() {
 			return controller_["app_ids"].get_array();
 		}
 

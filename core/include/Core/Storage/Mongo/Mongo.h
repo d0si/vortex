@@ -6,7 +6,7 @@
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/client.hpp>
 #endif
-#include <maze/object.h>
+#include <Maze/Object.hpp>
 #include <Core/Storage/Mongo/Db.h>
 #include <Core/Storage/Mongo/Collection.h>
 
@@ -19,15 +19,15 @@ namespace Vortex {
 #ifdef VORTEX_HAS_FEATURE_MONGO
 					mongocxx::client client_;
 #endif
-					maze::object mongo_config_;
+					Maze::Object mongo_config_;
 					bool enabled = true;
 
 				public:
 					Mongo();
-					Mongo(const maze::object& mongo_config);
+					Mongo(const Maze::Object& mongo_config);
 
 					void connect();
-					void set_config(const maze::object& mongo_config);
+					void set_config(const Maze::Object& mongo_config);
 
 					std::string get_connection_uri();
 					std::string get_default_db_name();

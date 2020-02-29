@@ -7,7 +7,7 @@ namespace Vortex {
 
 			}
 
-			Redis::Redis(const maze::object& redis_config) {
+			Redis::Redis(const Maze::Object& redis_config) {
 				set_config(redis_config);
 			}
 
@@ -39,7 +39,7 @@ namespace Vortex {
 #endif
 			}
 
-			void Redis::set_config(const maze::object& redis_config) {
+			void Redis::set_config(const Maze::Object& redis_config) {
 				redis_config_ = redis_config;
 
 				if (redis_config_.is_bool("enabled")) {

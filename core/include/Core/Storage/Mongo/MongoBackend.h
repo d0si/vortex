@@ -2,7 +2,6 @@
 #define VORTEX_CORE_STORAGE_MONGO_MONGOBACKEND_H
 
 #include <string>
-#include <maze/object.h>
 #include <Core/Storage/Interface/IBackend.h>
 #include <Core/Storage/Mongo/Mongo.h>
 

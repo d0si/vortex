@@ -15,7 +15,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_BUILD_TYPE Debug)
 
 # Include subprojects
-add_subdirectory(maze)
+add_subdirectory(Maze)
 add_subdirectory(core)
 add_subdirectory(server)
 add_subdirectory(vortex)

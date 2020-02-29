@@ -12,7 +12,7 @@ namespace Vortex {
 				
 			}
 
-			void Storage::initialize(maze::object storage_config) {
+			void Storage::initialize(Maze::Object storage_config) {
 				this->storage_config_ = storage_config;
 				this->initialized_ = false;
 
