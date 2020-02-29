@@ -1,0 +1,3 @@
+[submodule "Maze"]
+	path = Maze
+	url = https://github.com/d0si/Maze.git
