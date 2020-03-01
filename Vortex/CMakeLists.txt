@@ -1,8 +1,12 @@
 project(Vortex)
 
-include(${PROJECT_NAME}.cmake)
+SET(VORTEX_SOURCES
+    src/main.cpp
+    src/Vortex/Vortex.cpp
+)
+
 add_executable(${PROJECT_NAME}
-    ${${PROJECT_NAME}_SRC}
+    ${VORTEX_SOURCES}
 )
 
 find_package(Boost REQUIRED COMPONENTS system filesystem)
