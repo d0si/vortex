@@ -1,4 +1,4 @@
-project(vortex)
+project(Vortex)
 
 include(${PROJECT_NAME}.cmake)
 add_executable(${PROJECT_NAME}
@@ -12,8 +12,8 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    vortex::core
-    vortex::server
+    Vortex::Core
+    Vortex::Server
     ${Boost_LIBRARIES}
 )
 

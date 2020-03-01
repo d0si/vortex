@@ -1,4 +1,4 @@
-project(core)
+project(Core)
 
 include(${PROJECT_NAME}.cmake)
 add_library(${PROJECT_NAME}

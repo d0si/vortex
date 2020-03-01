@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(vortexProject)
+project(VortexProject)
 
 # Options
 option(VORTEX_ENABLE_FEATURE_MONGO "Enable support for mongo-cxx-driver and mongo-c-driver" OFF)
@@ -16,6 +16,6 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # Include subprojects
 add_subdirectory(Maze)
-add_subdirectory(core)
-add_subdirectory(server)
-add_subdirectory(vortex)
+add_subdirectory(Core)
+add_subdirectory(Server)
+add_subdirectory(Vortex)
