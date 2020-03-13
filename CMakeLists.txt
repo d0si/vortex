@@ -15,7 +15,8 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_BUILD_TYPE Debug)
 
 # Include subprojects
-add_subdirectory(Maze)
+add_subdirectory(dependencies/Maze)
+add_subdirectory(dependencies/GraphQL-cpp)
 add_subdirectory(Core)
 add_subdirectory(Server)
 add_subdirectory(Vortex)

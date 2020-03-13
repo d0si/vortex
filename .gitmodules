@@ -1,3 +1,6 @@
 [submodule "Maze"]
-	path = Maze
+	path = dependencies/Maze
 	url = https://github.com/d0si/Maze.git
+[submodule "dependencies/GraphQL-cpp"]
+	path = dependencies/GraphQL-cpp
+	url = https://github.com/d0si/GraphQL-cpp
