@@ -11,11 +11,11 @@ namespace Vortex {
 
 		void Controller::find(std::string app_id, std::string name, std::string method) {
 			Maze::Object query;
-			query["$or"] = Maze::Object("$or", Maze::Array()
+			query.set("$or", Maze::Array()
 				<< Maze::Object("app_id", app_id)
 				<< Maze::Object("app_id", Maze::Element::get_null()));
-			query["name"] = name;
-			query["method"] = method;
+			query.set("name", name);
+			query.set("method", method);
 
 			controller_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
 				->simple_find_first("vortex", "controllers", query.to_json()));

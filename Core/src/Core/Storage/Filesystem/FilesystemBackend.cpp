@@ -36,7 +36,8 @@ namespace Vortex {
 
                     std::ifstream collection_file(collection_file_path);
                     if (!collection_file.is_open()) {
-                        throw std::exception("Unable to open collection file");
+                        std::string error_msg("Unable to open collection file (" + collection + ")");
+                        throw std::exception(error_msg.c_str());
                     }
 
                     std::stringstream buffer;
@@ -159,15 +160,13 @@ namespace Vortex {
                             bool or_query_valid = false;
 
                             for (auto or_query_part : query_part.second.get_array()) {
-                                if (check_if_matches_simple_query(value, or_query_part.get_object()))
-                                    break;
-
                                 if (!or_query_part.is_object()) {
                                     throw std::exception("Invalid query or part");
                                 }
 
                                 if (check_if_matches_simple_query(value, or_query_part.get_object())) {
                                     or_query_valid = true;
+                                    break;
                                 }
                             }
 
@@ -184,6 +183,12 @@ namespace Vortex {
                                 }
                             }
                             else {
+                                value_valid = false;
+                                break;
+                            }
+                        }
+                        else if (query_part.second.is_null()) {
+                            if (value.exists(query_part.first) && !value[query_part.first].is_null()) {
                                 value_valid = false;
                                 break;
                             }
