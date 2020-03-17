@@ -17,12 +17,8 @@ namespace Vortex {
 			query["name"] = name;
 			query["method"] = method;
 
-			controller_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-				->find("vortex", "controllers", query.to_json()))
-				.get(0).get_object();
-			/*controller_ = framework_->mongo_
-				.get_collection("controllers")
-				.find_one(query);*/
+			controller_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				->simple_find_first("vortex", "controllers", query.to_json()));
 
 			if (controller_.is_empty()) {
 				framework_->view_.echo("Controller " + name + " not found.");

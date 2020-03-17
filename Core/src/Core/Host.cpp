@@ -16,12 +16,8 @@ namespace Vortex {
 			}
 
 			if (host_.is_empty()) {
-				host_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->find("vortex", "hosts", Maze::Object("hostname", hostname).to_json()))
-					.get(0).get_object();
-				/*host_ = framework_->mongo_
-					.get_collection("hosts")
-					.find_one(Maze::Object("hostname", hostname));*/
+				host_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->simple_find_first("vortex", "hosts", Maze::Object("hostname", hostname).to_json()));
 
 				if (!host_.is_empty()) {
 					framework_->redis_->set(redis_key, host_.to_json(0));

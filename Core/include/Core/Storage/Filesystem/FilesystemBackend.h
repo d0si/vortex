@@ -8,9 +8,14 @@ namespace Vortex {
 		namespace Storage {
 			namespace Filesystem {
 				class FilesystemBackend: public Core::Storage::Interface::IBackend {
+				private:
+					Maze::Object filesystem_config_;
+
 				public:
 					FilesystemBackend();
 					~FilesystemBackend();
+
+					void set_config(const Maze::Object& filesystem_config);
 
 					// Simple query
 					virtual void simple_insert(std::string database, std::string collection, std::string json_value);
@@ -24,6 +29,9 @@ namespace Vortex {
 					virtual std::string find(std::string database, std::string collection, std::string query);
 					virtual void update(std::string database, std::string collection, std::string query, std::string new_value);
 					virtual void remove(std::string database, std::string collection, std::string query);
+
+				private:
+					bool check_if_matches_simple_query(const Maze::Object& value, Maze::Object& simple_query) const;
 				};
 
 				Core::Storage::Interface::IBackend* get_backend();

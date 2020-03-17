@@ -158,20 +158,14 @@ namespace Vortex {
 			Maze::Object query("name", name);
 			query.set("app_ids", framework_->application_.get_id());
 
-			template_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-				->find("vortex", "templates", query.to_json()))
-				.get(0).get_object();
-			/*template_ = framework_->mongo_.get_collection("templates")
-				.find_one(query);*/
+			template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				->simple_find_first("vortex", "templates", query.to_json()));
 
 			if (template_.is_empty()) {
 				query.set_null("app_ids");
 
-				template_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->find("vortex", "templates", query.to_json()))
-					.get(0).get_object();
-				/*template_ = framework_->mongo_.get_collection("templates")
-					.find_one(query);*/
+				template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->simple_find_first("vortex", "templates", query.to_json()));
 			}
 
 			if (template_.is_empty()) {
@@ -191,20 +185,14 @@ namespace Vortex {
 			Maze::Object query("name", name);
 			query.set("app_ids", framework_->application_.get_id());
 
-			page_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-				->find("vortex", "pages", query.to_json()))
-				.get(0).get_object();
-			/*page_ = framework_->mongo_.get_collection("pages")
-				.find_one(query);*/
+			page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+				->simple_find_first("vortex", "pages", query.to_json()));
 
 			if (page_.is_empty()) {
 				query.set_null("app_ids");
 
-				page_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->find("vortex", "apps", query.to_json()))
-					.get(0).get_object();
-				/*page_ = framework_->mongo_.get_collection("pages")
-					.find_one(query);*/
+				page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->simple_find_first("vortex", "apps", query.to_json()));
 			}
 
 			if (page_.is_empty()) {

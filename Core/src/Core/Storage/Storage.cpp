@@ -17,6 +17,7 @@ namespace Vortex {
 				this->initialized_ = false;
 
 				Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::exports.get_backend_instance());
+				fs_backend->set_config(this->storage_config_["config"].get_object()["Filesystem"].get_object());
 
 				this->available_backends_.push_back(std::make_pair<std::string, Interface::IBackend*>(
 					Core::Storage::Filesystem::exports.backend_name,

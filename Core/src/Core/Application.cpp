@@ -19,12 +19,8 @@ namespace Vortex {
 				Maze::Object query;
 				query.set("_id", Maze::Object("$oid", app_id));
 
-				application_ = Maze::Array::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->find("vortex", "apps", query.to_json()))
-					.get(0).get_object();
-				/*application_ = framework_->mongo_
-					.get_collection("apps")
-					.find_by_id(app_id);*/
+				application_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->simple_find_first("vortex", "apps", query.to_json()));
 
 				if (!application_.is_empty()) {
 					framework_->redis_->set(redis_key, application_.to_json(0));
