@@ -4,3 +4,6 @@
 [submodule "dependencies/GraphQL-cpp"]
 	path = dependencies/GraphQL-cpp
 	url = https://github.com/d0si/GraphQL-cpp
+[submodule "dependencies/duktape-cpp"]
+	path = dependencies/duktape-cpp
+	url = https://github.com/vmanucharyan/duktape-cpp.git

@@ -96,7 +96,7 @@ namespace Vortex {
 				catch (Core::Exception::VortexException e) {
 					res_.result(boost::beast::http::status::internal_server_error);
 					std::string what = e.what();
-					res_.body() = "Exception - " + what;
+					res_.body() = "Exception - " + e.message + " (" + e.message + ")";
 				}
 				catch (std::runtime_error e) {
 					res_.result(boost::beast::http::status::internal_server_error);

@@ -84,6 +84,7 @@ namespace Vortex {
 
                 void FilesystemBackend::simple_replace_first(std::string database, std::string collection, std::string json_simple_query, std::string replacement_json_value) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
+                    Maze::Array new_collection_data;
 
                     Maze::Object simple_query;
                     try {
@@ -101,20 +102,20 @@ namespace Vortex {
                         throw Exception::StorageException("Unable to parse replacement json value");
                     }
 
-                    for (size_t i = 0; i < collection_data.size(); ++i) {
-                        Maze::Object value = collection_data[i].get_object();
+                    bool is_replaced = false;
+                    for (auto val : collection_data) {
+                        Maze::Object value = val.get_object();
 
-                        if (check_if_matches_simple_query(value, simple_query)) {
-                            collection_data[i] = Maze::Object();
-
-                            collection_data.remove(i);
-                            collection_data.push(replacement_value);
-
-                            return;
+                        if (!is_replaced && check_if_matches_simple_query(value, simple_query)) {
+                            new_collection_data.push(replacement_value);
+                            is_replaced = true;
+                        }
+                        else {
+                            new_collection_data.push(value);
                         }
                     }
 
-                    save_collection_entries(database, collection, collection_data);
+                    save_collection_entries(database, collection, new_collection_data);
                 }
 
                 void FilesystemBackend::simple_delete_all(std::string database, std::string collection, std::string json_simple_query) {
@@ -156,11 +157,11 @@ namespace Vortex {
                         if (check_if_matches_simple_query(value, simple_query)) {
                             collection_data.remove(i);
 
+                            save_collection_entries(database, collection, collection_data);
+
                             return;
                         }
                     }
-
-                    save_collection_entries(database, collection, collection_data);
                 }
 
                 bool FilesystemBackend::check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const {

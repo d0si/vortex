@@ -22,6 +22,8 @@ namespace Vortex {
 			void output();
 			void respond();
 			void echo(std::string contents);
+			void set_content_type(std::string content_type);
+			void set_status_code(int status_code);
 			void clear();
 			void finish();
 			std::string parse(std::string code);

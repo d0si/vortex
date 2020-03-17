@@ -219,5 +219,9 @@ namespace Vortex {
 		std::vector<std::string> Router::get_args() {
 			return args_;
 		}
+
+		std::string Router::get_post() const {
+			return framework_->request_->body();
+		}
 	}  // namespace Core
 }  // namespace Vortex

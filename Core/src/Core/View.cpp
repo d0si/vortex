@@ -21,6 +21,14 @@ namespace Vortex {
 			rendered_ += contents;
 		}
 
+		void View::set_content_type(std::string content_type) {
+			framework_->response_->set(boost::beast::http::field::content_type, content_type);
+		}
+
+		void View::set_status_code(int status_code) {
+			framework_->response_->result(boost::beast::http::int_to_status(status_code));
+		}
+
 		void View::clear() {
 			framework_->response_->body() = "";
 			rendered_.clear();
@@ -33,7 +41,8 @@ namespace Vortex {
 		}
 
 		std::string View::parse(std::string code) {
-			std::string rendered;
+			std::string old_rendered = rendered_;
+			rendered_.clear();
 
 			enum grabbing_stage {
 				String, Script, Echo, Comment
@@ -65,15 +74,15 @@ namespace Vortex {
 							++i;
 						}
 						else if (next == '\\') {
-							rendered += current;
+							rendered_ += current;
 							i++;
 						}
 						else {
-							rendered += current;
+							rendered_ += current;
 						}
 					}
 					else {
-						rendered += current;
+						rendered_ += current;
 					}
 				}
 				else if (stage == grabbing_stage::Script) {
@@ -81,16 +90,16 @@ namespace Vortex {
 						char next = code[i + 1];
 
 						if (next == '}') {
-							// TODO: Execute script
+							framework_->script_.exec(script_code);
 
 							script_code.clear();
 
 							stage = grabbing_stage::String;
 							++i;
 
-							if (code[i + 2] == '\n') {
+							/*if (code[i + 2] == '\n') {
 								++i;
-							}
+							}*/
 						}
 						else if (next == '\\') {
 							script_code += current;
@@ -109,16 +118,16 @@ namespace Vortex {
 						char next = code[i + 1];
 
 						if (next == '}') {
-							// TODO: Get script result as string
+							framework_->script_.exec("__view.echo(" + script_code + ")");
 
 							script_code.clear();
 
 							stage = grabbing_stage::String;
 							++i;
 
-							if (code[i + 2] == '\n') {
+							/*if (code[i + 2] == '\n') {
 								++i;
-							}
+							}*/
 						}
 						else if (next == '\\') {
 							script_code += current;
@@ -140,9 +149,9 @@ namespace Vortex {
 							stage = grabbing_stage::String;
 							++i;
 
-							if (code[i + 2] == '\n') {
+							/*if (code[i + 2] == '\n') {
 								++i;
-							}
+							}*/
 						}
 						else if (next == '\\') {
 							++i;
@@ -151,7 +160,9 @@ namespace Vortex {
 				}
 			}
 
-			return rendered;
+			std::string new_rendered = rendered_;
+			rendered_ = old_rendered;
+			return new_rendered;
 		}
 
 		void View::set_template(std::string name) {
@@ -192,7 +203,7 @@ namespace Vortex {
 				query.set_null("app_ids");
 
 				page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first("vortex", "apps", query.to_json()));
+					->simple_find_first("vortex", "pages", query.to_json()));
 			}
 
 			if (page_.is_empty()) {
@@ -201,8 +212,8 @@ namespace Vortex {
 		}
 
 		std::string View::parse_page() {
-			if (template_.is_string("contents")) {
-				return parse(template_["contents"].get_string());
+			if (page_.is_string("contents")) {
+				return parse(page_["contents"].get_string());
 			}
 
 			return "";

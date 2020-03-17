@@ -25,6 +25,8 @@ namespace Vortex {
 			std::string get_lang();
 			std::string get_controller();
 			std::vector<std::string> get_args();
+
+			std::string get_post() const;
 		};
 	}  // namespace Core
 }  // namespace Vortex

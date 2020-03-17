@@ -16,6 +16,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 # Include subprojects
 add_subdirectory(dependencies/Maze)
+#add_subdirectory(dependencies/duktape-cpp)
 #add_subdirectory(dependencies/GraphQL-cpp)
 add_subdirectory(Core)
 add_subdirectory(Server)
