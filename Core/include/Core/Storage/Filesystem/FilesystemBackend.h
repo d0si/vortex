@@ -34,6 +34,7 @@ namespace Vortex {
 				private:
 					bool check_if_matches_simple_query(const Maze::Object& value, Maze::Object& simple_query) const;
 					Maze::Array get_collection_entries(const std::string& database, const std::string& collection) const;
+					void save_collection_entries(const std::string& database, const std::string& collection, const Maze::Array& values) const;
 				};
 
 				Core::Storage::Interface::IBackend* get_backend();

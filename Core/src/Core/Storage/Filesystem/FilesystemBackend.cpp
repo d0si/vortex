@@ -21,7 +21,19 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::simple_insert(std::string database, std::string collection, std::string json_value) {
+                    Maze::Array collection_data = get_collection_entries(database, collection);
 
+                    Maze::Object value;
+                    try {
+                        value = Maze::Object::from_json(json_value);
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Unable to parse json value");
+                    }
+
+                    collection_data.push(value);
+
+                    save_collection_entries(database, collection, collection_data);
                 }
 
                 std::string FilesystemBackend::simple_find_all(std::string database, std::string collection, std::string json_simple_query) {
@@ -71,15 +83,84 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::simple_replace_first(std::string database, std::string collection, std::string json_simple_query, std::string replacement_json_value) {
+                    Maze::Array collection_data = get_collection_entries(database, collection);
 
+                    Maze::Object simple_query;
+                    try {
+                        simple_query = Maze::Object::from_json(json_simple_query);
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Invalid query syntax");
+                    }
+
+                    Maze::Object replacement_value;
+                    try {
+                        replacement_value = Maze::Object::from_json(replacement_json_value);
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Unable to parse replacement json value");
+                    }
+
+                    for (size_t i = 0; i < collection_data.size(); ++i) {
+                        Maze::Object value = collection_data[i].get_object();
+
+                        if (check_if_matches_simple_query(value, simple_query)) {
+                            collection_data[i] = Maze::Object();
+
+                            collection_data.remove(i);
+                            collection_data.push(replacement_value);
+
+                            return;
+                        }
+                    }
+
+                    save_collection_entries(database, collection, collection_data);
                 }
 
                 void FilesystemBackend::simple_delete_all(std::string database, std::string collection, std::string json_simple_query) {
+                    Maze::Array collection_data = get_collection_entries(database, collection);
 
+                    Maze::Object simple_query;
+                    try {
+                        simple_query = Maze::Object::from_json(json_simple_query);
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Invalid query syntax");
+                    }
+
+                    for (size_t i = 0; i < collection_data.size(); ++i) {
+                        Maze::Object value = collection_data[i].get_object();
+
+                        if (check_if_matches_simple_query(value, simple_query)) {
+                            collection_data.remove(i);
+                        }
+                    }
+
+                    save_collection_entries(database, collection, collection_data);
                 }
 
                 void FilesystemBackend::simple_delete_first(std::string database, std::string collection, std::string json_simple_query) {
+                    Maze::Array collection_data = get_collection_entries(database, collection);
 
+                    Maze::Object simple_query;
+                    try {
+                        simple_query = Maze::Object::from_json(json_simple_query);
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Invalid query syntax");
+                    }
+
+                    for (size_t i = 0; i < collection_data.size(); ++i) {
+                        Maze::Object value = collection_data[i].get_object();
+
+                        if (check_if_matches_simple_query(value, simple_query)) {
+                            collection_data.remove(i);
+
+                            return;
+                        }
+                    }
+
+                    save_collection_entries(database, collection, collection_data);
                 }
 
                 void FilesystemBackend::insert(std::string database, std::string collection, std::string value) {
@@ -215,6 +296,7 @@ namespace Vortex {
 
                     std::stringstream buffer;
                     buffer << collection_file.rdbuf();
+                    collection_file.close();
 
                     Maze::Array collection_data;
                     try {
@@ -225,6 +307,22 @@ namespace Vortex {
                     }
 
                     return Maze::Array();
+                }
+
+                void FilesystemBackend::save_collection_entries(const std::string& database, const std::string& collection, const Maze::Array& values) const {
+                    if (!filesystem_config_.is_string("root_path")) {
+                        throw Exception::StorageException("Invalid config root_path");
+                    }
+
+                    std::string collection_file_path = filesystem_config_["root_path"].get_string() + '/' + database + '/' + collection + ".json";
+
+                    std::ofstream collection_file(collection_file_path, std::ofstream::trunc);
+                    if (!collection_file.is_open()) {
+                        throw Exception::StorageException("Unable to open collection file for " + database + "/" + collection);
+                    }
+
+                    collection_file << values.to_json(4);
+                    collection_file.close();
                 }
 
                 Storage::Interface::IBackend* get_backend() {
