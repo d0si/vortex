@@ -1,3 +1,9 @@
-[submodule "maze"]
-	path = maze
-	url = https://github.com/d0si/maze.git
+[submodule "Maze"]
+	path = dependencies/Maze
+	url = https://github.com/d0si/Maze.git
+[submodule "dependencies/GraphQL-cpp"]
+	path = dependencies/GraphQL-cpp
+	url = https://github.com/d0si/GraphQL-cpp
+[submodule "dependencies/duktape-cpp"]
+	path = dependencies/duktape-cpp
+	url = https://github.com/vmanucharyan/duktape-cpp.git

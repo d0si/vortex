@@ -1,0 +1,30 @@
+{
+  "servers": [
+    {
+      "server": {
+        "ip": "0.0.0.0",
+        "port": 8080,
+        "thread_count": 2
+      },
+      "storage": {
+        "data_dir": "../samples/vortex_sample_data",
+        "default_backend": "Filesystem",
+        "enabled_backends": [ "Filesystem", "Mongo" ],
+        "config": {
+          "Mongo": {
+            "enabled": false
+          },
+          "Filesystem": {
+            "root_path": "../../samples"
+          }
+        }
+      },
+      "mongo": {
+        "enabled": false
+      },
+      "redis": {
+        "enabled": false
+      }
+    }
+  ]
+}

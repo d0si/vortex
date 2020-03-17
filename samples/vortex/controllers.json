@@ -1,0 +1,92 @@
+[
+    {
+        "_id": {
+            "$oid": "5e70d5d9209843fa06bdc262"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "db/list",
+        "script": "view.set_page('db_list')"
+    },
+    {
+        "_id": {
+            "$oid": "5e710b0898620dfada8597c8"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "db/view",
+        "script": "view.set_page('collection_list')"
+    },
+    {
+        "_id": {
+            "$oid": "5e710b1d397a6478febe18c3"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "col/view",
+        "script": "view.set_page('item_list')"
+    },
+    {
+        "_id": {
+            "$oid": "5e710b20c3d640752f4fec6f"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "col/find",
+        "script": "view.set_content_type('application/json'); var args = router.get_args(); var db_name = args[0]; var collection_name = args[1]; view.echo(storage.simple_find_all(db_name, collection_name, '{}')); view.finish();"
+    },
+    {
+        "_id": {
+            "$oid": "5e710b2e58e2b1edeab137d5"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "col/edit",
+        "script": "view.set_page('edit_item'); var args = router.get_args(); var db_name = args[0]; var collection_name = args[1]; var oid = args[2]; var value = storage.simple_find_first(db_name, collection_name, '{\"_id\": {\"$oid\": \"' + oid + '\"}}');"
+    },
+    {
+        "_id": {
+            "$oid": "5e710b33e919bf25b130c920"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "col/findOne",
+        "script": "view.set_content_type('application/json'); var args = router.get_args(); var db_name = args[0]; var collection_name = args[1]; var oid = args[2]; view.echo(storage.simple_find_first(db_name, collection_name, '{\"_id\": {\"$oid\": \"' + oid + '\"}}')); view.finish();"
+    },
+    {
+        "_id": {
+            "$oid": "5e711957bcad3824e6b33acb"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "POST",
+        "name": "col/update",
+        "script": "view.set_content_type('application/json');\r\n\r\nvar args = router.get_args();\r\nvar db_name = args[0];\r\nvar collection_name = args[1];\r\nvar oid = args[2];\r\nvar replacement = router.get_post();\r\n\r\n\r\nstorage.simple_replace_first(db_name, collection_name, '{\"_id\": {\"$oid\": \"' + oid + '\"}}', replacement);\r\nview.echo('{\"status\": \"success\"}');\r\nview.finish();\r\n"
+    },
+    {
+        "_id": {
+            "$oid": "5e711c620c97dd95f18c3329"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "GET",
+        "name": "col/create",
+        "script": "view.set_page('create_item'); var args = router.get_args(); var db_name = args[0]; var collection_name = args[1];"
+    },
+    {
+        "_id": {
+            "$oid": "5e711d6395d1adf3f02063f0"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "POST",
+        "name": "col/insert",
+        "script": "view.set_content_type('application/json');\r\n\r\nvar args = router.get_args();\r\nvar db_name = args[0];\r\nvar collection_name = args[1];\r\nvar value = router.get_post();\r\n\r\n\r\nstorage.simple_insert(db_name, collection_name, value);\r\nview.echo('{\"status\": \"success\"}');\r\nview.finish();\r\n"
+    },
+    {
+        "_id": {
+            "$oid": "5e711e0023204e38949f1b96"
+        },
+        "app_id": "5e70d5b6d08a50320e37afa5",
+        "method": "POST",
+        "name": "col/delete",
+        "script": "view.set_content_type('application/json');\n\nvar args = router.get_args();\nvar db_name = args[0];\nvar collection_name = args[1];\nvar oid = args[2];\n\n\nstorage.simple_delete_first(db_name, collection_name, '{\"_id\": {\"$oid\": \"' + oid + '\"}}');\n\nview.echo('{\"status\": \"success\"}');\nview.finish();\n"
+    }
+]

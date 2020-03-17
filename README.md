@@ -29,6 +29,7 @@ To build the project yourself you will need:
 - **duktape** runtime (recommended version 2.5.0)
 - **duktape-cpp**
 - **crypto++** (recommended version 8.2.0)
+- **libgraphqlparser** (recommended version 0.7.0)
 
 Please take a look at [d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
 
@@ -38,4 +39,4 @@ Build steps:
 1. Create `build` folder inside project root and cd into it
 2. Initialize CMake project using `cmake ..` (Use `-DCMAKE_BUILD_TYPE=Release` argument  to build release binaries)
 3. Build using `make` or `make -j8` replacing 8 with number of build jobs (threads) you want to use for building.
-4. Run executable `./bin/vortex`
+4. Run executable with sample project `./bin/vortex --config=../samples/server_config.json`

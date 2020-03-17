@@ -9,5 +9,8 @@ ADD ./ /vortex/
 WORKDIR /vortex
 
 RUN cd /vortex/build \
-    && cmake .. \
+    && cmake -DVORTEX_ENABLE_FEATURE_MONGO=ON \
+        -DVORTEX_ENABLE_FEATURE_REDIS=ON \
+        -DVORTEX_ENABLE_FEATURE_DUKTAPE=ON \
+        -DVORTEX_ENABLE_FEATURE_CRYPTOPP=ON .. \
     && make -j8

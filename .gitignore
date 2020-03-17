@@ -1,4 +1,5 @@
 # Editor specific files
+.vs
 .vscode
 .idea
 cmake-build-debug
