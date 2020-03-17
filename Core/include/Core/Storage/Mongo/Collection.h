@@ -30,6 +30,8 @@ namespace Vortex {
 					Maze::Object find_one(Maze::Object query);
 					Maze::Object find_one(std::string json_query);
 
+					void delete_many(Maze::Object query);
+					void delete_many(std::string json_query);
 					void delete_one(Maze::Object query);
 					void delete_one(std::string json_query);
 

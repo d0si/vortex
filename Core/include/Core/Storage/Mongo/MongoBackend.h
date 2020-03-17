@@ -17,6 +17,14 @@ namespace Vortex {
 					MongoBackend();
 					~MongoBackend();
 
+					// Simple query
+					virtual void simple_insert(std::string database, std::string collection, std::string json_value);
+					virtual std::string simple_find_all(std::string database, std::string collection, std::string json_simple_query);
+					virtual std::string simple_find_first(std::string database, std::string collection, std::string json_simple_query);
+					virtual void simple_replace_first(std::string database, std::string collection, std::string json_simple_query, std::string replacement_json_value);
+					virtual void simple_delete_all(std::string database, std::string collection, std::string json_simple_query);
+					virtual void simple_delete_first(std::string database, std::string collection, std::string json_simple_query);
+
 					virtual void insert(std::string database, std::string collection, std::string value);
 					virtual std::string find(std::string database, std::string collection, std::string query);
 					virtual void update(std::string database, std::string collection, std::string query, std::string new_value);

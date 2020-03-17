@@ -68,6 +68,16 @@ namespace Vortex {
 #endif
 				}
 
+				void Collection::delete_many(Maze::Object query) {
+					delete_many(query.to_json());
+				}
+
+				void Collection::delete_many(std::string json_query) {
+#ifdef VORTEX_HAS_FEATURE_MONGO
+					collection_.delete_many(bsoncxx::from_json(json_query));
+#endif
+				}
+
 				void Collection::insert_one(Maze::Object value) {
 					insert_one(value.to_json());
 				}
