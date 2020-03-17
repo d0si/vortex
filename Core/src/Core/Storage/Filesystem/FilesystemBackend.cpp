@@ -242,7 +242,7 @@ namespace Vortex {
 
                             for (auto or_query_part : query_part.second.get_array()) {
                                 if (!or_query_part.is_object()) {
-                                    throw std::exception("Invalid query or part");
+                                    throw Exception::StorageException("Invalid part of $or query");
                                 }
 
                                 if (check_if_matches_simple_query(value, or_query_part.get_object())) {
@@ -275,7 +275,7 @@ namespace Vortex {
                             }
                         }
                         else {
-                            throw std::exception("Invalid query parameter type");
+                            throw Exception::StorageException("Invalid query parameter type");
                         }
                     }
 
