@@ -9,7 +9,15 @@
       "storage": {
         "data_dir": "../samples/vortex_sample_data",
         "default_backend": "Filesystem",
-        "enabled_backends": [ "Filesystem", "Mongo" ]
+        "enabled_backends": [ "Filesystem", "Mongo" ],
+        "config": {
+          "Mongo": {
+            "enabled": false
+          },
+          "Filesystem": {
+            "root_path": "../../samples"
+          }
+        }
       },
       "mongo": {
         "enabled": false
