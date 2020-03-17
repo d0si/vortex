@@ -2,6 +2,7 @@
 #define VORTEX_CORE_STORAGE_FILESYSTEM_FILESYSTEMBACKEND_H
 
 #include <Core/Storage/Interface/IBackend.h>
+#include <Maze/Array.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -32,6 +33,7 @@ namespace Vortex {
 
 				private:
 					bool check_if_matches_simple_query(const Maze::Object& value, Maze::Object& simple_query) const;
+					Maze::Array get_collection_entries(const std::string& database, const std::string& collection) const;
 				};
 
 				Core::Storage::Interface::IBackend* get_backend();

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <Maze/Array.hpp>
+#include <Core/Exception/StorageException.h>
 
 namespace Vortex {
     namespace Core {
@@ -24,39 +25,38 @@ namespace Vortex {
                 }
 
                 std::string FilesystemBackend::simple_find_all(std::string database, std::string collection, std::string json_simple_query) {
-                    return "";
-                }
-
-                std::string FilesystemBackend::simple_find_first(std::string database, std::string collection, std::string json_simple_query) {
-                    if (!filesystem_config_.is_string("root_path")) {
-                        throw std::exception("Invalid root_path");  // TODO
-                    }
-
-                    std::string collection_file_path = filesystem_config_["root_path"].get_string() + '/' + database + '/' + collection + ".json";
-
-                    std::ifstream collection_file(collection_file_path);
-                    if (!collection_file.is_open()) {
-                        std::string error_msg("Unable to open collection file (" + collection + ")");
-                        throw std::exception(error_msg.c_str());
-                    }
-
-                    std::stringstream buffer;
-                    buffer << collection_file.rdbuf();
-
-                    Maze::Array collection_data;
-                    try {
-                        collection_data = Maze::Array::from_json(buffer.str());
-                    }
-                    catch (...) {
-                        throw std::exception("Collection file is corrupted");
-                    }
+                    Maze::Array collection_data = get_collection_entries(database, collection);
 
                     Maze::Object simple_query;
                     try {
                         simple_query = Maze::Object::from_json(json_simple_query);
                     }
                     catch (...) {
-                        throw std::exception("Invalid query syntax");
+                        throw Exception::StorageException("Invalid query syntax");
+                    }
+
+                    Maze::Array query_results;
+
+                    for (auto val : collection_data) {
+                        Maze::Object value = val.get_object();
+
+                        if (check_if_matches_simple_query(value, simple_query)) {
+                            query_results.push(value);
+                        }
+                    }
+
+                    return query_results.to_json();
+                }
+
+                std::string FilesystemBackend::simple_find_first(std::string database, std::string collection, std::string json_simple_query) {
+                    Maze::Array collection_data = get_collection_entries(database, collection);
+
+                    Maze::Object simple_query;
+                    try {
+                        simple_query = Maze::Object::from_json(json_simple_query);
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Invalid query syntax");
                     }
 
                     for (auto val : collection_data) {
@@ -199,6 +199,32 @@ namespace Vortex {
                     }
 
                     return value_valid;
+                }
+
+                Maze::Array FilesystemBackend::get_collection_entries(const std::string& database, const std::string& collection) const {
+                    if (!filesystem_config_.is_string("root_path")) {
+                        throw Exception::StorageException("Invalid config root_path");
+                    }
+
+                    std::string collection_file_path = filesystem_config_["root_path"].get_string() + '/' + database + '/' + collection + ".json";
+
+                    std::ifstream collection_file(collection_file_path);
+                    if (!collection_file.is_open()) {
+                        throw Exception::StorageException("Unable to open collection file for " + database + "/" + collection);
+                    }
+
+                    std::stringstream buffer;
+                    buffer << collection_file.rdbuf();
+
+                    Maze::Array collection_data;
+                    try {
+                        return Maze::Array::from_json(buffer.str());
+                    }
+                    catch (...) {
+                        throw Exception::StorageException("Collection file is corrupted (unable to parse json)");
+                    }
+
+                    return Maze::Array();
                 }
 
                 Storage::Interface::IBackend* get_backend() {

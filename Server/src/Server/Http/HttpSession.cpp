@@ -3,6 +3,7 @@
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
 #include <Core/Framework.h>
+#include <Core/Exception/VortexException.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
@@ -91,6 +92,11 @@ namespace Vortex {
 					std::string what = e.what();
 					res_.body() = "MongoDb exception: " + what;
 #endif
+				}
+				catch (Core::Exception::VortexException e) {
+					res_.result(boost::beast::http::status::internal_server_error);
+					std::string what = e.what();
+					res_.body() = "Exception - " + what;
 				}
 				catch (std::runtime_error e) {
 					res_.result(boost::beast::http::status::internal_server_error);

@@ -29,7 +29,10 @@ set(CORE_SOURCES
     src/Core/Util/Random.cpp
     src/Core/Util/Password.cpp
     src/Core/Util/String.cpp
-    src/Core/Util/Hash.cpp
+    src/Core/Util/Hash.cpp.
+
+    src/Core/Exception/VortexException.cpp
+    src/Core/Exception/StorageException.cpp
 )
 
 add_library(${PROJECT_NAME}
