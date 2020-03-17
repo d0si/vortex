@@ -3,6 +3,23 @@
         "_id": {
             "$oid": "5e70d5b6d08a50320e37afa5"
         },
-        "title": "Vortex default application"
+        "name": "vortex/db",
+        "script": "view.set_template('vortex/db')",
+        "title": "Vortex Database",
+        "config": {
+            "router": {
+                "url_schemes": [
+                    {
+                        "default_value": "db",
+                        "type": "controller"
+                    },
+                    {
+                        "default_value": "list",
+                        "type": "controller"
+                    },
+                    "args"
+                ]
+            }
+        }
     }
 ]

@@ -79,14 +79,5 @@
         "method": "POST",
         "name": "col/insert",
         "script": "view.set_content_type('application/json');\r\n\r\nvar args = router.get_args();\r\nvar db_name = args[0];\r\nvar collection_name = args[1];\r\nvar value = router.get_post();\r\n\r\n\r\nstorage.simple_insert(db_name, collection_name, value);\r\nview.echo('{\"status\": \"success\"}');\r\nview.finish();\r\n"
-    },
-    {
-        "_id": {
-            "$oid": "5e711e0023204e38949f1b96"
-        },
-        "app_id": "5e70d5b6d08a50320e37afa5",
-        "method": "POST",
-        "name": "col/delete",
-        "script": "view.set_content_type('application/json');\n\nvar args = router.get_args();\nvar db_name = args[0];\nvar collection_name = args[1];\nvar oid = args[2];\n\n\nstorage.simple_delete_first(db_name, collection_name, '{\"_id\": {\"$oid\": \"' + oid + '\"}}');\n\nview.echo('{\"status\": \"success\"}');\nview.finish();\n"
     }
 ]

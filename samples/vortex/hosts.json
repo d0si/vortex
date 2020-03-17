@@ -1,10 +1,9 @@
 [
     {
         "_id": {
-            "$oid": "5e70d5ca6373e234feb85b99"
+            "$oid": "5e710b3f43f6a83090eb8c17"
         },
         "hostname": "localhost",
-        "app_id": "5e70d5b6d08a50320e37afa5",
-        "script": "view.echo('Default host script.')"
+        "app_id": "5e70d5b6d08a50320e37afa5"
     }
 ]
