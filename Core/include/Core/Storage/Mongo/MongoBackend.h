@@ -25,10 +25,10 @@ namespace Vortex {
 					virtual void simple_delete_all(std::string database, std::string collection, std::string json_simple_query);
 					virtual void simple_delete_first(std::string database, std::string collection, std::string json_simple_query);
 
-					virtual void insert(std::string database, std::string collection, std::string value);
-					virtual std::string find(std::string database, std::string collection, std::string query);
-					virtual void update(std::string database, std::string collection, std::string query, std::string new_value);
-					virtual void remove(std::string database, std::string collection, std::string query);
+					// virtual void insert(std::string database, std::string collection, std::string value);
+					// virtual std::string find(std::string database, std::string collection, std::string query);
+					// virtual void update(std::string database, std::string collection, std::string query, std::string new_value);
+					// virtual void remove(std::string database, std::string collection, std::string query);
 
 					Core::Storage::Mongo::Mongo* get_client();
 				};
