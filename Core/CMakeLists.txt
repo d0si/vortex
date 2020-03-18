@@ -20,6 +20,7 @@ set(CORE_SOURCES
     src/Core/Storage/Filesystem/Collection.cpp
     src/Core/Storage/Filesystem/FilesystemBackend.cpp
 
+    src/Core/Cache/Cache.cpp
     src/Core/Cache/Redis.cpp
 
     src/Core/Script/Script.cpp
@@ -33,6 +34,7 @@ set(CORE_SOURCES
 
     src/Core/Exception/VortexException.cpp
     src/Core/Exception/StorageException.cpp
+    src/Core/Exception/CacheException.cpp
 )
 
 add_library(${PROJECT_NAME}
