@@ -15,10 +15,9 @@ namespace Vortex {
 		namespace Http {
 			HttpListener::HttpListener(
 				Maze::Object config,
-				Vortex::Core::Cache::Redis* redis,
 				asio::io_context& ioC,
 				tcp::endpoint endpoint)
-				: config_(config), redis_(redis), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
+				: config_(config), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {
 				error_code ec;
 
 				acceptor_.open(endpoint.protocol(), ec);
@@ -74,7 +73,6 @@ namespace Vortex {
 				else {
 					std::make_shared<HttpSession>(
 						config_,
-						redis_,
 						std::move(socket))
 						->run();
 				}

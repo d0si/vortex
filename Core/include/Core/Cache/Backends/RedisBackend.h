@@ -28,11 +28,11 @@ namespace Vortex {
                     void set_config(const Maze::Object& redis_config);
                     const bool is_enabled() const;
 
-                    virtual std::string get(const std::string& key) const;
-                    virtual void set(const std::string& key, const std::string& value, int expire_seconds = 180) const;
-                    virtual bool exists(const std::string& key) const;
-                    virtual void remove(const std::string& key) const;
-                    virtual void set_expiry(const std::string& key, int seconds) const;
+                    virtual std::string get(const std::string& key);
+                    virtual void set(const std::string& key, const std::string& value, int expire_seconds = 180);
+                    virtual bool exists(const std::string& key);
+                    virtual void remove(const std::string& key);
+                    virtual void set_expiry(const std::string& key, int seconds);
                 };
 
                 Core::Cache::ICacheBackend* get_redis_backend();

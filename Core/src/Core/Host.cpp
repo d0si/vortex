@@ -10,9 +10,9 @@ namespace Vortex {
 		}
 
 		void Host::find(std::string hostname) {
-			std::string redis_key = "vortex.core.host.value." + hostname;
-			if (framework_->redis_->exists(redis_key)) {
-				host_ = Maze::Object::from_json(framework_->redis_->get(redis_key));
+			std::string cache_key = "vortex.core.host.value." + hostname;
+			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+				host_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
 			}
 
 			if (host_.is_empty()) {
@@ -20,7 +20,7 @@ namespace Vortex {
 					->simple_find_first("vortex", "hosts", Maze::Object("hostname", hostname).to_json()));
 
 				if (!host_.is_empty()) {
-					framework_->redis_->set(redis_key, host_.to_json(0));
+					CommonRuntime::Instance.get_cache()->set(cache_key, host_.to_json(0));
 				}
 			}
 

@@ -9,7 +9,6 @@
 #include <Core/Application.h>
 #include <Core/Controller.h>
 #include <Core/View.h>
-#include <Core/Cache/Redis.h>
 #include <Core/Script/Script.h>
 
 namespace Vortex {
@@ -20,7 +19,6 @@ namespace Vortex {
 			boost::beast::http::request<boost::beast::http::string_body>* request_;
 			boost::beast::http::response<boost::beast::http::string_body>* response_;
 			Maze::Object config_;
-			Cache::Redis* redis_;
 
 			Router router_;
 			Host host_;
@@ -31,7 +29,6 @@ namespace Vortex {
 
 			Framework(
 				Maze::Object config,
-				Cache::Redis* redis,
 				std::string client_ip,
 				boost::beast::http::request<boost::beast::http::string_body>* request,
 				boost::beast::http::response<boost::beast::http::string_body>* response);

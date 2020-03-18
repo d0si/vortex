@@ -10,9 +10,9 @@ namespace Vortex {
 		}
 
 		void Application::find(std::string app_id) {
-			std::string redis_key = "vortex.core.application.value." + app_id;
-			if (framework_->redis_->exists(redis_key)) {
-				application_ = Maze::Object::from_json(framework_->redis_->get(redis_key));
+			const std::string cache_key = "vortex.core.application.value." + app_id;
+			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+				application_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
 			}
 
 			if (application_.is_empty()) {
@@ -23,7 +23,7 @@ namespace Vortex {
 					->simple_find_first("vortex", "apps", query.to_json()));
 
 				if (!application_.is_empty()) {
-					framework_->redis_->set(redis_key, application_.to_json(0));
+					CommonRuntime::Instance.get_cache()->set(cache_key, application_.to_json(0));
 				}
 			}
 

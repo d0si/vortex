@@ -22,6 +22,8 @@ set(CORE_SOURCES
 
     src/Core/Cache/Cache.cpp
     src/Core/Cache/Backends/RedisBackend.cpp
+    src/Core/Cache/Backends/MemoryCacheBackend.cpp
+    src/Core/Cache/Backends/DummyCacheBackend.cpp
 
     src/Core/Script/Script.cpp
     src/Core/Script/Duktape.cpp

@@ -52,7 +52,7 @@ namespace Vortex {
                     return enabled;
                 }
 
-                std::string RedisBackend::get(const std::string& key) const {
+                std::string RedisBackend::get(const std::string& key) {
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     if (enabled && client_.is_connected()) {
                         std::future<cpp_redis::reply> reply = client_.get(key);
@@ -69,7 +69,7 @@ namespace Vortex {
 #endif
                 }
 
-                void RedisBackend::set(const std::string& key, const std::string& value, int expire_seconds) const {
+                void RedisBackend::set(const std::string& key, const std::string& value, int expire_seconds) {
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     if (enabled && client_.is_connected()) {
                         client_.set(key, value);
@@ -83,7 +83,7 @@ namespace Vortex {
 #endif
                 }
 
-                bool RedisBackend::exists(const std::string& key) const {
+                bool RedisBackend::exists(const std::string& key) {
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     if (enabled && client_.is_connected()) {
                         std::vector<std::string> keys;
@@ -103,7 +103,7 @@ namespace Vortex {
 #endif
                 }
 
-                void RedisBackend::remove(const std::string& key) const {
+                void RedisBackend::remove(const std::string& key) {
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     if (enabled && client_.is_connected()) {
                         std::vector<std::string> keys;
@@ -115,7 +115,7 @@ namespace Vortex {
 #endif
                 }
 
-                void RedisBackend::set_expiry(const std::string& key, int seconds) const {
+                void RedisBackend::set_expiry(const std::string& key, int seconds) {
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     if (enabled && client_.is_connected()) {
                         client_.expire(key, seconds);
