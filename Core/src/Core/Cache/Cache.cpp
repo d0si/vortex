@@ -1,5 +1,8 @@
 #include <Core/Cache/Cache.h>
 #include <Core/Exception/CacheException.h>
+#ifndef VORTEX_HAS_FEATURE_REDIS
+#include <Core/Cache/Backends/RedisBackend.h>
+#endif
 
 namespace Vortex {
 	namespace Core {
@@ -11,6 +14,20 @@ namespace Vortex {
 			void Cache::initialize(const Maze::Object& cache_config) {
 				cache_config_ = cache_config;
 				initialized_ = false;
+
+#ifndef VORTEX_HAS_FEATURE_REDIS
+				Backends::RedisBackend* redis_backend = static_cast<Backends::RedisBackend*>(Backends::redis_exports.get_backend_instance());
+				redis_backend->set_config(cache_config_["config"].get_object()["Redis"].get_object());
+
+				if (redis_backend->is_enabled()) {
+					redis_backend->connect();
+
+					available_backends_.push_back(std::make_pair<std::string, ICacheBackend*>(
+						Backends::redis_exports.backend_name,
+						static_cast<ICacheBackend*>(redis_backend)
+					));
+				}
+#endif
 
 
 

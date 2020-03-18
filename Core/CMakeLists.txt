@@ -21,7 +21,7 @@ set(CORE_SOURCES
     src/Core/Storage/Filesystem/FilesystemBackend.cpp
 
     src/Core/Cache/Cache.cpp
-    src/Core/Cache/Redis.cpp
+    src/Core/Cache/Backends/RedisBackend.cpp
 
     src/Core/Script/Script.cpp
     src/Core/Script/Duktape.cpp
