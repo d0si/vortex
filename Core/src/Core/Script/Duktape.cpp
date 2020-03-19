@@ -228,6 +228,10 @@ namespace Vortex {
 						framework_->exit();
 					}
 				}
+#else
+				framework_->view_.echo("Script engine is unavailable.");
+				framework_->view_.respond();
+				framework_->exit();
 #endif
 			}
 		}  // namespace Script

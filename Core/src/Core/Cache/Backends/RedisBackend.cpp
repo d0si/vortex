@@ -77,7 +77,7 @@ namespace Vortex {
                         client_.sync_commit();
 
                         if (expire_seconds > 0) {
-                            expire(key, expire_seconds);
+                            set_expiry(key, expire_seconds);
                         }
                     }
 #endif

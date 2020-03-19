@@ -10,15 +10,26 @@ namespace Vortex {
 		}
 
 		void Controller::find(std::string app_id, std::string name, std::string method) {
-			Maze::Object query;
-			query.set("$or", Maze::Array()
-				<< Maze::Object("app_id", app_id)
-				<< Maze::Object("app_id", Maze::Element::get_null()));
-			query.set("name", name);
-			query.set("method", method);
+			std::string cache_key = "vortex.core.controller.value." + app_id + "." + name + "." + method;
+			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+				controller_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
+			}
 
-			controller_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-				->simple_find_first("vortex", "controllers", query.to_json()));
+			if (controller_.is_empty()) {
+				Maze::Object query;
+				query.set("$or", Maze::Array()
+					<< Maze::Object("app_id", app_id)
+					<< Maze::Object("app_id", Maze::Element::get_null()));
+				query.set("name", name);
+				query.set("method", method);
+
+				controller_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->simple_find_first("vortex", "controllers", query.to_json()));
+
+				if (!controller_.is_empty()) {
+					CommonRuntime::Instance.get_cache()->set(cache_key, controller_.to_json(0));
+				}
+			}
 
 			if (controller_.is_empty()) {
 				framework_->view_.echo("Controller " + name + " not found.");
