@@ -33,7 +33,8 @@ namespace Vortex {
                     if (enabled_) {
                         auto it = cache_map_.find(key);
                         if (it != cache_map_.end()) {
-                            if (get_current_time_millis() - it->second->second.expiry_timestamp < 100) {
+                            if (it->second->second.expiry_timestamp == 0 ||
+                                get_current_time_millis() - it->second->second.expiry_timestamp < 100) {
                                 return it->second->second.value;
                             }
                             else {
@@ -50,7 +51,7 @@ namespace Vortex {
                         remove(key);
 
                         MemoryCacheEntry entry{
-                            get_current_time_millis() + (expire_seconds * 60),
+                            expire_seconds != 0 ? get_current_time_millis() + (expire_seconds * 60) : 0,
                             value
                         };
 
@@ -63,7 +64,8 @@ namespace Vortex {
                     if (enabled_) {
                         auto it = cache_map_.find(key);
                         if (it != cache_map_.end()) {
-                            if (get_current_time_millis() - it->second->second.expiry_timestamp < 0) {
+                            if (it->second->second.expiry_timestamp == 0 ||
+                                get_current_time_millis() - it->second->second.expiry_timestamp < 0) {
                                 return true;
                             }
                             else {
@@ -89,9 +91,10 @@ namespace Vortex {
                     if (enabled_) {
                         auto it = cache_map_.find(key);
                         if (it != cache_map_.end()) {
-                            if (get_current_time_millis() - it->second->second.expiry_timestamp < 0) {
+                            if (it->second->second.expiry_timestamp == 0 ||
+                                get_current_time_millis() - it->second->second.expiry_timestamp < 0) {
                                 it->second->second.expiry_timestamp =
-                                    get_current_time_millis() + (seconds * 60);
+                                    seconds != 0 ? get_current_time_millis() + (seconds * 60) : 0;
                             }
                             else {
                                 remove(key);
