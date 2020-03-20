@@ -11,6 +11,9 @@ namespace Vortex {
 				class FilesystemBackend: public Core::Storage::Interface::IBackend {
 				private:
 					Maze::Object filesystem_config_;
+					bool cache_enabled_ = false;
+					bool in_memory_only_ = false;
+					int cache_expiry_ = 60;
 
 				public:
 					FilesystemBackend();
