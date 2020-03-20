@@ -90,7 +90,6 @@ namespace Vortex {
                         auto it = cache_map_.find(key);
                         if (it != cache_map_.end()) {
                             if (get_current_time_millis() - it->second->second.expiry_timestamp < 0) {
-                                // TODO: Test how this works
                                 it->second->second.expiry_timestamp =
                                     get_current_time_millis() + (seconds * 60);
                             }
