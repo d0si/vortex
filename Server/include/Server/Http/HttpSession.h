@@ -8,7 +8,6 @@
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <Maze/Object.hpp>
-#include <Core/Cache/Redis.h>
 
 namespace Vortex {
 	namespace Server {
@@ -20,12 +19,10 @@ namespace Vortex {
 				boost::beast::http::request<boost::beast::http::string_body> req_;
 				boost::beast::http::response<boost::beast::http::string_body> res_;
 				Maze::Object config_;
-				Vortex::Core::Cache::Redis* redis_;
 
 			public:
 				explicit HttpSession(
 					Maze::Object config,
-					Vortex::Core::Cache::Redis* redis,
 					boost::asio::ip::tcp::socket socket);
 
 				void run();

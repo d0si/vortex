@@ -18,9 +18,8 @@ namespace Vortex {
 		namespace Http {
 			HttpSession::HttpSession(
 				Maze::Object config,
-				Vortex::Core::Cache::Redis* redis,
 				tcp::socket socket)
-				: config_(config), redis_(redis), stream_(std::move(socket)) {
+				: config_(config), stream_(std::move(socket)) {
 
 			}
 
@@ -74,7 +73,6 @@ namespace Vortex {
 				try {
 					framework = new Vortex::Core::Framework(
 						config_,
-						redis_,
 						stream_.socket().remote_endpoint().address().to_string(),
 						&req_,
 						&res_);

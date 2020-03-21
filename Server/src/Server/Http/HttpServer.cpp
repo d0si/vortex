@@ -21,8 +21,9 @@ namespace Vortex {
 					Core::CommonRuntime::Instance.get_storage()->initialize(config["storage"].get_object());
 				}
 
-				redis_.set_config(config_["redis"].get_object());
-				redis_.connect();
+				if (!Core::CommonRuntime::Instance.get_cache()->is_initialized()) {
+					Core::CommonRuntime::Instance.get_cache()->initialize(config["cache"].get_object());
+				}
 
 				Maze::Object server_config;
 				if (config_.is_object("server")) {
@@ -66,7 +67,6 @@ namespace Vortex {
 
 					std::make_shared<HttpListener>(
 						config_,
-						&redis_,
 						ioContext,
 						ip::tcp::endpoint{ address, port })
 						->run();

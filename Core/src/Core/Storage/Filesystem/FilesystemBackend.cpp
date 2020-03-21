@@ -3,6 +3,7 @@
 #include <sstream>
 #include <Maze/Array.hpp>
 #include <Core/Exception/StorageException.h>
+#include <Core/CommonRuntime.h>
 
 namespace Vortex {
     namespace Core {
@@ -18,6 +19,23 @@ namespace Vortex {
 
                 void FilesystemBackend::set_config(const Maze::Object& filesystem_config) {
                     filesystem_config_ = filesystem_config;
+
+                    if (filesystem_config_.is_bool("cache_enabled")) {
+                        cache_enabled_ = filesystem_config_["cache_enabled"].get_bool();
+                    }
+
+                    if (filesystem_config_.is_int("cache_expiry")) {
+                        cache_expiry_ = filesystem_config_["cache_expiry"].get_int();
+                    }
+
+                    if (filesystem_config_.is_bool("in_memory_only")) {
+                        in_memory_only_ = filesystem_config_["in_memory_only"].get_bool();
+
+                        if (in_memory_only_) {
+                            cache_enabled_ = in_memory_only_;
+                            cache_expiry_ = 0;
+                        }
+                    }
                 }
 
                 void FilesystemBackend::simple_insert(std::string database, std::string collection, std::string json_value) {
@@ -242,6 +260,14 @@ namespace Vortex {
                 }
 
                 Maze::Array FilesystemBackend::get_collection_entries(const std::string& database, const std::string& collection) const {
+                    const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
+
+                    if (cache_enabled_) {
+                        if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+                            return Maze::Array::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
+                        }
+                    }
+
                     if (!filesystem_config_.is_string("root_path")) {
                         throw Exception::StorageException("Invalid config root_path");
                     }
@@ -259,7 +285,13 @@ namespace Vortex {
 
                     Maze::Array collection_data;
                     try {
-                        return Maze::Array::from_json(buffer.str());
+                        Maze::Array result = Maze::Array::from_json(buffer.str());
+
+                        if (cache_enabled_) {
+                            CommonRuntime::Instance.get_cache()->set(cache_key, buffer.str(), cache_expiry_);
+                        }
+
+                        return result;
                     }
                     catch (...) {
                         throw Exception::StorageException("Collection file is corrupted (unable to parse json)");
@@ -269,6 +301,18 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::save_collection_entries(const std::string& database, const std::string& collection, const Maze::Array& values) const {
+                    const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
+
+                    if (in_memory_only_) {
+                        CommonRuntime::Instance.get_cache()->set(cache_key, values.to_json(0), 0);
+
+                        return;
+                    }
+
+                    if (cache_enabled_) {
+                        CommonRuntime::Instance.get_cache()->set(cache_key, values.to_json(0), cache_expiry_);
+                    }
+
                     if (!filesystem_config_.is_string("root_path")) {
                         throw Exception::StorageException("Invalid config root_path");
                     }
@@ -284,7 +328,7 @@ namespace Vortex {
                     collection_file.close();
                 }
 
-                Storage::Interface::IBackend* get_backend() {
+                Core::Storage::Interface::IBackend* get_backend() {
                     static FilesystemBackend instance;
                     return &instance;
                 }

@@ -166,21 +166,35 @@ namespace Vortex {
 		}
 
 		void View::set_template(std::string name) {
-			Maze::Object query("name", name);
-			query.set("app_ids", framework_->application_.get_id());
+			template_.clear();
 
-			template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-				->simple_find_first("vortex", "templates", query.to_json()));
-
-			if (template_.is_empty()) {
-				query.set_null("app_ids");
-
-				template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first("vortex", "templates", query.to_json()));
+			std::string cache_key = "vortex.core.template.value." + framework_->application_.get_id() + "." + name;
+			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+				template_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
 			}
 
 			if (template_.is_empty()) {
-				template_.set("contents", "Template " + name + " not found");
+				Maze::Object query("name", name);
+				query.set("app_ids", framework_->application_.get_id());
+				
+				template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+					->simple_find_first("vortex", "templates", query.to_json()));
+				
+				if (template_.is_empty()) {
+					query.set_null("app_ids");
+
+					template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+						->simple_find_first("vortex", "templates", query.to_json()));
+				}
+
+				if (!template_.is_empty()) {
+					CommonRuntime::Instance.get_cache()->set(cache_key, template_.to_json(0));
+				}
+			}
+
+			if (template_.is_empty()) {
+				framework_->view_.echo("Template " + name + " not found");
+				framework_->exit();
 			}
 		}
 
@@ -193,17 +207,30 @@ namespace Vortex {
 		}
 
 		void View::set_page(std::string name) {
-			Maze::Object query("name", name);
-			query.set("app_ids", framework_->application_.get_id());
+			page_.clear();
 
-			page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-				->simple_find_first("vortex", "pages", query.to_json()));
+			std::string cache_key = "vortex.core.page.value." + framework_->application_.get_id() + "." + name;
+			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+				page_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
+			}
 
 			if (page_.is_empty()) {
-				query.set_null("app_ids");
+				Maze::Object query("name", name);
+				query.set("app_ids", framework_->application_.get_id());
 
 				page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
 					->simple_find_first("vortex", "pages", query.to_json()));
+
+				if (page_.is_empty()) {
+					query.set_null("app_ids");
+
+					page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
+						->simple_find_first("vortex", "pages", query.to_json()));
+				}
+
+				if (!page_.is_empty()) {
+					CommonRuntime::Instance.get_cache()->set(cache_key, page_.to_json(0));
+				}
 			}
 
 			if (page_.is_empty()) {
