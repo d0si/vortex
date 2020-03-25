@@ -15,9 +15,6 @@ set(CORE_SOURCES
     src/Core/Storage/Mongo/Db.cpp
     src/Core/Storage/Mongo/Collection.cpp
     src/Core/Storage/Mongo/MongoBackend.cpp
-    src/Core/Storage/Filesystem/Filesystem.cpp
-    src/Core/Storage/Filesystem/Database.cpp
-    src/Core/Storage/Filesystem/Collection.cpp
     src/Core/Storage/Filesystem/FilesystemBackend.cpp
 
     src/Core/Cache/Cache.cpp

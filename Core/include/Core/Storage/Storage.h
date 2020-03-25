@@ -3,14 +3,14 @@
 
 #include <string>
 #include <vector>
-#include <Core/Storage/Interface/IBackend.h>
+#include <Core/Storage/IStorageBackend.h>
 
 namespace Vortex {
 	namespace Core {
 		namespace Storage {
 			class Storage {
 			private:
-				std::vector<std::pair<std::string, Interface::IBackend*>> available_backends_;
+				std::vector<std::pair<std::string, IStorageBackend*>> available_backends_;
 				std::string default_backend_;
 				Maze::Object storage_config_;
 				bool initialized_ = false;
@@ -21,8 +21,8 @@ namespace Vortex {
 				void initialize(Maze::Object storage_config);
 				const bool is_initialized() const;
 
-				Interface::IBackend* get_backend();
-				Interface::IBackend* get_backend(std::string backend_name);
+				IStorageBackend* get_backend();
+				IStorageBackend* get_backend(std::string backend_name);
 			};
 		}  // namespace Storage
 	}  // namespace Core

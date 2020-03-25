@@ -16,33 +16,33 @@ namespace Vortex {
 				this->storage_config_ = storage_config;
 				this->initialized_ = false;
 
-				Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::exports.get_backend_instance());
+				Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::filesystem_exports.get_backend_instance());
 				fs_backend->set_config(this->storage_config_["config"].get_object()["Filesystem"].get_object());
 
-				this->available_backends_.push_back(std::make_pair<std::string, Interface::IBackend*>(
-					Core::Storage::Filesystem::exports.backend_name,
-					static_cast<Core::Storage::Interface::IBackend*>(fs_backend)
+				this->available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
+					Core::Storage::Filesystem::filesystem_exports.backend_name,
+					static_cast<Core::Storage::IStorageBackend*>(fs_backend)
 					));
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
-				Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::exports.get_backend_instance());
+				Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::mongo_exports.get_backend_instance());
 				mongo_backend->get_client()->set_config(this->storage_config_["config"].get_object()["Mongo"].get_object());
 
 				if (mongo_backend->get_client()->is_enabled()) {
 					mongo_backend->get_client()->connect();
 
-					this->available_backends_.push_back(std::make_pair<std::string, Interface::IBackend*>(
-						Core::Storage::Mongo::exports.backend_name,
-						static_cast<Core::Storage::Interface::IBackend*>(mongo_backend)
+					this->available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
+						Core::Storage::Mongo::mongo_exports.backend_name,
+						static_cast<Core::Storage::IStorageBackend*>(mongo_backend)
 						));
 
-					this->default_backend_ = Core::Storage::Mongo::exports.backend_name;
+					this->default_backend_ = Core::Storage::Mongo::mongo_exports.backend_name;
 				}
 				else {
-					this->default_backend_ = Core::Storage::Filesystem::exports.backend_name;
+					this->default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
 				}
 #else
-				this->default_backend_ = Core::Storage::Filesystem::exports.backend_name;
+				this->default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
 #endif
 
 				if (this->storage_config_.is_string("default_backend")) {
@@ -70,11 +70,11 @@ namespace Vortex {
 				return this->initialized_;
 			}
 
-			Interface::IBackend* Storage::get_backend() {
+			IStorageBackend* Storage::get_backend() {
 				return this->get_backend(this->default_backend_);
 			}
 
-			Interface::IBackend* Storage::get_backend(std::string backend_name) {
+			IStorageBackend* Storage::get_backend(std::string backend_name) {
 				if (!this->initialized_) {
 					throw std::runtime_error("Storage instance is not initialized");
 				}

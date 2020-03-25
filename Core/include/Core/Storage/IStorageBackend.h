@@ -1,20 +1,17 @@
-#ifndef VORTEX_CORE_STORAGE_INTERFACE_IBACKEND_H
-#define VORTEX_CORE_STORAGE_INTERFACE_IBACKEND_H
+#ifndef VORTEX_CORE_STORAGE_ISTORAGEBACKEND_H
+#define VORTEX_CORE_STORAGE_ISTORAGEBACKEND_H
 
 #include <string>
 #include <Maze/Object.hpp>
-#include <Core/Storage/Interface/IDatabase.h>
-#include <Core/Storage/Interface/ICollection.h>
 
 namespace Vortex {
 	namespace Core {
 		namespace Storage {
-			namespace Interface {
-				class IBackend {
+				class IStorageBackend {
 				public:
-					IBackend() {};
-					IBackend(const Maze::Object& config) {};
-					virtual ~IBackend() {};
+					IStorageBackend() {};
+					IStorageBackend(const Maze::Object& config) {};
+					virtual ~IStorageBackend() {};
 
 					// Simple query
 					virtual void simple_insert(std::string database, std::string collection, std::string json_value) = 0;
@@ -31,16 +28,15 @@ namespace Vortex {
 					// virtual void remove(std::string database, std::string collection, std::string query) = 0;
 				};
 
-				typedef IBackend* (*GetBackendInstanceFunc)();
+				typedef IStorageBackend* (*GetStorageBackendInstanceFunc)();
 
-				struct BackendDetails {
+				struct StorageBackendDetails {
 					const char* class_name;
 					const char* backend_name;
-					GetBackendInstanceFunc get_backend_instance;
+					GetStorageBackendInstanceFunc get_backend_instance;
 				};
-			}  // namespace Interface
 		}  // namespace Storage
 	}  // namespace Core
 }  // namespace Vortex
 
-#endif  // VORTEX_CORE_STORAGE_INTERFACE_IBACKEND_H
+#endif  // VORTEX_CORE_STORAGE_ISTORAGEBACKEND_H

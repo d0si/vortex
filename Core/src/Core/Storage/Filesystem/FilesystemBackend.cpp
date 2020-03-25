@@ -328,7 +328,7 @@ namespace Vortex {
                     collection_file.close();
                 }
 
-                Core::Storage::Interface::IBackend* get_backend() {
+                Core::Storage::IStorageBackend* get_filesystem_backend() {
                     static FilesystemBackend instance;
                     return &instance;
                 }

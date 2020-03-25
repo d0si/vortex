@@ -40,7 +40,7 @@ namespace Vortex {
 					return &this->client_;
 				}
 
-				Storage::Interface::IBackend* get_backend() {
+				Storage::IStorageBackend* get_mongo_backend() {
 					static MongoBackend instance;
 					return &instance;
 				}

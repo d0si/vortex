@@ -2,14 +2,14 @@
 #define VORTEX_CORE_STORAGE_MONGO_MONGOBACKEND_H
 
 #include <string>
-#include <Core/Storage/Interface/IBackend.h>
+#include <Core/Storage/IStorageBackend.h>
 #include <Core/Storage/Mongo/Mongo.h>
 
 namespace Vortex {
 	namespace Core {
 		namespace Storage {
 			namespace Mongo {
-				class MongoBackend : public Core::Storage::Interface::IBackend {
+				class MongoBackend : public Core::Storage::IStorageBackend {
 				private:
 					Core::Storage::Mongo::Mongo client_;
 
@@ -33,12 +33,12 @@ namespace Vortex {
 					Core::Storage::Mongo::Mongo* get_client();
 				};
 
-				Core::Storage::Interface::IBackend* get_backend();
+				Core::Storage::IStorageBackend* get_mongo_backend();
 
-				static const Core::Storage::Interface::BackendDetails exports = {
+				static const Core::Storage::StorageBackendDetails mongo_exports = {
 					"MongoBackend",
 					"Mongo",
-					get_backend
+					get_mongo_backend
 				};
 			}  // namespace Mongo
 		}  // namespace Storage

@@ -1,14 +1,14 @@
 #ifndef VORTEX_CORE_STORAGE_FILESYSTEM_FILESYSTEMBACKEND_H
 #define VORTEX_CORE_STORAGE_FILESYSTEM_FILESYSTEMBACKEND_H
 
-#include <Core/Storage/Interface/IBackend.h>
+#include <Core/Storage/IStorageBackend.h>
 #include <Maze/Array.hpp>
 
 namespace Vortex {
 	namespace Core {
 		namespace Storage {
 			namespace Filesystem {
-				class FilesystemBackend: public Core::Storage::Interface::IBackend {
+				class FilesystemBackend: public Core::Storage::IStorageBackend {
 				private:
 					Maze::Object filesystem_config_;
 					bool cache_enabled_ = false;
@@ -40,12 +40,12 @@ namespace Vortex {
 					void save_collection_entries(const std::string& database, const std::string& collection, const Maze::Array& values) const;
 				};
 
-				Core::Storage::Interface::IBackend* get_backend();
+				Core::Storage::IStorageBackend* get_filesystem_backend();
 
-				static const Core::Storage::Interface::BackendDetails exports = {
+				static const Core::Storage::StorageBackendDetails filesystem_exports = {
 					"FilesystemBackend",
 					"Filesystem",
-					get_backend
+					get_filesystem_backend
 				};
 			}  // namespace Filesystem
 		}  // namespace Storage
