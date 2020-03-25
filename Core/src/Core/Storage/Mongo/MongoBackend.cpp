@@ -36,6 +36,14 @@ namespace Vortex {
 					client_.get_collection(database, collection).delete_one(json_simple_query);
 				}
 
+				std::vector<std::string> MongoBackend::get_database_list() {
+					return client_.list_databases();
+				}
+
+				std::vector<std::string> MongoBackend::get_collection_list(std::string database) {
+					return client_.list_collections(database);
+				}
+
 				Storage::Mongo::Mongo* MongoBackend::get_client() {
 					return &this->client_;
 				}

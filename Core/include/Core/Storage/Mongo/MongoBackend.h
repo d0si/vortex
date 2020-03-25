@@ -30,6 +30,9 @@ namespace Vortex {
 					// virtual void update(std::string database, std::string collection, std::string query, std::string new_value);
 					// virtual void remove(std::string database, std::string collection, std::string query);
 
+					virtual std::vector<std::string> get_database_list();
+					virtual std::vector<std::string> get_collection_list(std::string database);
+
 					Core::Storage::Mongo::Mongo* get_client();
 				};
 

@@ -2,6 +2,7 @@
 #define VORTEX_CORE_STORAGE_ISTORAGEBACKEND_H
 
 #include <string>
+#include <vector>
 #include <Maze/Object.hpp>
 
 namespace Vortex {
@@ -26,6 +27,9 @@ namespace Vortex {
 					// virtual std::string find(std::string database, std::string collection, std::string query) = 0;
 					// virtual void update(std::string database, std::string collection, std::string query, std::string new_value) = 0;
 					// virtual void remove(std::string database, std::string collection, std::string query) = 0;
+
+					virtual std::vector<std::string> get_database_list() = 0;
+					virtual std::vector<std::string> get_collection_list(std::string database) = 0;
 				};
 
 				typedef IStorageBackend* (*GetStorageBackendInstanceFunc)();

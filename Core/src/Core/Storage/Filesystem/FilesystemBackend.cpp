@@ -182,6 +182,14 @@ namespace Vortex {
                     }
                 }
 
+                std::vector<std::string> FilesystemBackend::get_database_list() {
+                    return std::vector<std::string>();
+                }
+
+                std::vector<std::string> FilesystemBackend::get_collection_list(std::string database) {
+                    return std::vector<std::string>();
+                }
+
                 bool FilesystemBackend::check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const {
                     bool value_valid = true;
 

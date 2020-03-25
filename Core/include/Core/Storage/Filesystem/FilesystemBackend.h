@@ -34,6 +34,9 @@ namespace Vortex {
 					// virtual void update(std::string database, std::string collection, std::string query, std::string new_value);
 					// virtual void remove(std::string database, std::string collection, std::string query);
 
+					virtual std::vector<std::string> get_database_list();
+					virtual std::vector<std::string> get_collection_list(std::string database);
+
 				private:
 					bool check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const;
 					Maze::Array get_collection_entries(const std::string& database, const std::string& collection) const;
