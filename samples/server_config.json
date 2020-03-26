@@ -7,23 +7,26 @@
         "thread_count": 2
       },
       "storage": {
-        "data_dir": "../samples/vortex_sample_data",
         "default_backend": "Filesystem",
-        "enabled_backends": [ "Filesystem", "Mongo" ],
         "config": {
           "Mongo": {
             "enabled": false
           },
           "Filesystem": {
-            "root_path": "../../samples"
+            "root_path": "../../samples",
+            "cache_enabled": true,
+            "in_memory_only": true
           }
         }
       },
-      "mongo": {
-        "enabled": false
-      },
-      "redis": {
-        "enabled": false
+      "cache": {
+        "enabled": true,
+        "default_backend": "MemoryCache",
+        "config": {
+          "MemoryCache": {
+            "enabled": true
+          }
+        }
       }
     }
   ]
