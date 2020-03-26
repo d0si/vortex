@@ -33,7 +33,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "GET",
         "name": "col/find",
-        "script": "view.set_content_type('application/json'); var args = router.get_args(); var db_name = args[0]; var collection_name = args[1]; view.echo(storage.simple_find_all(db_name, collection_name, '{}')); view.finish();"
+        "script": "view.set_content_type('application/json');\n\nvar args = router.get_args();\nvar db_name = args[0];\nvar collection_name = args[1];\n\nview.echo(storage.simple_find_all(db_name, collection_name, '{}'));\nview.finish();"
     },
     {
         "_id": {
