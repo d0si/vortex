@@ -220,7 +220,41 @@ namespace Vortex {
                 }
 
                 std::vector<std::string> FilesystemBackend::get_collection_list(std::string database) {
-                    return std::vector<std::string>();
+                    const std::string cache_key = "vortex.core.filesystem.collection_list." + database;
+
+                    if (cache_enabled_) {
+                        if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+                            return Util::String::split(CommonRuntime::Instance.get_cache()->get(cache_key), ",");
+                        }
+                    }
+
+                    std::vector<std::string> collection_list;
+
+                    if (!filesystem_config_.is_string("root_path")) {
+                        return collection_list;
+                    }
+
+                    std::string storage_collections_path = filesystem_config_["root_path"].get_string() + "/" + database;
+
+                    if (!boost::filesystem::exists(storage_collections_path) || !boost::filesystem::is_directory(storage_collections_path)) {
+                        return collection_list;
+                    }
+
+                    for (auto dir_entry : boost::make_iterator_range(boost::filesystem::directory_iterator(storage_collections_path), {})) {
+                        if (!boost::filesystem::is_directory(dir_entry.status())) {
+                            std::string file_name = dir_entry.path().filename().string();
+
+                            if (Util::String::ends_with(file_name, ".json")) {
+                                std::string name = file_name.substr(0, file_name.length() - 5);
+
+                                collection_list.push_back(name);
+                            }
+                        }
+                    }
+
+                    CommonRuntime::Instance.get_cache()->set(cache_key, Util::String::join(collection_list, ","), 15);
+
+                    return collection_list;
                 }
 
                 bool FilesystemBackend::check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const {
