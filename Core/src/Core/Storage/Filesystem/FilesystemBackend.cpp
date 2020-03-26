@@ -4,6 +4,9 @@
 #include <Maze/Array.hpp>
 #include <Core/Exception/StorageException.h>
 #include <Core/CommonRuntime.h>
+#include <Core/Util/String.h>
+#include <boost/filesystem.hpp>
+#include <boost/range/iterator_range.hpp>
 
 namespace Vortex {
     namespace Core {
@@ -183,7 +186,37 @@ namespace Vortex {
                 }
 
                 std::vector<std::string> FilesystemBackend::get_database_list() {
-                    return std::vector<std::string>();
+                    const std::string cache_key = "vortex.core.filesystem.database_list";
+
+                    if (cache_enabled_) {
+                        if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+                            return Util::String::split(CommonRuntime::Instance.get_cache()->get(cache_key), ",");
+                        }
+                    }
+
+                    std::vector<std::string> database_list;
+
+                    if (!filesystem_config_.is_string("root_path")) {
+                        return database_list;
+                    }
+
+                    std::string storage_databases_path = filesystem_config_["root_path"].get_string();
+
+                    if (!boost::filesystem::exists(storage_databases_path) || !boost::filesystem::is_directory(storage_databases_path)) {
+                        return database_list;
+                    }
+
+                    for (auto dir_entry : boost::make_iterator_range(boost::filesystem::directory_iterator(storage_databases_path), {})) {
+                        if (boost::filesystem::is_directory(dir_entry.status())) {
+                            std::string dir_name = dir_entry.path().filename().string();
+
+                            database_list.push_back(dir_name);
+                        }
+                    }
+
+                    CommonRuntime::Instance.get_cache()->set(cache_key, Util::String::join(database_list, ","), 15);
+
+                    return database_list;
                 }
 
                 std::vector<std::string> FilesystemBackend::get_collection_list(std::string database) {
