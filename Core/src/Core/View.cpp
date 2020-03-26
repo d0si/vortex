@@ -118,7 +118,7 @@ namespace Vortex {
 						char next = code[i + 1];
 
 						if (next == '}') {
-							framework_->script_.exec("__view.echo(" + script_code + ")");
+							framework_->script_.exec("var results = (" + script_code + "); if (results != undefined) __view.echo(results);");
 
 							script_code.clear();
 

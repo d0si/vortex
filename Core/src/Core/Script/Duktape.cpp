@@ -64,33 +64,38 @@ namespace DuktapeBindings {
         Router() {}
         Router(Vortex::Core::Framework* framework) : framework_(framework) {}
 
-        std::string get_hostname() {
+        std::string get_hostname() const {
             return framework_->router_.get_hostname();
         }
 
-        std::string get_lang() {
+        std::string get_lang() const {
             return framework_->router_.get_lang();
         }
 
-        std::string get_controller() {
+        std::string get_controller() const {
             return framework_->router_.get_controller();
         }
 
-        std::vector<std::string> get_args() {
+        std::vector<std::string> get_args() const {
             return framework_->router_.get_args();
         }
 
-        std::string get_post() {
+        std::string get_post() const {
             return framework_->router_.get_post();
         }
 
         template<class Inspector>
         static void inspect(Inspector& i) {
             i.construct(&std::make_shared<Router>);
+            i.property("hostname", &Router::get_hostname);
             i.method("get_hostname", &Router::get_hostname);
+            i.property("lang", &Router::get_lang);
             i.method("get_lang", &Router::get_lang);
+            i.property("controller", &Router::get_controller);
             i.method("get_controller", &Router::get_controller);
+            i.property("args", &Router::get_args);
             i.method("get_args", &Router::get_args);
+            i.property("post", &Router::get_post);
             i.method("get_post", &Router::get_post);
         }
     };
@@ -230,9 +235,6 @@ namespace Vortex {
                     }
                     catch (duk::DuktapeException & e) {
                         std::string message = e.what();
-
-                        
-
                         framework_->view_.echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
                         framework_->view_.respond();
                         framework_->exit();
