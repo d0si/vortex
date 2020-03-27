@@ -223,5 +223,30 @@ namespace Vortex {
 		std::string Router::get_post() const {
 			return framework_->request_->body();
 		}
+
+		std::map<std::string, std::string> Router::get_cookies() {
+			// TODO
+
+			return cookies_;
+		}
+
+		std::string Router::get_cookie(const std::string& cookie_name, bool* cookie_exists) {
+			auto cookies = get_cookies();
+
+			auto it = cookies.find(cookie_name);
+			if (it != cookies.end()) {
+				if (cookie_exists != nullptr) {
+					*cookie_exists = true;
+				}
+
+				return it->second;
+			}
+
+			if (cookie_exists != nullptr) {
+				*cookie_exists = false;
+			}
+
+			return "";
+		}
 	}  // namespace Core
 }  // namespace Vortex

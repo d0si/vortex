@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 namespace Vortex {
 	namespace Core {
@@ -16,6 +17,8 @@ namespace Vortex {
 			std::string lang_;
 			std::string controller_;
 			std::vector<std::string> args_;
+			std::map<std::string, std::string> cookies_;
+			bool cookies_initialized_ = false;
 
 		public:
 			Router(Framework* framework);
@@ -25,8 +28,11 @@ namespace Vortex {
 			std::string get_lang();
 			std::string get_controller();
 			std::vector<std::string> get_args();
-
+			
 			std::string get_post() const;
+
+			std::map<std::string, std::string> get_cookies();
+			std::string get_cookie(const std::string& cookie_name, bool* cookie_exists = nullptr);
 		};
 	}  // namespace Core
 }  // namespace Vortex
