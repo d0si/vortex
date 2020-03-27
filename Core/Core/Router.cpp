@@ -225,7 +225,43 @@ namespace Vortex {
 		}
 
 		std::map<std::string, std::string> Router::get_cookies() {
-			// TODO
+			if (!cookies_initialized_) {
+				std::string cookies_string = framework_->request_->base()[boost::beast::http::field::cookie].to_string();
+				
+				std::string key = "";
+				std::string value = "";
+				bool grabbing_value_part = false;
+
+				for (unsigned int i = 0; i < cookies_string.length(); ++i) {
+					char val = cookies_string[i];
+
+					if (val == ';') {
+						cookies_.emplace(std::make_pair(key, value));
+						key.clear();
+						value.clear();
+						grabbing_value_part = false;
+
+						while (cookies_string[i + 1] == ' ') {
+							++i;
+						}
+					}
+					else if (val == '=') {
+						grabbing_value_part = true;
+					}
+					else {
+						if (!grabbing_value_part) {
+							key += val;
+						}
+						else {
+							value += val;
+						}
+					}
+				}
+
+				if (!key.empty()) {
+					cookies_.emplace(std::make_pair(key, value));
+				}
+			}
 
 			return cookies_;
 		}
