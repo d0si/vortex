@@ -21,6 +21,8 @@ target_link_libraries(${PROJECT_NAME}
     ${Boost_LIBRARIES}
 )
 
+configure_file(${PROJECT_SOURCE_DIR}/../samples/server_config.json server_config.json COPYONLY)
+
 if (!WIN32)
 target_link_libraries(${PROJECT_NAME}
     pthread
