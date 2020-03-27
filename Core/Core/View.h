@@ -21,17 +21,21 @@ namespace Vortex {
 
 			void output();
 			void respond();
-			void echo(std::string contents);
-			void set_content_type(std::string content_type);
+
+			void echo(const std::string& contents);
+			void set_content_type(const std::string& content_type);
 			void set_status_code(int status_code);
+			void set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params = "");
+			void set_cookie(const std::string& cookie_string);
+
 			void clear();
 			void finish();
-			std::string parse(std::string code);
+			std::string parse(const std::string& code);
 
-			void set_template(std::string name);
+			void set_template(const std::string& name);
 			std::string parse_template();
 
-			void set_page(std::string name);
+			void set_page(const std::string& name);
 			std::string parse_page();
 		};
 	}  // namespace Core

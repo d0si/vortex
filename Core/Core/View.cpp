@@ -17,16 +17,24 @@ namespace Vortex {
 			framework_->response_->body() = rendered_;
 		}
 
-		void View::echo(std::string contents) {
+		void View::echo(const std::string& contents) {
 			rendered_ += contents;
 		}
 
-		void View::set_content_type(std::string content_type) {
+		void View::set_content_type(const std::string& content_type) {
 			framework_->response_->set(boost::beast::http::field::content_type, content_type);
 		}
 
 		void View::set_status_code(int status_code) {
 			framework_->response_->result(boost::beast::http::int_to_status(status_code));
+		}
+
+		void View::set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params) {
+			set_cookie(cookie_name + '=' + value + ";" + (params.length() > 0 ? params + ";" : ""));
+		}
+
+		void View::set_cookie(const std::string& cookie_string) {
+			framework_->response_->insert(boost::beast::http::field::set_cookie, cookie_string);
 		}
 
 		void View::clear() {
@@ -40,16 +48,16 @@ namespace Vortex {
 			respond();
 		}
 
-		std::string View::parse(std::string code) {
-			std::string old_rendered = rendered_;
+		std::string View::parse(const std::string& code) {
+			const std::string old_rendered = rendered_;
 			rendered_.clear();
 
-			enum grabbing_stage {
+			enum class grabbing_stage {
 				String, Script, Echo, Comment
 			};
 
 			std::string script_code;
-			grabbing_stage stage = String;
+			grabbing_stage stage = grabbing_stage::String;
 
 			for (size_t i = 0; i < code.length(); ++i) {
 				char current = code[i];
@@ -165,7 +173,7 @@ namespace Vortex {
 			return new_rendered;
 		}
 
-		void View::set_template(std::string name) {
+		void View::set_template(const std::string& name) {
 			template_.clear();
 
 			std::string cache_key = "vortex.core.template.value." + framework_->application_.get_id() + "." + name;
@@ -206,7 +214,7 @@ namespace Vortex {
 			return "";
 		}
 
-		void View::set_page(std::string name) {
+		void View::set_page(const std::string& name) {
 			page_.clear();
 
 			std::string cache_key = "vortex.core.page.value." + framework_->application_.get_id() + "." + name;
