@@ -1,8 +1,8 @@
 project(Vortex)
 
 SET(VORTEX_SOURCES
-    src/main.cpp
-    src/Vortex/Vortex.cpp
+    main.cpp
+    Vortex/Vortex.cpp
 )
 
 add_executable(${PROJECT_NAME}
@@ -12,7 +12,7 @@ add_executable(${PROJECT_NAME}
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PUBLIC ${PROJECT_SOURCE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -20,6 +20,8 @@ target_link_libraries(${PROJECT_NAME}
     Vortex::Server
     ${Boost_LIBRARIES}
 )
+
+configure_file(${PROJECT_SOURCE_DIR}/../samples/server_config.json server_config.json COPYONLY)
 
 if (!WIN32)
 target_link_libraries(${PROJECT_NAME}

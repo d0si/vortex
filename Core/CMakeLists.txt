@@ -2,38 +2,38 @@ project(Core)
 
 # Set cpp sources
 set(CORE_SOURCES
-    src/Core/Framework.cpp
-    src/Core/CommonRuntime.cpp
-    src/Core/Router.cpp
-    src/Core/Host.cpp
-    src/Core/Application.cpp
-    src/Core/Controller.cpp
-    src/Core/View.cpp
+    Core/Framework.cpp
+    Core/CommonRuntime.cpp
+    Core/Router.cpp
+    Core/Host.cpp
+    Core/Application.cpp
+    Core/Controller.cpp
+    Core/View.cpp
 
-    src/Core/Storage/Storage.cpp
-    src/Core/Storage/Mongo/Mongo.cpp
-    src/Core/Storage/Mongo/Db.cpp
-    src/Core/Storage/Mongo/Collection.cpp
-    src/Core/Storage/Mongo/MongoBackend.cpp
-    src/Core/Storage/Filesystem/FilesystemBackend.cpp
+    Core/Storage/Storage.cpp
+    Core/Storage/Mongo/Mongo.cpp
+    Core/Storage/Mongo/Db.cpp
+    Core/Storage/Mongo/Collection.cpp
+    Core/Storage/Mongo/MongoBackend.cpp
+    Core/Storage/Filesystem/FilesystemBackend.cpp
 
-    src/Core/Cache/Cache.cpp
-    src/Core/Cache/Backends/RedisBackend.cpp
-    src/Core/Cache/Backends/MemoryCacheBackend.cpp
-    src/Core/Cache/Backends/DummyCacheBackend.cpp
+    Core/Cache/Cache.cpp
+    Core/Cache/Backends/RedisBackend.cpp
+    Core/Cache/Backends/MemoryCacheBackend.cpp
+    Core/Cache/Backends/DummyCacheBackend.cpp
 
-    src/Core/Script/Script.cpp
-    src/Core/Script/Duktape.cpp
+    Core/Script/Script.cpp
+    Core/Script/Duktape.cpp
 
-    src/Core/Util/Time.cpp
-    src/Core/Util/Random.cpp
-    src/Core/Util/Password.cpp
-    src/Core/Util/String.cpp
-    src/Core/Util/Hash.cpp
+    Core/Util/Time.cpp
+    Core/Util/Random.cpp
+    Core/Util/Password.cpp
+    Core/Util/String.cpp
+    Core/Util/Hash.cpp
 
-    src/Core/Exception/VortexException.cpp
-    src/Core/Exception/StorageException.cpp
-    src/Core/Exception/CacheException.cpp
+    Core/Exception/VortexException.cpp
+    Core/Exception/StorageException.cpp
+    Core/Exception/CacheException.cpp
 )
 
 add_library(${PROJECT_NAME}
@@ -49,13 +49,12 @@ if (VORTEX_ENABLE_FEATURE_MONGO)
 endif()
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC ${PROJECT_SOURCE_DIR}/include
+    PUBLIC ${PROJECT_SOURCE_DIR}
     PUBLIC ${Boost_INCLUDE_DIRS}
 )
 
 target_link_libraries(${PROJECT_NAME}
     PUBLIC maze
-#    PUBLIC graphqlparser
     PUBLIC ${Boost_LIBRARIES}
 )
 
