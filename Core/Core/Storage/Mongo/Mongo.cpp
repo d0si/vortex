@@ -74,7 +74,7 @@ namespace Vortex {
 					}
 				}
 
-				Db Mongo::get_db(std::string database_name) {
+				Db Mongo::get_db(const std::string& database_name) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
 					return Db(client_[database_name]);
 #else
@@ -82,11 +82,11 @@ namespace Vortex {
 #endif
 				}
 
-				Collection Mongo::get_collection(std::string collection_name) {
+				Collection Mongo::get_collection(const std::string& collection_name) {
 					return get_collection(get_default_db_name(), collection_name);
 				}
 
-				Collection Mongo::get_collection(std::string database_name, std::string collection_name) {
+				Collection Mongo::get_collection(const std::string& database_name, const std::string& collection_name) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
 					return Collection(client_[database_name][collection_name]);
 #else
@@ -107,18 +107,36 @@ namespace Vortex {
 					return databases;
 				}
 
-				std::vector<std::string> Mongo::list_collections(std::string database_name) {
+				std::vector<std::string> Mongo::list_collections(const std::string& database_name) {
 					Db db = get_db(database_name);
 
 					return db.list_collections();
 				}
 
-				void Mongo::drop_database(std::string database_name) {
+				bool Mongo::database_exists(const std::string& database) {
+					for (auto db: list_databases()) {
+						if (db == database) {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				bool Mongo::collection_exists(const std::string& database, const std::string& collection) {
+#ifdef VORTEX_HAS_FEATURE_MONGO
+					return client_[database].has_collection(collection);
+#else
+					return false;
+#endif
+				}
+
+				void Mongo::drop_database(const std::string& database_name) {
 					Db db = get_db(database_name);
 					db.drop_database();
 				}
 
-				void Mongo::clone_database(std::string old_name, std::string new_name) {
+				void Mongo::clone_database(const std::string& old_name, const std::string& new_name) {
 					if (old_name == new_name) {
 						return;
 					}

@@ -41,7 +41,7 @@ namespace Vortex {
                     }
                 }
 
-                void FilesystemBackend::simple_insert(std::string database, std::string collection, std::string json_value) {
+                void FilesystemBackend::simple_insert(const std::string& database, const std::string& collection, const std::string& json_value) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
 
                     Maze::Object value;
@@ -57,7 +57,7 @@ namespace Vortex {
                     save_collection_entries(database, collection, collection_data);
                 }
 
-                std::string FilesystemBackend::simple_find_all(std::string database, std::string collection, std::string json_simple_query) {
+                std::string FilesystemBackend::simple_find_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
 
                     Maze::Object simple_query;
@@ -81,7 +81,7 @@ namespace Vortex {
                     return query_results.to_json();
                 }
 
-                std::string FilesystemBackend::simple_find_first(std::string database, std::string collection, std::string json_simple_query) {
+                std::string FilesystemBackend::simple_find_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
 
                     Maze::Object simple_query;
@@ -103,7 +103,7 @@ namespace Vortex {
                     return "{}";
                 }
 
-                void FilesystemBackend::simple_replace_first(std::string database, std::string collection, std::string json_simple_query, std::string replacement_json_value) {
+                void FilesystemBackend::simple_replace_first(const std::string& database, const std::string& collection, const std::string& json_simple_query, const std::string& replacement_json_value) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
                     Maze::Array new_collection_data;
 
@@ -139,7 +139,7 @@ namespace Vortex {
                     save_collection_entries(database, collection, new_collection_data);
                 }
 
-                void FilesystemBackend::simple_delete_all(std::string database, std::string collection, std::string json_simple_query) {
+                void FilesystemBackend::simple_delete_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
 
                     Maze::Object simple_query;
@@ -161,7 +161,7 @@ namespace Vortex {
                     save_collection_entries(database, collection, collection_data);
                 }
 
-                void FilesystemBackend::simple_delete_first(std::string database, std::string collection, std::string json_simple_query) {
+                void FilesystemBackend::simple_delete_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
                     Maze::Array collection_data = get_collection_entries(database, collection);
 
                     Maze::Object simple_query;
@@ -219,7 +219,7 @@ namespace Vortex {
                     return database_list;
                 }
 
-                std::vector<std::string> FilesystemBackend::get_collection_list(std::string database) {
+                std::vector<std::string> FilesystemBackend::get_collection_list(const std::string& database) {
                     const std::string cache_key = "vortex.core.filesystem.collection_list." + database;
 
                     if (cache_enabled_) {
@@ -255,6 +255,60 @@ namespace Vortex {
                     CommonRuntime::Instance.get_cache()->set(cache_key, Util::String::join(collection_list, ","), 15);
 
                     return collection_list;
+                }
+
+                bool FilesystemBackend::database_exists(const std::string& database) {
+                    const std::string cache_key = "vortex.core.filesystem.database_exists." + database;
+
+                    if (cache_enabled_) {
+                        if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+                            return (CommonRuntime::Instance.get_cache()->get(cache_key) == "1");
+                        }
+                    }
+
+                    std::string database_path = filesystem_config_["root_path"].get_string() + "/" + database;
+
+                    if (boost::filesystem::exists(database_path) && boost::filesystem::is_directory(database_path)) {
+                        if (cache_enabled_) {
+                            CommonRuntime::Instance.get_cache()->set(cache_key, "1", 15);
+                        }
+
+                        return true;
+                    }
+                    else {
+                        if (cache_enabled_) {
+                            CommonRuntime::Instance.get_cache()->set(cache_key, "0", 15);
+                        }
+
+                        return false;
+                    }
+                }
+
+                bool FilesystemBackend::collection_exists(const std::string& database, const std::string& collection) {
+                    const std::string cache_key = "vortex.core.filesystem.collection_exists." + database + "." + collection;
+
+                    if (cache_enabled_) {
+                        if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
+                            return (CommonRuntime::Instance.get_cache()->get(cache_key) == "1");
+                        }
+                    }
+
+                    std::string collection_path = filesystem_config_["root_path"].get_string() + "/" + database + "/" + collection + ".json";
+                    
+                    if (boost::filesystem::exists(collection_path) && boost::filesystem::is_regular_file(collection_path)) {
+                        if (cache_enabled_) {
+                            CommonRuntime::Instance.get_cache()->set(cache_key, "1", 15);
+                        }
+
+                        return true;
+                    }
+                    else {
+                        if (cache_enabled_) {
+                            CommonRuntime::Instance.get_cache()->set(cache_key, "0", 15);
+                        }
+
+                        return false;
+                    }
                 }
 
                 bool FilesystemBackend::check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const {

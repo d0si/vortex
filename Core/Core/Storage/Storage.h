@@ -18,11 +18,11 @@ namespace Vortex {
 			public:
 				Storage();
 
-				void initialize(Maze::Object storage_config);
+				void initialize(const Maze::Object& storage_config);
 				const bool is_initialized() const;
 
 				IStorageBackend* get_backend();
-				IStorageBackend* get_backend(std::string backend_name);
+				IStorageBackend* get_backend(const std::string& backend_name);
 			};
 		}  // namespace Storage
 	}  // namespace Core
