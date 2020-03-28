@@ -402,6 +402,9 @@ namespace Vortex {
                     }
 
                     std::string collection_file_path = filesystem_config_["root_path"].get_string() + '/' + database + '/' + collection + ".json";
+                    if (!boost::filesystem::exists(collection_file_path)) {
+                        return Maze::Array();
+                    }
 
                     std::ifstream collection_file(collection_file_path);
                     if (!collection_file.is_open()) {
@@ -446,7 +449,13 @@ namespace Vortex {
                         throw Exception::StorageException("Invalid config root_path");
                     }
 
-                    std::string collection_file_path = filesystem_config_["root_path"].get_string() + '/' + database + '/' + collection + ".json";
+                    std::string database_folder_path = filesystem_config_["root_path"].get_string() + '/' + database;
+
+                    if (!boost::filesystem::exists(database_folder_path)) {
+                        boost::filesystem::create_directory(database_folder_path);
+                    }
+
+                    std::string collection_file_path = database_folder_path + '/' + collection + ".json";
 
                     std::ofstream collection_file(collection_file_path, std::ofstream::trunc);
                     if (!collection_file.is_open()) {
