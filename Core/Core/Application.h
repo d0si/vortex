@@ -16,13 +16,15 @@ namespace Vortex {
 		public:
 			Application(Framework* framework);
 
-			void find(std::string app_id);
+			void find(const std::string& app_id);
 
-			std::string get_id();
-			std::string get_title();
-			Maze::Object get_config();
-			std::string get_script();
-			std::string get_post_script();
+			std::string get_id() const;
+			std::string get_title() const;
+			Maze::Object get_config() const;
+			std::string get_script() const;
+			std::string get_post_script() const;
+
+			Maze::Object find_object_in_application_storage(const std::string& collection, const Maze::Object& query, bool search_other_storages = true) const;
 		};
 	}  // namespace Core
 }  // namespace Vortex
