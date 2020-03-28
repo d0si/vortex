@@ -177,14 +177,12 @@ namespace Vortex {
 				Maze::Object query("name", name);
 				query.set("app_ids", framework_->application_.get_id());
 				
-				template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first("vortex", "templates", query.to_json()));
-				
+				template_ = framework_->application_.find_object_in_application_storage("templates", query);
+
 				if (template_.is_empty()) {
 					query.set_null("app_ids");
-
-					template_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-						->simple_find_first("vortex", "templates", query.to_json()));
+					
+					template_ = framework_->application_.find_object_in_application_storage("templates", query);
 				}
 
 				if (!template_.is_empty()) {
@@ -218,14 +216,12 @@ namespace Vortex {
 				Maze::Object query("name", name);
 				query.set("app_ids", framework_->application_.get_id());
 
-				page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first("vortex", "pages", query.to_json()));
+				page_ = framework_->application_.find_object_in_application_storage("pages", query);
 
 				if (page_.is_empty()) {
 					query.set_null("app_ids");
-
-					page_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-						->simple_find_first("vortex", "pages", query.to_json()));
+					
+					page_ = framework_->application_.find_object_in_application_storage("pages", query);
 				}
 
 				if (!page_.is_empty()) {

@@ -23,8 +23,7 @@ namespace Vortex {
 				query.set("name", name);
 				query.set("method", method);
 
-				controller_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first("vortex", "controllers", query.to_json()));
+				controller_ = framework_->application_.find_object_in_application_storage("controllers", query);
 
 				if (!controller_.is_empty()) {
 					CommonRuntime::Instance.get_cache()->set(cache_key, controller_.to_json(0));
