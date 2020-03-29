@@ -27,6 +27,10 @@ namespace DuktapeBindings {
             framework_->view_.set_status_code(status_code);
         }
 
+        void set_cookie(const std::string& cookie_string) {
+            framework_->view_.set_cookie(cookie_string);
+        }
+
         void set_template(std::string name) {
             framework_->view_.set_template(name);
         }
@@ -49,6 +53,7 @@ namespace DuktapeBindings {
             i.method("echo", &View::echo);
             i.method("set_content_type", &View::set_content_type);
             i.method("set_status_code", &View::set_status_code);
+            i.method("set_cookie", &View::set_cookie);
             i.method("set_template", &View::set_template);
             i.method("set_page", &View::set_page);
             i.method("parse_page", &View::parse_page);
@@ -84,6 +89,21 @@ namespace DuktapeBindings {
             return framework_->router_.get_post();
         }
 
+        std::string get_cookie(const std::string& cookie_name) const {
+            return framework_->router_.get_cookie(cookie_name);
+        }
+
+        std::string get_cookies_json() const {
+            auto cookies = framework_->router_.get_cookies();
+            Maze::Object cookies_obj;
+
+            for (auto cookie : cookies) {
+                cookies_obj.set(cookie.first, cookie.second);
+            }
+
+            return cookies_obj.to_json();
+        }
+
         template<class Inspector>
         static void inspect(Inspector& i) {
             i.construct(&std::make_shared<Router>);
@@ -97,6 +117,8 @@ namespace DuktapeBindings {
             i.method("get_args", &Router::get_args);
             i.property("post", &Router::get_post);
             i.method("get_post", &Router::get_post);
+            i.method("get_cookie", &Router::get_cookie);
+            i.method("get_cookies_json", &Router::get_cookies_json);
         }
     };
 

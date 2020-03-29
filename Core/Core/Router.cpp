@@ -223,5 +223,66 @@ namespace Vortex {
 		std::string Router::get_post() const {
 			return framework_->request_->body();
 		}
+
+		std::map<std::string, std::string> Router::get_cookies() {
+			if (!cookies_initialized_) {
+				std::string cookies_string = framework_->request_->base()[boost::beast::http::field::cookie].to_string();
+				
+				std::string key = "";
+				std::string value = "";
+				bool grabbing_value_part = false;
+
+				for (unsigned int i = 0; i < cookies_string.length(); ++i) {
+					char val = cookies_string[i];
+
+					if (val == ';') {
+						cookies_.emplace(std::make_pair(key, value));
+						key.clear();
+						value.clear();
+						grabbing_value_part = false;
+
+						while (cookies_string[i + 1] == ' ') {
+							++i;
+						}
+					}
+					else if (val == '=') {
+						grabbing_value_part = true;
+					}
+					else {
+						if (!grabbing_value_part) {
+							key += val;
+						}
+						else {
+							value += val;
+						}
+					}
+				}
+
+				if (!key.empty()) {
+					cookies_.emplace(std::make_pair(key, value));
+				}
+			}
+
+			return cookies_;
+		}
+
+		std::string Router::get_cookie(const std::string& cookie_name, bool* cookie_exists) {
+			auto cookies = get_cookies();
+
+			auto it = cookies.find(cookie_name);
+			if (it != cookies.end()) {
+				if (cookie_exists != nullptr) {
+					*cookie_exists = true;
+				}
+
+				return it->second;
+			}
+
+			if (cookie_exists != nullptr) {
+				*cookie_exists = false;
+			}
+
+			return "";
+		}
 	}  // namespace Core
 }  // namespace Vortex
