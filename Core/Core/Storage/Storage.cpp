@@ -12,7 +12,7 @@ namespace Vortex {
 				
 			}
 
-			void Storage::initialize(Maze::Object storage_config) {
+			void Storage::initialize(const Maze::Object& storage_config) {
 				this->storage_config_ = storage_config;
 				this->initialized_ = false;
 
@@ -74,7 +74,7 @@ namespace Vortex {
 				return this->get_backend(this->default_backend_);
 			}
 
-			IStorageBackend* Storage::get_backend(std::string backend_name) {
+			IStorageBackend* Storage::get_backend(const std::string& backend_name) {
 				if (!this->initialized_) {
 					throw std::runtime_error("Storage instance is not initialized");
 				}

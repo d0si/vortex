@@ -15,12 +15,12 @@ namespace Vortex {
 					virtual ~IStorageBackend() {};
 
 					// Simple query
-					virtual void simple_insert(std::string database, std::string collection, std::string json_value) = 0;
-					virtual std::string simple_find_all(std::string database, std::string collection, std::string json_simple_query) = 0;
-					virtual std::string simple_find_first(std::string database, std::string collection, std::string json_simple_query) = 0;
-					virtual void simple_replace_first(std::string database, std::string collection, std::string json_simple_query, std::string replacement_json_value) = 0;
-					virtual void simple_delete_all(std::string database, std::string collection, std::string json_simple_query) = 0;
-					virtual void simple_delete_first(std::string database, std::string collection, std::string json_simple_query) = 0;
+					virtual void simple_insert(const std::string& database, const std::string& collection, const std::string& json_value) = 0;
+					virtual std::string simple_find_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) = 0;
+					virtual std::string simple_find_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) = 0;
+					virtual void simple_replace_first(const std::string& database, const std::string& collection, const std::string& json_simple_query, const std::string& replacement_json_value) = 0;
+					virtual void simple_delete_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) = 0;
+					virtual void simple_delete_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) = 0;
 
 					// Basic CRUD methods
 					// virtual void insert(std::string database, std::string collection, std::string value) = 0;
@@ -29,7 +29,10 @@ namespace Vortex {
 					// virtual void remove(std::string database, std::string collection, std::string query) = 0;
 
 					virtual std::vector<std::string> get_database_list() = 0;
-					virtual std::vector<std::string> get_collection_list(std::string database) = 0;
+					virtual std::vector<std::string> get_collection_list(const std::string& database) = 0;
+
+					virtual bool database_exists(const std::string& database) = 0;
+					virtual bool collection_exists(const std::string& database, const std::string& collection) = 0;
 				};
 
 				typedef IStorageBackend* (*GetStorageBackendInstanceFunc)();
