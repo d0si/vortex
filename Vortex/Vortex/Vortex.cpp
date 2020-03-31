@@ -15,6 +15,7 @@
 namespace Util = Vortex::Core::Util;
 
 namespace Vortex {
+	std::vector<std::thread> running_servers;
 
 	void start_vortex(std::vector<std::string> args) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
@@ -159,6 +160,13 @@ namespace Vortex {
 				<< "Use ./vortex help to find more info on how to use the program." << std::endl;
 			exit_with_error(1002);
 		}
+
+		for (size_t i = 0; i < running_servers.size(); ++i) {
+
+			if (running_servers[i].joinable()) {
+				running_servers[i].join();
+			}
+		}
 	}
 
 	void exit_with_error(int error_code) {
@@ -244,11 +252,27 @@ namespace Vortex {
 			Maze::Array servers = config["servers"];
 
 			for (auto it = servers.begin(); it != servers.end(); it++) {
+				Maze::Object global_config = config;
+				global_config.remove("servers");
+
 				if (it->is_int()) {
-					start_http_server(Maze::Object("port", it->get_int()));
+					if (global_config.is_object("server")) {
+						Maze::Object conf = global_config["server"].get_object();
+						conf.set("port", it->get_int());
+						global_config.set("server", conf);
+					}
+					else {
+						global_config.set("server", Maze::Object("port", it->get_int()));
+					}
+
+					running_servers.push_back(std::thread(start_http_server, global_config));
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
 				else if (it->is_object()) {
-					start_http_server(it->get_object());
+					global_config.apply(it->get_object());
+
+					running_servers.push_back(std::thread(start_http_server, global_config));
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
 				else {
 					std::cout << "Server config is invalid: "
@@ -287,8 +311,7 @@ namespace Vortex {
 					return;
 				}
 				else if (type == "http") {
-					std::thread server_thread(start_http_server, config);
-					server_thread.detach();
+					running_servers.push_back(std::thread(start_http_server, config));
 
 					return;
 				}
@@ -300,8 +323,8 @@ namespace Vortex {
 			}
 		}
 
-		std::thread server_thread(start_http_server, config);
-		server_thread.detach();
+		running_servers.push_back(std::thread(start_http_server, config));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	void start_http_server(Maze::Object config) {
