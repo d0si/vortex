@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <mutex>
 #include <Core/Storage/IStorageBackend.h>
 
 namespace Vortex {
@@ -14,6 +15,7 @@ namespace Vortex {
 				std::string default_backend_;
 				Maze::Object storage_config_;
 				bool initialized_ = false;
+				std::mutex mtx_;
 
 			public:
 				Storage();

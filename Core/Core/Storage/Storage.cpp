@@ -13,45 +13,46 @@ namespace Vortex {
 			}
 
 			void Storage::initialize(const Maze::Object& storage_config) {
-				this->storage_config_ = storage_config;
-				this->initialized_ = false;
+				mtx_.lock();
+				storage_config_ = storage_config;
+				initialized_ = false;
 
 				Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::filesystem_exports.get_backend_instance());
-				fs_backend->set_config(this->storage_config_["config"].get_object()["Filesystem"].get_object());
+				fs_backend->set_config(storage_config_["config"].get_object()["Filesystem"].get_object());
 
-				this->available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
+				available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
 					Core::Storage::Filesystem::filesystem_exports.backend_name,
 					static_cast<Core::Storage::IStorageBackend*>(fs_backend)
 					));
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
 				Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::mongo_exports.get_backend_instance());
-				mongo_backend->get_client()->set_config(this->storage_config_["config"].get_object()["Mongo"].get_object());
+				mongo_backend->get_client()->set_config(storage_config_["config"].get_object()["Mongo"].get_object());
 
 				if (mongo_backend->get_client()->is_enabled()) {
 					mongo_backend->get_client()->connect();
 
-					this->available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
+					available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
 						Core::Storage::Mongo::mongo_exports.backend_name,
 						static_cast<Core::Storage::IStorageBackend*>(mongo_backend)
 						));
 
-					this->default_backend_ = Core::Storage::Mongo::mongo_exports.backend_name;
+					default_backend_ = Core::Storage::Mongo::mongo_exports.backend_name;
 				}
 				else {
-					this->default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
+					default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
 				}
 #else
-				this->default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
+				default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
 #endif
 
-				if (this->storage_config_.is_string("default_backend")) {
+				if (storage_config_.is_string("default_backend")) {
 					const std::string backend_name = storage_config["default_backend"].get_string();
 					bool backend_exists = false;
 
-					for (auto b : this->available_backends_) {
+					for (auto b : available_backends_) {
 						if (b.first == backend_name) {
-							this->default_backend_ = backend_name;
+							default_backend_ = backend_name;
 							backend_exists = true;
 							break;
 						}
@@ -63,33 +64,34 @@ namespace Vortex {
 					}
 				}
 
-				this->initialized_ = true;
+				initialized_ = true;
+				mtx_.unlock();
 			}
 
 			const bool Storage::is_initialized() const {
-				return this->initialized_;
+				return initialized_;
 			}
 
 			IStorageBackend* Storage::get_backend() {
-				return this->get_backend(this->default_backend_);
+				return get_backend(default_backend_);
 			}
 
 			IStorageBackend* Storage::get_backend(const std::string& backend_name) {
-				if (!this->initialized_) {
+				if (!initialized_) {
 					throw std::runtime_error("Storage instance is not initialized");
 				}
 
-				if (this->available_backends_.size() == 0) {
+				if (available_backends_.size() == 0) {
 					return nullptr;
 				}
 
-				if (this->available_backends_[0].first == backend_name) {
-					return this->available_backends_[0].second;
+				if (available_backends_[0].first == backend_name) {
+					return available_backends_[0].second;
 				}
 
-				for (int i = 1; i < this->available_backends_.size(); ++i) {
-					if (this->available_backends_[i].first == backend_name) {
-						return this->available_backends_[i].second;
+				for (int i = 1; i < available_backends_.size(); ++i) {
+					if (available_backends_[i].first == backend_name) {
+						return available_backends_[i].second;
 					}
 				}
 

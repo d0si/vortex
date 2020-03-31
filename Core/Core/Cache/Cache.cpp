@@ -14,6 +14,7 @@ namespace Vortex {
             }
 
             void Cache::initialize(const Maze::Object& cache_config) {
+                mtx_.lock();
                 cache_config_ = cache_config;
                 initialized_ = false;
 
@@ -72,6 +73,7 @@ namespace Vortex {
                 }
 
                 initialized_ = true;
+                mtx_.unlock();
             }
 
             const bool Cache::is_initialized() const {

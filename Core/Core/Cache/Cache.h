@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <mutex>
 #include <Maze/Object.hpp>
 #include <Core/Cache/ICacheBackend.h>
 
@@ -15,6 +16,7 @@ namespace Vortex {
 				std::string default_backend_;
 				Maze::Object cache_config_;
 				bool initialized_ = false;
+				std::mutex mtx_;
 
 			public:
 				Cache();
