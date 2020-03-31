@@ -5,29 +5,29 @@
         "ip": "0.0.0.0",
         "port": 8080,
         "thread_count": 2
-      },
-      "storage": {
-        "default_backend": "Filesystem",
-        "config": {
-          "Mongo": {
-            "enabled": false
-          },
-          "Filesystem": {
-            "root_path": "../../samples",
-            "cache_enabled": true,
-            "in_memory_only": true
-          }
-        }
-      },
-      "cache": {
-        "enabled": true,
-        "default_backend": "MemoryCache",
-        "config": {
-          "MemoryCache": {
-            "enabled": true
-          }
-        }
       }
     }
-  ]
+  ],
+  "storage": {
+    "default_backend": "Filesystem",
+    "config": {
+      "Mongo": {
+        "enabled": false
+      },
+      "Filesystem": {
+        "root_path": "../../../../samples",
+        "cache_enabled": true,
+        "in_memory_only": true
+      }
+    }
+  },
+  "cache": {
+    "enabled": true,
+    "default_backend": "MemoryCache",
+    "config": {
+      "MemoryCache": {
+        "enabled": true
+      }
+    }
+  }
 }
