@@ -183,12 +183,12 @@ namespace Vortex {
 
 			if (template_.is_empty()) {
 				Maze::Object query("name", name);
-				query.set("app_ids", framework_->application_.get_id());
+				query.set("app_id", framework_->application_.get_id());
 				
 				template_ = framework_->application_.find_object_in_application_storage("templates", query);
 
 				if (template_.is_empty()) {
-					query.set_null("app_ids");
+					query.set_null("app_id");
 					
 					template_ = framework_->application_.find_object_in_application_storage("templates", query);
 				}
@@ -222,12 +222,12 @@ namespace Vortex {
 
 			if (page_.is_empty()) {
 				Maze::Object query("name", name);
-				query.set("app_ids", framework_->application_.get_id());
+				query.set("app_id", framework_->application_.get_id());
 
 				page_ = framework_->application_.find_object_in_application_storage("pages", query);
 
 				if (page_.is_empty()) {
-					query.set_null("app_ids");
+					query.set_null("app_id");
 					
 					page_ = framework_->application_.find_object_in_application_storage("pages", query);
 				}
