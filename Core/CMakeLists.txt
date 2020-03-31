@@ -9,6 +9,7 @@ set(CORE_SOURCES
     Core/Application.cpp
     Core/Controller.cpp
     Core/View.cpp
+    Core/User.cpp
 
     Core/Storage/Storage.cpp
     Core/Storage/Mongo/Mongo.cpp

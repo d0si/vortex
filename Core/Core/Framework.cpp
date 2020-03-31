@@ -18,6 +18,7 @@ namespace Vortex {
 			application_(this),
 			controller_(this),
 			view_(this),
+			user_(this),
 			script_(this) {
 
 		}

@@ -9,6 +9,7 @@
 #include <Core/Application.h>
 #include <Core/Controller.h>
 #include <Core/View.h>
+#include <Core/User.h>
 #include <Core/Script/Script.h>
 
 namespace Vortex {
@@ -25,6 +26,7 @@ namespace Vortex {
 			Application application_;
 			Controller controller_;
 			View view_;
+			User user_;
 			Script::Script script_;
 
 			Framework(
