@@ -48,6 +48,17 @@ namespace Vortex {
 			respond();
 		}
 
+		void View::send_refresh() {
+			redirect(framework_->request_->target().to_string());
+		}
+
+		void View::redirect(const std::string& url) {
+			framework_->response_->set(boost::beast::http::field::location, url);
+			set_status_code(302);
+			clear();
+			framework_->exit();
+		}
+
 		std::string View::parse(const std::string& code) {
 			const std::string old_rendered = rendered_;
 			rendered_.clear();

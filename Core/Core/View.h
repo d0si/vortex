@@ -30,6 +30,8 @@ namespace Vortex {
 
 			void clear();
 			void finish();
+			void send_refresh();
+			void redirect(const std::string& url);
 			std::string parse(const std::string& code);
 
 			void set_template(const std::string& name);

@@ -35,6 +35,7 @@ set(CORE_SOURCES
     Core/Exception/VortexException.cpp
     Core/Exception/StorageException.cpp
     Core/Exception/CacheException.cpp
+    Core/Exception/FrameworkExitException.cpp
 )
 
 add_library(${PROJECT_NAME}

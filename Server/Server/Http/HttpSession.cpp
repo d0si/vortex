@@ -4,6 +4,7 @@
 #include <boost/beast/http.hpp>
 #include <Core/Framework.h>
 #include <Core/Exception/VortexException.h>
+#include <Core/Exception/FrameworkExitException.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
@@ -90,6 +91,9 @@ namespace Vortex {
 					std::string what = e.what();
 					res_.body() = "MongoDb exception: " + what;
 #endif
+				}
+				catch (Core::Exception::FrameworkExitException e) {
+
 				}
 				catch (Core::Exception::VortexException e) {
 					res_.result(boost::beast::http::status::internal_server_error);
