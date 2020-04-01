@@ -4,6 +4,7 @@
 #endif
 #include <Core/Framework.h>
 #include <Core/CommonRuntime.h>
+#include <Core/Exception/FrameworkExitException.h>
 
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 namespace DuktapeBindings {
@@ -47,6 +48,14 @@ namespace DuktapeBindings {
             return framework_->view_.finish();
         }
 
+        void refresh() {
+            return framework_->view_.send_refresh();
+        }
+
+        void redirect(const std::string url) {
+            return framework_->view_.redirect(url);
+        }
+
         template<class Inspector>
         static void inspect(Inspector& i) {
             i.construct(&std::make_shared<View>);
@@ -58,6 +67,8 @@ namespace DuktapeBindings {
             i.method("set_page", &View::set_page);
             i.method("parse_page", &View::parse_page);
             i.method("finish", &View::finish);
+            i.method("refresh", &View::refresh);
+            i.method("redirect", &View::redirect);
         }
     };
 
@@ -146,6 +157,35 @@ namespace DuktapeBindings {
         }
     };
 
+    class User {
+    private:
+        Vortex::Core::Framework* framework_;
+
+    public:
+        User() {}
+        User(Vortex::Core::Framework* framework) : framework_(framework) {}
+
+        bool is_logged_in() {
+            return framework_->user_.is_logged_in();
+        }
+
+        std::string get_user_id() {
+            return framework_->user_.get_user_id();
+        }
+
+        std::string get_username() {
+            return framework_->user_.get_username();
+        }
+
+        template<class Inspector>
+        static void inspect(Inspector& i) {
+            i.construct(&std::make_shared<User>);
+            i.method("is_logged_in", &User::is_logged_in);
+            i.method("get_user_id", &User::get_user_id);
+            i.method("get_username", &User::get_username);
+        }
+    };
+
     class Storage {
     public:
         Storage() {}
@@ -208,6 +248,7 @@ namespace DuktapeBindings {
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::View);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Router);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Application);
+DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::User);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Storage);
 
 #endif  // VORTEX_HAS_FEATURE_CRYPTOPP
@@ -237,15 +278,18 @@ namespace Vortex {
                 auto router = std::make_shared<DuktapeBindings::Router>(framework_);
                 ctx_->registerClass<DuktapeBindings::Application>();
                 auto application = std::make_shared<DuktapeBindings::Application>(framework_);
+                ctx_->registerClass<DuktapeBindings::User>();
+                auto user = std::make_shared<DuktapeBindings::User>(framework_);
                 ctx_->registerClass<DuktapeBindings::Storage>();
                 auto storage = std::make_shared<DuktapeBindings::Storage>();
 
                 ctx_->addGlobal("__view", view);
                 ctx_->addGlobal("__router", router);
                 ctx_->addGlobal("__application", application);
+                ctx_->addGlobal("__user", user);
                 ctx_->addGlobal("__storage", storage);
 
-                exec("view=__view;router=__router;application=__application;storage=__storage;");
+                exec("view=__view;router=__router;application=__application;user=__user;storage=__storage;");
 #endif
             }
 
@@ -258,6 +302,10 @@ namespace Vortex {
                     catch (duk::DuktapeException & e) {
                         std::string message = e.what();
                         framework_->view_.echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
+                        framework_->view_.respond();
+                        framework_->exit();
+                    }
+                    catch (Exception::FrameworkExitException e) {
                         framework_->view_.respond();
                         framework_->exit();
                     }

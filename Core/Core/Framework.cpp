@@ -1,5 +1,6 @@
 #include <Core/Framework.h>
 #include <Maze/Element.hpp>
+#include <Core/Exception/FrameworkExitException.h>
 
 namespace Vortex {
 	namespace Core {
@@ -34,6 +35,7 @@ namespace Vortex {
 			config_.apply(host_.get_config());
 
 			router_.setup();
+			user_.setup();
 
 			controller_.find(
 				application_.get_id(),
@@ -51,13 +53,13 @@ namespace Vortex {
 			script_.exec(controller_.get_post_script());
 
 			view_.output();
-			throw(0);
+			throw Exception::FrameworkExitException("");
 		}
 
 		void Framework::exit() {
 			view_.respond();
 
-			throw(0);
+			throw Exception::FrameworkExitException("");
 		}
 
 		Maze::Object Framework::get_config() {
