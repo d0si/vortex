@@ -5,10 +5,12 @@ project(VortexProject)
 option(VORTEX_ENABLE_FEATURE_MONGO "Enable support for mongo-cxx-driver and mongo-c-driver" OFF)
 option(VORTEX_ENABLE_FEATURE_REDIS "Enable support for cpp_redis and tacopie" OFF)
 option(VORTEX_ENABLE_FEATURE_DUKTAPE "Enable support for duktape and duktape-cpp" OFF)
+option(VORTEX_ENABLE_FEATURE_DELTASCRIPT "Enable support for DeltaScript engine" ON)
 option(VORTEX_ENABLE_FEATURE_CRYPTOPP "Enable support for crypto++" OFF)
 
 # Include subprojects
 add_subdirectory(dependencies/Maze)
+add_subdirectory(dependencies/DeltaScript)
 #add_subdirectory(dependencies/duktape-cpp)
 #add_subdirectory(dependencies/GraphQL-cpp)
 add_subdirectory(Core)
