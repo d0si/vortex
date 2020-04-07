@@ -24,6 +24,7 @@ set(CORE_SOURCES
 
     Core/Script/Script.cpp
     Core/Script/DuktapeEngine.cpp
+    Core/Script/DeltaScriptEngine.cpp
 
     Core/Util/Time.cpp
     Core/Util/Random.cpp

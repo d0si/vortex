@@ -4,6 +4,9 @@
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 #include <Core/Script/DuktapeEngine.h>
 #endif
+#ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
+#include <Core/Script/DeltaScriptEngine.h>
+#endif
 #include <Core/Script/DummyEngine.h>
 #include <Core/Exception/VortexException.h>
 #include <iostream>
@@ -35,7 +38,9 @@ namespace Vortex {
 				}
 
 #ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
-				// TODO
+				if (default_engine_name_ == Core::Script::deltascript_exports.engine_name) {
+					initialized_engine_ = Core::Script::deltascript_exports.get_new_engine_instance();
+				}
 #endif
 
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
