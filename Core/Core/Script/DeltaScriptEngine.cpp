@@ -3,6 +3,7 @@
 #include <DeltaScript/DeltaScript.h>
 #endif
 #include <Core/Framework.h>
+#include <Core/CommonRuntime.h>
 
 namespace Vortex {
     namespace Core {
@@ -109,15 +110,70 @@ namespace Vortex {
                         ((Framework*)(data))->application_.get_id()
                     );
                     }, framework_);
+
+
+                ctx_->add_native_function("function storage.simple_insert(database, collection, json_value)", [](DeltaScript::Variable* var, void* data) {
+                    Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->simple_insert(
+                            var->find_child("database")->var->get_string(),
+                            var->find_child("collection")->var->get_string(),
+                            var->find_child("json_value")->var->get_string()
+                        );
+                    }, nullptr);
+                ctx_->add_native_function("function storage.simple_find_all(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
+                    var->find_child("return")->var->set_string(
+                        Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->simple_find_all(
+                            var->find_child("database")->var->get_string(),
+                            var->find_child("collection")->var->get_string(),
+                            var->find_child("json_simple_query")->var->get_string()
+                        )
+                    );
+                    }, nullptr);
+                ctx_->add_native_function("function storage.simple_find_first(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
+                    var->find_child("return")->var->set_string(
+                        Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->simple_find_first(
+                            var->find_child("database")->var->get_string(),
+                            var->find_child("collection")->var->get_string(),
+                            var->find_child("json_simple_query")->var->get_string()
+                        )
+                    );
+                    }, nullptr);
+                ctx_->add_native_function("function storage.simple_replace_first(database, collection, json_simple_query, replacement_json_value)", [](DeltaScript::Variable* var, void* data) {
+                    Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->simple_replace_first(
+                            var->find_child("database")->var->get_string(),
+                            var->find_child("collection")->var->get_string(),
+                            var->find_child("json_simple_query")->var->get_string(),
+                            var->find_child("replacement_json_value")->var->get_string()
+                        );
+                    }, nullptr);
+                ctx_->add_native_function("function storage.simple_delete_all(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
+                    Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->simple_delete_all(
+                            var->find_child("database")->var->get_string(),
+                            var->find_child("collection")->var->get_string(),
+                            var->find_child("json_simple_query")->var->get_string()
+                        );
+                    }, nullptr);
+                ctx_->add_native_function("function storage.simple_delete_first(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
+                    Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->simple_delete_first(
+                            var->find_child("database")->var->get_string(),
+                            var->find_child("collection")->var->get_string(),
+                            var->find_child("json_simple_query")->var->get_string()
+                        );
+                    }, nullptr);
 #endif
-        }
+            }
 
             void DeltaScriptEngine::exec(const std::string& script) {
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
                 if (script.length() > 0) {
                     try {
                         ctx_->execute(script);
-                    }
+        }
                     catch (DeltaScript::DeltaScriptException & e) {
                         framework_->view_.echo("<i>Script error (DeltaScript engine):</i><pre>" + e.message + "</pre>");
                         framework_->view_.respond();
@@ -128,17 +184,17 @@ namespace Vortex {
                         framework_->view_.respond();
                         framework_->exit();
                     }
-                }
+    }
 #else
                 framework_->view_.echo("DeltaScript script engine is unavailable.");
                 framework_->view_.respond();
                 framework_->exit();
 #endif
-            }
+}
 
             IScriptEngine* get_new_deltascript_engine() {
                 return new DeltaScriptEngine();
             }
-    }  // namespace Script
-}  // namespace Core
+        }  // namespace Script
+    }  // namespace Core
 }  // namespace Vortex
