@@ -165,6 +165,16 @@ namespace Vortex {
                             var->find_child("json_simple_query")->var->get_string()
                         );
                     }, nullptr);
+
+                ctx_->add_native_function("function storage.get_database_list()", [](DeltaScript::Variable* var, void* data) {
+                    var->find_child("return")->var->set_as_array();
+                    auto list = Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->get_database_list();
+                    for (int i = 0; i < list.size(); ++i) {
+                        var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(list[i]));
+                    }
+                    
+                    }, nullptr);
 #endif
             }
 
@@ -173,7 +183,7 @@ namespace Vortex {
                 if (script.length() > 0) {
                     try {
                         ctx_->execute(script);
-        }
+                    }
                     catch (DeltaScript::DeltaScriptException & e) {
                         framework_->view_.echo("<i>Script error (DeltaScript engine):</i><pre>" + e.message + "</pre>");
                         framework_->view_.respond();
@@ -184,17 +194,17 @@ namespace Vortex {
                         framework_->view_.respond();
                         framework_->exit();
                     }
-    }
+                }
 #else
                 framework_->view_.echo("DeltaScript script engine is unavailable.");
                 framework_->view_.respond();
                 framework_->exit();
 #endif
-}
+                    }
 
             IScriptEngine* get_new_deltascript_engine() {
                 return new DeltaScriptEngine();
             }
-        }  // namespace Script
-    }  // namespace Core
-}  // namespace Vortex
+                }  // namespace Script
+            }  // namespace Core
+        }  // namespace Vortex
