@@ -69,13 +69,13 @@ namespace Vortex {
                     );
                     }, framework_);
                 ctx_->add_native_function("function router.get_args()", [](DeltaScript::Variable* var, void* data) {
-                    DeltaScript::Variable* return_var = var->find_child("return")->var;
-                    /*return_var->set_as_array();
-
+                    var->find_child("return")->var->set_as_array();
                     std::vector<std::string> args = ((Framework*)(data))->router_.get_args();
+
                     for (int i = 0; i < args.size(); ++i) {
-                        return_var->set_array_val_at_index(i, new DeltaScript::Variable(args[i]));
-                    }*/
+                        var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(args[i]));
+                    }
+
                     }, framework_);
                 ctx_->add_native_function("function router.get_post()", [](DeltaScript::Variable* var, void* data) {
                     var->find_child("return")->var->set_string(
@@ -173,7 +173,16 @@ namespace Vortex {
                     for (int i = 0; i < list.size(); ++i) {
                         var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(list[i]));
                     }
-                    
+
+                    }, nullptr);
+                ctx_->add_native_function("function storage.get_collection_list(database)", [](DeltaScript::Variable* var, void* data) {
+                    var->find_child("return")->var->set_as_array();
+                    auto list = Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+                        ->get_collection_list(var->find_child("database")->var->get_string());
+                    for (int i = 0; i < list.size(); ++i) {
+                        var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(list[i]));
+                    }
+
                     }, nullptr);
 #endif
             }
@@ -200,11 +209,11 @@ namespace Vortex {
                 framework_->view_.respond();
                 framework_->exit();
 #endif
-                    }
+            }
 
             IScriptEngine* get_new_deltascript_engine() {
                 return new DeltaScriptEngine();
             }
-                }  // namespace Script
-            }  // namespace Core
-        }  // namespace Vortex
+        }  // namespace Script
+    }  // namespace Core
+}  // namespace Vortex
