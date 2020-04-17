@@ -4,7 +4,7 @@
             "$oid": "5e70d5b6d08a50320e37afa5"
         },
         "name": "vortex/db",
-        "script": "view.set_template('vortex/db')",
+        "script": "view.set_template('vortex/db');\n",
         "title": "Vortex Database",
         "config": {
             "router": {

@@ -7,3 +7,6 @@
 [submodule "dependencies/duktape-cpp"]
 	path = dependencies/duktape-cpp
 	url = https://github.com/vmanucharyan/duktape-cpp.git
+[submodule "dependencies/DeltaScript"]
+	path = dependencies/DeltaScript
+	url = https://github.com/d0si/DeltaScript.git

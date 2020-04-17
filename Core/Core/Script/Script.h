@@ -2,23 +2,26 @@
 #define VORTEX_CORE_SCRIPT_SCRIPT_H
 
 #include <string>
-#include <Core/Script/Duktape.h>
 
 namespace Vortex {
 	namespace Core {
 		class Framework;
 
 		namespace Script {
+			class IScriptEngine;
+
 			class Script {
 			private:
 				Framework* framework_;
-				Duktape duktape_;
+				IScriptEngine* initialized_engine_ = nullptr;
+				std::string default_engine_name_ = "Dummy";
 
 			public:
 				Script(Framework* framework);
+				~Script();
 
 				void setup();
-				void exec(std::string script);
+				void exec(const std::string& script);
 			};
 		}  // namespace Script
 	}  // namespace Core

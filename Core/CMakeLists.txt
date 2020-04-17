@@ -23,7 +23,8 @@ set(CORE_SOURCES
     Core/Cache/Backends/DummyCacheBackend.cpp
 
     Core/Script/Script.cpp
-    Core/Script/Duktape.cpp
+    Core/Script/DuktapeEngine.cpp
+    Core/Script/DeltaScriptEngine.cpp
 
     Core/Util/Time.cpp
     Core/Util/Random.cpp
@@ -97,6 +98,16 @@ if (VORTEX_ENABLE_FEATURE_REDIS)
 
     target_compile_definitions(${PROJECT_NAME}
         PRIVATE VORTEX_HAS_FEATURE_REDIS=1
+    )
+endif()
+
+if (VORTEX_ENABLE_FEATURE_DELTASCRIPT)
+    target_link_libraries(${PROJECT_NAME}
+        PUBLIC DeltaScript
+    )
+
+    target_compile_definitions(${PROJECT_NAME}
+        PRIVATE VORTEX_HAS_FEATURE_DELTASCRIPT=1
     )
 endif()
 

@@ -15,7 +15,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "GET",
         "name": "db/view",
-        "script": "if (router.args.length != 1) {\n  view.set_page('invalid_request');\n} else {\n  view.set_page('collection_list');\n  \n  const db_name = router.args[0];\n  const collection_list = storage.get_collection_list(db_name);\n}\n"
+        "script": "var router_args = router.get_args();\n\nif (router_args.length != 1) {\n  view.set_page('invalid_request');\n} else {\n  view.set_page('collection_list');\n\n  var db_name = router_args[0];\n  var collection_list = storage.get_collection_list(db_name);\n}"
     },
     {
         "_id": {
@@ -24,7 +24,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "GET",
         "name": "col/view",
-        "script": "if (router.args.length != 2) {\n  view.set_page('invalid_request');\n} else {\n  view.set_page('item_list');\n  \n  const db_name = router.args[0];\n  const collection_name = router.args[1];\n}"
+        "script": "var router_args = router.get_args();\n\nif (router_args.length != 2) {\n  view.set_page('invalid_request');\n} else {\n  view.set_page('item_list');\n\n  var db_name = router_args[0];\n  var collection_name = router_args[1];\n}\n"
     },
     {
         "_id": {
@@ -33,7 +33,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "GET",
         "name": "col/find",
-        "script": "view.set_content_type('application/json');\n\nif (router.args.length != 2) {\n  view.echo(JSON.stringify({}));\n  view.finish();\n} else {\n  const db_name = router.args[0];\n  const collection_name = router.args[1];\n\n  view.echo(storage.simple_find_all(db_name, collection_name, '{}'));\n  view.finish();\n}"
+        "script": "view.set_content_type('application/json');\n\nvar router_args = router.get_args();\n\nif (router_args.length != 2) {\n  view.echo(\"{}\");\n  view.finish();\n} else {\n  var db_name = router_args[0];\n  var collection_name = router_args[1];\n\n  view.echo(storage.simple_find_all(db_name, collection_name, '{}'));\n  view.finish();\n}\n"
     },
     {
         "_id": {
@@ -42,7 +42,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "GET",
         "name": "col/edit",
-        "script": "if (router.args.length != 3) {\n  view.set_page('invalid_request');\n} else {\n  view.set_page('edit_item');\n  \n  const db_name = router.args[0];\n  const collection_name = router.args[1];\n  const oid = router.args[2];\n  \n  const find_query = {\n    '_id': {\n      '$oid': oid\n    }\n  };\n  \n  const value = storage.simple_find_first(db_name, collection_name, JSON.stringify(find_query));\n}\n"
+        "script": "var router_args = router.get_args();\n\nif (router_args.length != 3) {\n  view.set_page('invalid_request');\n} else {\n  view.set_page('edit_item');\n  \n  var db_name = router_args[0];\n  var collection_name = router_args[1];\n  var oid = router_args[2];\n  \n  // Potentialy dangerous!\n  var find_query = '{\"_id\":{\"$oid\":\"' + oid + '\"}}';\n    \n  /*var find_query = {\n    '_id': {\n      '$oid': oid\n    }\n  };*/\n  \n  var value = storage.simple_find_first(db_name, collection_name, /*JSON.stringify(*/find_query/*)*/);\n}\n"
     },
     {
         "_id": {
@@ -51,7 +51,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "GET",
         "name": "col/findOne",
-        "script": "view.set_content_type('application/json');\n\nif (router.args.length != 3) {\n  view.echo(JSON.stringify({}));\n  view.finish();\n} else {\n  const db_name = router.args[0];\n  const collection_name = router.args[1];\n  const oid = router.args[2];\n  \n  const find_query = {\n    '_id': {\n      '$oid': oid\n    }\n  };\n  \n  view.echo(storage.simple_find_first(db_name, collection_name, JSON.stringify(find_query)));\n  view.finish();\n}\n"
+        "script": "view.set_content_type('application/json');\n\nvar router_args = router.get_args();\n\nif (router_args.length != 3) {\n  view.echo('{}');\n  view.finish();\n} else {\n  var db_name = router_args[0];\n  var collection_name = router_args[1];\n  var oid = router_args[2];\n  \n  // Potentialy dangerous!\n  var find_query = '{\"_id\":{\"$oid\":\"' + oid + '\"}}';\n  \n  /*var find_query = {\n    '_id': {\n      '$oid': oid\n    }\n  };*/\n  \n  view.echo(storage.simple_find_first(db_name, collection_name, /*JSON.stringify(*/find_query/*)*/));\n  view.finish();\n}\n"
     },
     {
         "_id": {
@@ -60,7 +60,7 @@
         "app_id": "5e70d5b6d08a50320e37afa5",
         "method": "POST",
         "name": "col/update",
-        "script": "view.set_content_type('application/json');\r\n\r\nif (router.args.length != 3) {\r\n  view.echo(JSON.stringify({\r\n    'status': 'failed'\r\n  }));\r\n  view.finish();\r\n} else {\r\n  const db_name = router.args[0];\r\n  const collection_name = router.args[1];\r\n  const oid = router.args[2];\r\n  const replacement_value = router.get_post();\r\n  \r\n  const query = {\r\n    '_id': {\r\n      '$oid': oid\r\n    }\r\n  };\r\n  \r\n  storage.simple_replace_first(db_name, collection_name, JSON.stringify(query), replacement_value);\r\n\r\n  view.echo(JSON.stringify({\r\n    'status': 'success'\r\n  }));\r\n  view.finish();\r\n}\r\n"
+        "script": "view.set_content_type('application/json');\r\n\r\nvar router_args = router.get_args();\r\n\r\nif (router_args.length != 3) {\r\n  view.echo(JSON.stringify({\r\n    'status': 'failed'\r\n  }));\r\n  view.finish();\r\n} else {\r\n  const db_name = router.args[0];\r\n  const collection_name = router.args[1];\r\n  const oid = router.args[2];\r\n  const replacement_value = router.get_post();\r\n  \r\n  const query = {\r\n    '_id': {\r\n      '$oid': oid\r\n    }\r\n  };\r\n  \r\n  storage.simple_replace_first(db_name, collection_name, JSON.stringify(query), replacement_value);\r\n\r\n  view.echo(JSON.stringify({\r\n    'status': 'success'\r\n  }));\r\n  view.finish();\r\n}\r\n"
     },
     {
         "_id": {

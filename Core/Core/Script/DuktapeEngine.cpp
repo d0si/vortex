@@ -1,4 +1,4 @@
-#include <Core/Script/Duktape.h>
+#include <Core/Script/DuktapeEngine.h>
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
@@ -215,13 +215,13 @@ DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Storage);
 namespace Vortex {
     namespace Core {
         namespace Script {
-            Duktape::Duktape(Framework* framework) : framework_(framework) {
+            DuktapeEngine::DuktapeEngine() {
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
                 ctx_ = new duk::Context();
 #endif
             }
 
-            Duktape::~Duktape() {
+            DuktapeEngine::~DuktapeEngine() {
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
                 if (ctx_ != nullptr) {
                     delete ctx_;
@@ -229,7 +229,9 @@ namespace Vortex {
 #endif
             }
 
-            void Duktape::setup() {
+            void DuktapeEngine::setup(Framework* framework) {
+                framework_ = framework;
+
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
                 ctx_->registerClass<DuktapeBindings::View>();
                 auto view = std::make_shared<DuktapeBindings::View>(framework_);
@@ -249,7 +251,7 @@ namespace Vortex {
 #endif
             }
 
-            void Duktape::exec(std::string script) {
+            void DuktapeEngine::exec(const std::string& script) {
 #ifdef VORTEX_HAS_FEATURE_DUKTAPE
                 if (script.length() > 0) {
                     try {
@@ -268,10 +270,14 @@ namespace Vortex {
                     }
                 }
 #else
-                framework_->view_.echo("Script engine is unavailable.");
+                framework_->view_.echo("Duktape script engine is unavailable.");
                 framework_->view_.respond();
                 framework_->exit();
 #endif
+            }
+
+            IScriptEngine* get_new_duktape_engine() {
+                return new DuktapeEngine();
             }
         }  // namespace Script
     }  // namespace Core
