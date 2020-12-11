@@ -1,114 +1,111 @@
 #include <Core/Util/Password.h>
 #include <stdexcept>
 #include <Core/Util/Random.h>
-#ifdef VORTEX_HAS_FEATURE_CRYPTOPP
+#ifdef HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>
 #include <cryptopp/base64.h>
 #endif
 #define SALT_LENGTH 24
 
-namespace Vortex {
-	namespace Core {
-		namespace Util {
-			namespace Password {
-				std::string hash_password(std::string password) {
-					return hash_password(password, generate_salt());
-				}
+namespace Vortex::Core::Util {
 
-				std::string hash_password(std::string password, std::string salt, unsigned int iterations) {
-#ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-					if (salt.empty()) {
-						salt = generate_salt();
-					}
+    const std::string Password::hash_password(const std::string& password) {
+        return hash_password(password, generate_salt());
+    }
 
-					CryptoPP::byte* salt_bytes = (CryptoPP::byte*) salt.c_str();
+    const std::string Password::hash_password(const std::string& password, std::string& salt, const unsigned int iterations) {
+#ifdef HAS_FEATURE_CRYPTOPP
+        if (salt.empty()) {
+            salt = generate_salt();
+        }
 
-					std::string hash_string = salt + password;
+        const char* salt_char = salt.empty() ? generate_salt().c_str() : salt.c_str();
+        CryptoPP::byte* salt_bytes = (CryptoPP::byte*)salt.c_str();
 
-					CryptoPP::SHA256 hash;
-					CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
-					hash.CalculateDigest(digest, (CryptoPP::byte*) hash_string.c_str(), hash_string.length());
+        std::string hash_string = salt + password;
 
-					for (unsigned int i = 1; i < iterations; ++i) {
-						CryptoPP::byte intermediate[CryptoPP::SHA256::DIGESTSIZE + sizeof(salt_bytes)];
+        CryptoPP::SHA256 hash;
+        CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
+        hash.CalculateDigest(digest, (CryptoPP::byte*)hash_string.c_str(), hash_string.length());
 
-						memcpy(intermediate, digest, CryptoPP::SHA256::DIGESTSIZE);
-						memcpy(intermediate + CryptoPP::SHA256::DIGESTSIZE, salt_bytes, sizeof(salt_bytes));
+        for (unsigned int i = 1; i < iterations; ++i) {
+            CryptoPP::byte intermediate[CryptoPP::SHA256::DIGESTSIZE + sizeof(salt_bytes)];
 
-						hash.CalculateDigest(digest, intermediate, sizeof(intermediate));
-					}
+            memcpy(intermediate, digest, CryptoPP::SHA256::DIGESTSIZE);
+            memcpy(intermediate + CryptoPP::SHA256::DIGESTSIZE, salt_bytes, sizeof(salt_bytes));
 
-					std::string hash_output;
-					CryptoPP::Base64Encoder encoder;
-					CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::InsertLineBreaks(), false);
-					encoder.IsolatedInitialize(params);
-					encoder.Attach(new CryptoPP::StringSink(hash_output));
-					encoder.Put(digest, sizeof(digest));
-					encoder.MessageEnd();
+            hash.CalculateDigest(digest, intermediate, sizeof(intermediate));
+        }
 
-					return "$v1$" + salt + "$" + hash_output;
+        std::string hash_output;
+        CryptoPP::Base64Encoder encoder;
+        CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::InsertLineBreaks(), false);
+        encoder.IsolatedInitialize(params);
+        encoder.Attach(new CryptoPP::StringSink(hash_output));
+        encoder.Put(digest, sizeof(digest));
+        encoder.MessageEnd();
+
+        return "$v1$" + salt + "$" + hash_output;
 #else
-					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+        throw std::runtime_error("HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-				}
+    }
 
-				bool verify_password(std::string password, std::string hashed_password) {
-					if (hashed_password.length() < 80 || hashed_password.substr(0, 4) != "$v1$") {
-						return false;
-					}
+    bool Password::verify_password(const std::string& password, const std::string& hashed_password) {
+        if (hashed_password.length() < 80 || hashed_password.substr(0, 4) != "$v1$") {
+            return false;
+        }
 
-					std::string salt;
-					std::string hash;
-					bool reading_hash = false;
-					char current_char;
-					for (unsigned int i = 4; i < hashed_password.length(); ++i) {
-						current_char = hashed_password[i];
+        std::string salt;
+        std::string hash;
+        bool reading_hash = false;
+        char current_char;
+        for (unsigned int i = 4; i < hashed_password.length(); ++i) {
+            current_char = hashed_password[i];
 
-						if (reading_hash) {
-							hash += current_char;
-						}
-						else {
-							if (current_char == '$') {
-								reading_hash = true;
-							}
-							else {
-								salt += current_char;
-							}
-						}
-					}
+            if (reading_hash) {
+                hash += current_char;
+            }
+            else {
+                if (current_char == '$') {
+                    reading_hash = true;
+                }
+                else {
+                    salt += current_char;
+                }
+            }
+        }
 
-					if (salt.empty() || salt.length() != SALT_LENGTH || hash.empty()) {
-						return false;
-					}
+        if (salt.empty() || salt.length() != SALT_LENGTH || hash.empty()) {
+            return false;
+        }
 
-					std::string new_password_hash = hash_password(password, salt);
+        std::string new_password_hash = hash_password(password, salt);
 
-					return new_password_hash == hashed_password;
-				}
+        return new_password_hash == hashed_password;
+    }
 
-				std::string generate_salt() {
-#ifdef VORTEX_HAS_FEATURE_CRYPTOPP
-					CryptoPP::byte salt[SALT_LENGTH];
+    std::string Password::generate_salt() {
+#ifdef HAS_FEATURE_CRYPTOPP
+        CryptoPP::byte salt[SALT_LENGTH];
 
-					if (Util::Random::rand_bytes(salt, SALT_LENGTH) != 0) {
-						return "";
-					}
+        if (Util::Random::rand_bytes(salt, SALT_LENGTH) != 0) {
+            return "";
+        }
 
-					std::string salt_str;
+        std::string salt_str;
 
-					CryptoPP::Base64Encoder encoder;
-					CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::InsertLineBreaks(), false);
-					encoder.IsolatedInitialize(params);
-					encoder.Attach(new CryptoPP::StringSink(salt_str));
-					encoder.Put(salt, sizeof(salt));
-					encoder.MessageEnd();
+        CryptoPP::Base64Encoder encoder;
+        CryptoPP::AlgorithmParameters params = CryptoPP::MakeParameters(CryptoPP::Name::InsertLineBreaks(), false);
+        encoder.IsolatedInitialize(params);
+        encoder.Attach(new CryptoPP::StringSink(salt_str));
+        encoder.Put(salt, sizeof(salt));
+        encoder.MessageEnd();
 
-					return salt_str;
+        return salt_str;
 #else
-					throw std::runtime_error("VORTEX_HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
+        throw std::runtime_error("HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
-				}
-			}  // namespace Password
-		}  // namespace Util
-	}  // namespace Core
-}  // namespace Vortex
+    }
+
+}

@@ -1,21 +1,14 @@
-#ifndef VORTEX_CORE_UTIL_TIME_H
-#define VORTEX_CORE_UTIL_TIME_H
+#pragma once
 
 #include <string>
 #include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		namespace Util {
-			namespace Time {
-				int VORTEX_CORE_API get_now();
-				int VORTEX_CORE_API get_diff(int time);
-				int VORTEX_CORE_API get_diff(int time_1, int time_2);
-				std::string VORTEX_CORE_API to_string(int time);
-				std::string VORTEX_CORE_API get_now_string();
-			}  // namespace Time
-		}  // namespace Util
-	}  // namespace Core
-}  // namespace Vortex
+namespace Vortex::Core::Util::Time {
 
-#endif  // VORTEX_CORE_UTIL_TIME_H
+    VORTEX_CORE_API int get_now();
+    VORTEX_CORE_API int get_diff(const int time);
+    VORTEX_CORE_API int get_diff(const int time_1, const int time_2);
+    VORTEX_CORE_API const std::string to_string(const int time);
+    VORTEX_CORE_API const std::string get_now_string();
+
+}  // namespace Vortex::Core::Util::Time

@@ -1,102 +1,95 @@
 #include <Core/Storage/Storage.h>
-#include <Core/Framework.h>
 #include <Core/Storage/Filesystem/FilesystemBackend.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <Core/Storage/Mongo/MongoBackend.h>
 #endif
 
-namespace Vortex {
-	namespace Core {
-		namespace Storage {
-			Storage::Storage() {
-				
-			}
+namespace Vortex::Core::Storage {
 
-			void Storage::initialize(const Maze::Element& storage_config) {
-				mtx_.lock();
-				storage_config_ = storage_config;
-				initialized_ = false;
+    void Storage::initialize(const Maze::Element& storage_config) {
+        _mtx.lock();
+        _storage_config = storage_config;
+        _initialized = false;
 
-				Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::filesystem_exports.get_backend_instance());
-				fs_backend->set_config(storage_config.get("config").get("Filesystem"));
+        Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::filesystem_exports.get_backend_instance());
+        fs_backend->set_config(storage_config.get("config").get("Filesystem"));
 
-				available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
-					Core::Storage::Filesystem::filesystem_exports.backend_name,
-					static_cast<Core::Storage::IStorageBackend*>(fs_backend)
-					));
+        _available_backends.push_back(std::make_pair<std::string, StorageBackendInterface*>(
+            Core::Storage::Filesystem::filesystem_exports.backend_name,
+            static_cast<Core::Storage::StorageBackendInterface*>(fs_backend)
+            ));
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
-				Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::mongo_exports.get_backend_instance());
-				mongo_backend->get_client()->set_config(storage_config.get("config").get("Mongo"));
+                Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::mongo_exports.get_backend_instance());
+                mongo_backend->get_client()->set_config(storage_config.get("config").get("Mongo"));
 
-				if (mongo_backend->get_client()->is_enabled()) {
-					mongo_backend->get_client()->connect();
+                if (mongo_backend->get_client()->is_enabled()) {
+                    mongo_backend->get_client()->connect();
 
-					available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
-						Core::Storage::Mongo::mongo_exports.backend_name,
-						static_cast<Core::Storage::IStorageBackend*>(mongo_backend)
-						));
+                    available_backends_.push_back(std::make_pair<std::string, StorageBackendInterface*>(
+                        Core::Storage::Mongo::mongo_exports.backend_name,
+                        static_cast<Core::Storage::StorageBackendInterface*>(mongo_backend)
+                        ));
 
-					default_backend_ = Core::Storage::Mongo::mongo_exports.backend_name;
-				}
-				else {
-					default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
-				}
+                    _default_backend = Core::Storage::Mongo::mongo_exports.backend_name;
+                }
+                else {
+                    _default_backend = Core::Storage::Filesystem::filesystem_exports.backend_name;
+                }
 #else
-				default_backend_ = Core::Storage::Filesystem::filesystem_exports.backend_name;
+                _default_backend = Core::Storage::Filesystem::filesystem_exports.backend_name;
 #endif
 
-				if (storage_config_.is_string("default_backend")) {
-					const std::string backend_name = storage_config["default_backend"].get_string();
-					bool backend_exists = false;
+                if (_storage_config.is_string("default_backend")) {
+                    const std::string backend_name = storage_config["default_backend"].get_string();
+                    bool backend_exists = false;
 
-					for (auto b : available_backends_) {
-						if (b.first == backend_name) {
-							default_backend_ = backend_name;
-							backend_exists = true;
-							break;
-						}
-					}
+                    for (auto b : _available_backends) {
+                        if (b.first == backend_name) {
+                            _default_backend = backend_name;
+                            backend_exists = true;
+                            break;
+                        }
+                    }
 
-					if (!backend_exists) {
-						throw std::runtime_error("Storage backend " + backend_name + " requested in config is not available");
-						// TODO: Throw more useful exception
-					}
-				}
+                    if (!backend_exists) {
+                        throw std::runtime_error("Storage backend " + backend_name + " requested in config is not available");
+                        // TODO: Throw more useful exception
+                    }
+                }
 
-				initialized_ = true;
-				mtx_.unlock();
-			}
+        _initialized = true;
+        _mtx.unlock();
+    }
 
-			const bool Storage::is_initialized() const {
-				return initialized_;
-			}
+    const bool Storage::is_initialized() const {
+        return _initialized;
+    }
 
-			IStorageBackend* Storage::get_backend() {
-				return get_backend(default_backend_);
-			}
+    StorageBackendInterface* Storage::get_backend() {
+        return get_backend(_default_backend);
+    }
 
-			IStorageBackend* Storage::get_backend(const std::string& backend_name) {
-				if (!initialized_) {
-					throw std::runtime_error("Storage instance is not initialized");
-				}
+    StorageBackendInterface* Storage::get_backend(const std::string& backend_name) {
+        if (!_initialized) {
+            throw std::runtime_error("Storage instance is not initialized");
+        }
 
-				if (available_backends_.size() == 0) {
-					return nullptr;
-				}
+        if (_available_backends.size() == 0) {
+            return nullptr;
+        }
 
-				if (available_backends_[0].first == backend_name) {
-					return available_backends_[0].second;
-				}
+        if (_available_backends[0].first == backend_name) {
+            return _available_backends[0].second;
+        }
 
-				for (int i = 1; i < available_backends_.size(); ++i) {
-					if (available_backends_[i].first == backend_name) {
-						return available_backends_[i].second;
-					}
-				}
+        for (int i = 1; i < _available_backends.size(); ++i) {
+            if (_available_backends[i].first == backend_name) {
+                return _available_backends[i].second;
+            }
+        }
 
-				return nullptr;
-			}
-		}  // namespace Storage
-	}  // namespace Core
-}  // namespace Vortex
+        return nullptr;
+    }
+
+}

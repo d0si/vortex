@@ -1,5 +1,4 @@
-#ifndef VORTEX_CORE_STORAGE_MONGO_DB_H
-#define VORTEX_CORE_STORAGE_MONGO_DB_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -8,33 +7,28 @@
 #endif
 #include <Core/Storage/Mongo/Collection.h>
 
-namespace Vortex {
-	namespace Core {
-		namespace Storage {
-			namespace Mongo {
-				class Mongo;
+namespace Vortex::Core::Storage::Mongo {
 
-				class Db {
-				private:
+    class Mongo;
+
+
+    class Db {
+    public:
+        Db();
 #ifdef VORTEX_HAS_FEATURE_MONGO
-					mongocxx::database database_;
+        Db(mongocxx::database database);
 #endif
 
-				public:
-					Db();
+        VORTEX_CORE_API Collection get_collection(const std::string& collection_name);
+
+        VORTEX_CORE_API std::vector<std::string> list_collections();
+
+        VORTEX_CORE_API void drop_database();
+
+    private:
 #ifdef VORTEX_HAS_FEATURE_MONGO
-					Db(mongocxx::database database);
+        mongocxx::database _database;
 #endif
+    };
 
-					Collection get_collection(std::string collection_name);
-
-					std::vector<std::string> list_collections();
-
-					void drop_database();
-				};
-			}  // namespace Mongo
-		}  // namespace Storage
-	}  // namespace Core
-}  // namespace Vortex
-
-#endif  // VORTEX_CORE_STORAGE_MONGO_DB_H
+}  // namespace Vortex::Core::Storage::Mongo

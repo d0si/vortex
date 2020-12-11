@@ -15,7 +15,7 @@ add_library(Vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC VORTEX_CORE_EXPORTS)
 
-find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}

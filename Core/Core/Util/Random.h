@@ -1,18 +1,11 @@
-#ifndef VORTEX_CORE_UTIL_RANDOM_H
-#define VORTEX_CORE_UTIL_RANDOM_H
+#pragma once
 
 #include <string>
 #include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		namespace Util {
-			namespace Random {
-				std::string VORTEX_CORE_API random_string(unsigned int length = 32, const std::string char_list = "0123456789" "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-				int VORTEX_CORE_API rand_bytes(void* const byte_buf, const size_t byte_len);
-			}  // namespace Random
-		}  // namespace Util
-	}  // namespace Core
-}  // namespace Vortex
+namespace Vortex::Core::Util::Random {
 
-#endif  // VORTEX_CORE_UTIL_RANDOM_H
+    VORTEX_CORE_API const std::string random_string(const unsigned int length = 32, const std::string& char_list = "0123456789" "abcdefghijklmnopqrstuvwxyz" "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    VORTEX_CORE_API int rand_bytes(void* const byte_buf, const unsigned int byte_len);
+
+}  // namespace Vortex::Core::Util::Random

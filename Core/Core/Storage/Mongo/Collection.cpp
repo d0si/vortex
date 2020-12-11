@@ -4,124 +4,117 @@
 #endif
 #include <Maze/Maze.hpp>
 
-namespace Vortex {
-    namespace Core {
-        namespace Storage {
-            namespace Mongo {
-                Collection::Collection() {
+namespace Vortex::Core::Storage::Mongo {
 
-                }
+    Collection::Collection() {}
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                Collection::Collection(mongocxx::collection collection) : collection_(collection) {
-
-                }
+    Collection::Collection(mongocxx::collection collection)
+        : _collection(collection) {}
 #endif
 
-                Maze::Element Collection::find(const Maze::Element& query) {
-                    return find(query.to_json());
-                }
+    Maze::Element Collection::find(const Maze::Element& query) {
+        return find(query.to_json());
+    }
 
-                Maze::Element Collection::find(const std::string& json_query) {
-                    Maze::Element results(Maze::Type::Array);
+    Maze::Element Collection::find(const std::string& json_query) {
+        Maze::Element results(Maze::Type::Array);
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    auto values = collection_.find(bsoncxx::from_json(json_query));
-                    for (auto it = values.begin(); it != values.end(); it++) {
-                        results << Maze::Element::from_json(bsoncxx::to_json(*it));
-                    }
+        auto values = _collection.find(bsoncxx::from_json(json_query));
+        for (auto it = values.begin(); it != values.end(); it++) {
+            results << Maze::Element::from_json(bsoncxx::to_json(*it));
+        }
 #endif
 
-                    return results;
-                }
+        return results;
+    }
 
-                Maze::Element Collection::find_by_id(const std::string& oid) {
-                    Maze::Element query(
-                        { "id" },
-                        { Maze::Element({ "$oid" }, { oid }) }
-                    );
+    Maze::Element Collection::find_by_id(const std::string& oid) {
+        Maze::Element query(
+            { "id" },
+            { Maze::Element({ "$oid" }, { oid }) }
+        );
 
-                    return find_one(query);
-                }
+        return find_one(query);
+    }
 
-                Maze::Element Collection::find_one(const Maze::Element& query) {
-                    return find_one(query.to_json());
-                }
+    Maze::Element Collection::find_one(const Maze::Element& query) {
+        return find_one(query.to_json());
+    }
 
-                Maze::Element Collection::find_one(const std::string& json_query) {
+    Maze::Element Collection::find_one(const std::string& json_query) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    auto value = collection_.find_one(bsoncxx::from_json(json_query));
+        auto value = _collection.find_one(bsoncxx::from_json(json_query));
 
-                    if (value) {
-                        return Maze::Element::from_json(bsoncxx::to_json(value.value()));
-                    }
+        if (value) {
+            return Maze::Element::from_json(bsoncxx::to_json(value.value()));
+        }
 #endif
 
-                    return Maze::Element(Maze::Type::Object);
-                }
+        return Maze::Element(Maze::Type::Object);
+    }
 
-                void Collection::delete_one(const Maze::Element& query) {
-                    delete_one(query.to_json());
-                }
+    void Collection::delete_one(const Maze::Element& query) {
+        delete_one(query.to_json());
+    }
 
-                void Collection::delete_one(const std::string& json_query) {
+    void Collection::delete_one(const std::string& json_query) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    collection_.delete_one(bsoncxx::from_json(json_query));
+        _collection.delete_one(bsoncxx::from_json(json_query));
 #endif
-                }
+    }
 
-                void Collection::delete_many(const Maze::Element& query) {
-                    delete_many(query.to_json());
-                }
+    void Collection::delete_many(const Maze::Element& query) {
+        delete_many(query.to_json());
+    }
 
-                void Collection::delete_many(const std::string& json_query) {
+    void Collection::delete_many(const std::string& json_query) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    collection_.delete_many(bsoncxx::from_json(json_query));
+        _collection.delete_many(bsoncxx::from_json(json_query));
 #endif
-                }
+    }
 
-                void Collection::insert_one(const Maze::Element& value) {
-                    insert_one(value.to_json());
-                }
+    void Collection::insert_one(const Maze::Element& value) {
+        insert_one(value.to_json());
+    }
 
-                void Collection::insert_one(const std::string& json_value) {
+    void Collection::insert_one(const std::string& json_value) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    collection_.insert_one(bsoncxx::from_json(json_value));
+        _collection.insert_one(bsoncxx::from_json(json_value));
 #endif
-                }
+    }
 
-                void Collection::insert_many(const Maze::Element& values) {
-                    std::vector<std::string> json_values;
+    void Collection::insert_many(const Maze::Element& values) {
+        std::vector<std::string> json_values;
 
-                    for (auto it = values.begin(); it != values.end(); it++) {
-                        json_values.push_back(it->to_json());
-                    }
+        for (auto it = values.begin(); it != values.end(); it++) {
+            json_values.push_back(it->to_json());
+        }
 
-                    insert_many(json_values);
-                }
+        insert_many(json_values);
+    }
 
-                void Collection::insert_many(const std::vector<std::string>& json_values_array) {
+    void Collection::insert_many(const std::vector<std::string>& json_values_array) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    std::vector<bsoncxx::document::value> bson_values;
+        std::vector<bsoncxx::document::value> bson_values;
 
-                    for (auto it = json_values_array.begin(); it != json_values_array.end(); it++) {
-                        bson_values.push_back(bsoncxx::from_json(*it));
-                    }
+        for (auto it = json_values_array.begin(); it != json_values_array.end(); it++) {
+            bson_values.push_back(bsoncxx::from_json(*it));
+        }
 
-                    collection_.insert_many(bson_values);
+        _collection.insert_many(bson_values);
 #endif
-                }
+    }
 
-                void Collection::replace_one(const Maze::Element& query, const Maze::Element& replacement_value) {
-                    replace_one(query.to_json(), replacement_value.to_json());
-                }
+    void Collection::replace_one(const Maze::Element& query, const Maze::Element& replacement_value) {
+        replace_one(query.to_json(), replacement_value.to_json());
+    }
 
-                void Collection::replace_one(const std::string& json_query, const std::string& json_replacement_value) {
+    void Collection::replace_one(const std::string& json_query, const std::string& json_replacement_value) {
 #ifdef VORTEX_HAS_FEATURE_MONGO
-                    collection_.replace_one(bsoncxx::from_json(json_query), bsoncxx::from_json(json_replacement_value));
+        _collection.replace_one(bsoncxx::from_json(json_query), bsoncxx::from_json(json_replacement_value));
 #endif
-                }
-            }  // namespace Mongo
-        }  // namespace Storage
-    }  // namespace Core
-}  // namespace Vortex
+    }
+
+}

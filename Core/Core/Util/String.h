@@ -1,27 +1,20 @@
-#ifndef VORTEX_CORE_UTIL_STRING_H
-#define VORTEX_CORE_UTIL_STRING_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		namespace Util {
-			namespace String {
-				std::string VORTEX_CORE_API join(const std::vector<std::string>& values, const std::string& separator);
-				std::vector<std::string> VORTEX_CORE_API split(const std::string& value, const std::string& delimiter);
+namespace Vortex::Core::Util::String {
 
-				std::string VORTEX_CORE_API trim(const std::string& value);
-				std::string VORTEX_CORE_API trim_left(const std::string& value);
-				std::string VORTEX_CORE_API trim_right(const std::string& value);
+    VORTEX_CORE_API const std::string join(const std::vector<std::string>& values, const std::string& separator);
+    VORTEX_CORE_API std::vector<std::string> split(const std::string& value, const std::string& delimiter);
 
-				bool VORTEX_CORE_API contains(const std::string& value, const std::string& search);
-				bool VORTEX_CORE_API starts_with(const std::string& value, const std::string& search);
-				bool VORTEX_CORE_API ends_with(const std::string& value, const std::string& search);
-			}  // namespace String
-		}  // namespace Util
-	}  // namespace Core
-}  // namespace Vortex
+    VORTEX_CORE_API const std::string trim(const std::string& value);
+    VORTEX_CORE_API const std::string trim_left(const std::string& value);
+    VORTEX_CORE_API const std::string trim_right(const std::string& value);
 
-#endif  // VORTEX_CORE_UTIL_STRING_H
+    VORTEX_CORE_API bool contains(const std::string& value, const std::string& search);
+    VORTEX_CORE_API bool starts_with(const std::string& value, const std::string& search);
+    VORTEX_CORE_API bool ends_with(const std::string& value, const std::string& search);
+
+}  // namespace Vortex::Core::Util::String
