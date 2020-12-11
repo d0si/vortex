@@ -2,7 +2,7 @@
 #define VORTEX_CORE_STORAGE_FILESYSTEM_FILESYSTEMBACKEND_H
 
 #include <Core/Storage/IStorageBackend.h>
-#include <Maze/Array.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -10,7 +10,7 @@ namespace Vortex {
 			namespace Filesystem {
 				class FilesystemBackend: public Core::Storage::IStorageBackend {
 				private:
-					Maze::Object filesystem_config_;
+					Maze::Element filesystem_config_;
 					bool cache_enabled_ = false;
 					bool in_memory_only_ = false;
 					int cache_expiry_ = 60;
@@ -19,7 +19,7 @@ namespace Vortex {
 					FilesystemBackend();
 					~FilesystemBackend();
 
-					void set_config(const Maze::Object& filesystem_config);
+					void set_config(const Maze::Element& filesystem_config);
 
 					// Simple query
 					virtual void simple_insert(const std::string& database, const std::string& collection, const std::string& json_value);
@@ -41,9 +41,9 @@ namespace Vortex {
 					virtual bool collection_exists(const std::string& database, const std::string& collection);
 
 				private:
-					bool check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const;
-					Maze::Array get_collection_entries(const std::string& database, const std::string& collection) const;
-					void save_collection_entries(const std::string& database, const std::string& collection, const Maze::Array& values) const;
+					bool check_if_matches_simple_query(const Maze::Element& value, Maze::Element simple_query) const;
+					Maze::Element get_collection_entries(const std::string& database, const std::string& collection) const;
+					void save_collection_entries(const std::string& database, const std::string& collection, const Maze::Element& values) const;
 				};
 
 				Core::Storage::IStorageBackend* get_filesystem_backend();

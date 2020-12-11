@@ -24,7 +24,7 @@ namespace Vortex {
 			}
 
 			void Script::setup() {
-				Maze::Object script_config = framework_->get_config()["script"].get_object();
+				const Maze::Element& script_config = framework_->get_config().get("script");
 #ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
 				default_engine_name_ = "DeltaScript";
 #elif defined(VORTEX_HAS_FEATURE_DUKTAPE)
@@ -32,8 +32,8 @@ namespace Vortex {
 #endif
 
 				if (script_config.is_object("javascript")) {
-					if (script_config["javascript"].get_object().is_string("default_engine")) {
-						default_engine_name_ = script_config["javascript"].get_object()["default_engine"].get_string();
+					if (script_config["javascript"].is_string("default_engine")) {
+						default_engine_name_ = script_config["javascript"]["default_engine"].get_string();
 					}
 				}
 

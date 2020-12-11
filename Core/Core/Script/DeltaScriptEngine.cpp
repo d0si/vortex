@@ -25,7 +25,7 @@ namespace Vortex {
             void DeltaScriptEngine::setup(Framework* framework) {
                 framework_ = framework;
 
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
+#ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
                 ctx_->add_native_function("function view.echo(value)", [](DeltaScript::Variable* var, void* data) {
                     ((Framework*)(data))->view_.echo(var->find_child("value")->var->get_string());
                     }, framework_);
@@ -89,7 +89,7 @@ namespace Vortex {
                     }, framework_);
                 ctx_->add_native_function("function router.get_cookies_json()", [](DeltaScript::Variable* var, void* data) {
                     auto cookies = ((Framework*)(data))->router_.get_cookies();
-                    Maze::Object cookies_obj;
+                    Maze::Element cookies_obj(Maze::Type::Object);
 
                     for (auto cookie : cookies) {
                         cookies_obj.set(cookie.first, cookie.second);
@@ -188,7 +188,7 @@ namespace Vortex {
             }
 
             void DeltaScriptEngine::exec(const std::string& script) {
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
+#ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
                 if (script.length() > 0) {
                     try {
                         ctx_->execute(script);

@@ -95,7 +95,7 @@ namespace DuktapeBindings {
 
         std::string get_cookies_json() const {
             auto cookies = framework_->router_.get_cookies();
-            Maze::Object cookies_obj;
+            Maze::Element cookies_obj(Maze::Type::Object);
 
             for (auto cookie : cookies) {
                 cookies_obj.set(cookie.first, cookie.second);

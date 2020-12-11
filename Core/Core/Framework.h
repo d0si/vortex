@@ -3,7 +3,7 @@
 
 #include <string>
 #include <boost/beast/http.hpp>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 #include <Core/Router.h>
 #include <Core/Host.h>
 #include <Core/Application.h>
@@ -18,7 +18,7 @@ namespace Vortex {
 			std::string client_ip_;
 			boost::beast::http::request<boost::beast::http::string_body>* request_;
 			boost::beast::http::response<boost::beast::http::string_body>* response_;
-			Maze::Object config_;
+			Maze::Element config_;
 
 			Router router_;
 			Host host_;
@@ -28,7 +28,7 @@ namespace Vortex {
 			Script::Script script_;
 
 			Framework(
-				Maze::Object config,
+				const Maze::Element& config,
 				std::string client_ip,
 				boost::beast::http::request<boost::beast::http::string_body>* request,
 				boost::beast::http::response<boost::beast::http::string_body>* response);
@@ -37,7 +37,7 @@ namespace Vortex {
 			void run();
 			void exit();
 
-			Maze::Object get_config();
+			const Maze::Element& get_config() const;
 		};
 	}  // namespace Core
 }  // namespace Vortex

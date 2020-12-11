@@ -2,7 +2,7 @@
 #define VORTEX_CORE_FRAMEWORK_HOST_H
 
 #include <string>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -11,19 +11,19 @@ namespace Vortex {
 		class Host {
 		private:
 			Framework* framework_;
-			Maze::Object host_;
+			Maze::Element host_;
 
 		public:
 			Host(Framework* framework);
 
-			void find(std::string hostname);
+			void find(const std::string& hostname);
 
-			std::string get_id();
-			std::string get_hostname();
-			std::string get_app_id();
-			Maze::Object get_config();
-			std::string get_script();
-			std::string get_post_script();
+			const std::string& get_id() const;
+			const std::string& get_hostname() const;
+			const std::string& get_app_id() const;
+			const Maze::Element get_config() const;
+			const std::string& get_script() const;
+			const std::string& get_post_script() const;
 		};
 	}  // namespace Core
 }  // namespace Vortex

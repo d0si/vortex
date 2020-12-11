@@ -17,7 +17,7 @@ namespace Vortex {
 	namespace Server {
 		namespace Http {
 			HttpSession::HttpSession(
-				Maze::Object config,
+				const Maze::Element& config,
 				tcp::socket socket)
 				: config_(config), stream_(std::move(socket)) {
 

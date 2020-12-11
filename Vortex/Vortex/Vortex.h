@@ -3,10 +3,7 @@
 
 #include <string>
 #include <vector>
-
-namespace Maze {
-	class Object;
-}
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	void start_vortex(std::vector<std::string> args);
@@ -17,9 +14,9 @@ namespace Vortex {
 	void start_from_config(const std::string& config_file_name);
 
 	void start_server();
-	void start_server(Maze::Object config);
+	void start_server(const Maze::Element& config);
 
-	void start_http_server(Maze::Object config);
+	void start_http_server(const Maze::Element& config);
 }  // namespace Vortex
 
 #endif  // VORTEX_VORTEX_VORTEX_H

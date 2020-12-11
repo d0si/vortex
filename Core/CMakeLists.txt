@@ -1,53 +1,21 @@
 project(Core)
 
-# Set cpp sources
-set(CORE_SOURCES
-    Core/Framework.cpp
-    Core/CommonRuntime.cpp
-    Core/Router.cpp
-    Core/Host.cpp
-    Core/Application.cpp
-    Core/Controller.cpp
-    Core/View.cpp
 
-    Core/Storage/Storage.cpp
-    Core/Storage/Mongo/Mongo.cpp
-    Core/Storage/Mongo/Db.cpp
-    Core/Storage/Mongo/Collection.cpp
-    Core/Storage/Mongo/MongoBackend.cpp
-    Core/Storage/Filesystem/FilesystemBackend.cpp
+#
+# Include project file list variables
+#
+include(Core.cmake)
 
-    Core/Cache/Cache.cpp
-    Core/Cache/Backends/RedisBackend.cpp
-    Core/Cache/Backends/MemoryCacheBackend.cpp
-    Core/Cache/Backends/DummyCacheBackend.cpp
 
-    Core/Script/Script.cpp
-    Core/Script/DuktapeEngine.cpp
-    Core/Script/DeltaScriptEngine.cpp
-
-    Core/Util/Time.cpp
-    Core/Util/Random.cpp
-    Core/Util/Password.cpp
-    Core/Util/String.cpp
-    Core/Util/Hash.cpp
-
-    Core/Exception/VortexException.cpp
-    Core/Exception/StorageException.cpp
-    Core/Exception/CacheException.cpp
-)
-
-add_library(${PROJECT_NAME}
-    ${CORE_SOURCES}
-)
-
+#
+# Add library
+#
+add_library(${PROJECT_NAME} SHARED ${CORE_SOURCES})
 add_library(Vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-find_package(Boost REQUIRED COMPONENTS system)
+target_compile_definitions(${PROJECT_NAME} PUBLIC VORTEX_CORE_EXPORTS)
 
-if (VORTEX_ENABLE_FEATURE_MONGO)
-    find_package(libmongocxx REQUIRED)
-endif()
+find_package(Boost REQUIRED COMPONENTS system)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}
@@ -55,106 +23,28 @@ target_include_directories(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    PUBLIC maze
+    PUBLIC Maze::Maze
     PUBLIC ${Boost_LIBRARIES}
 )
 
+include(${PROJECT_SOURCE_DIR}/../cmake/AddMaze.cmake)
+
+
+#
+# Configure enabled features
+#
 if (VORTEX_ENABLE_FEATURE_MONGO)
-    target_include_directories(${PROJECT_NAME}
-        PUBLIC ${LIBMONGOCXX_INCLUDE_DIRS}
-    )
-
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC ${LIBMONGOCXX_LIBRARIES}
-    )
-
-    target_compile_definitions(${PROJECT_NAME}
-        PUBLIC VORTEX_HAS_FEATURE_MONGO=1
-    )
+    include(${PROJECT_SOURCE_DIR}/../cmake/AddMongocxx.cmake)
 endif()
-
 if (VORTEX_ENABLE_FEATURE_REDIS)
-    target_include_directories(${PROJECT_NAME}
-        PUBLIC ${CMAKE_SOURCE_DIR}/libs/cpp_redis/includes
-        PUBLIC ${CMAKE_SOURCE_DIR}/libs/cpp_redis/tacopie/includes
-    )
-
-    if (VCPKG_TOOLCHAIN)
-        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-            target_link_directories(${PROJECT_NAME}
-                PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib
-            )
-        else()
-            target_link_directories(${PROJECT_NAME}
-                PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib
-            )
-        endif()
-    endif()
-
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC cpp_redis
-        PUBLIC tacopie
-    )
-
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE VORTEX_HAS_FEATURE_REDIS=1
-    )
+    include(${PROJECT_SOURCE_DIR}/../cmake/AddCppRedis.cmake)
 endif()
-
 if (VORTEX_ENABLE_FEATURE_DELTASCRIPT)
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC DeltaScript
-    )
-
-    target_compile_definitions(${PROJECT_NAME}
-        PRIVATE VORTEX_HAS_FEATURE_DELTASCRIPT=1
-    )
+    include(${PROJECT_SOURCE_DIR}/../cmake/AddDeltaScript.cmake)
 endif()
-
 if (VORTEX_ENABLE_FEATURE_DUKTAPE)
-    target_include_directories(${PROJECT_NAME}
-        PUBLIC ${CMAKE_SOURCE_DIR}/dependencies/duktape-cpp/src
-    )
-
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC duktape
-    )
-    
-    if (VCPKG_TOOLCHAIN)
-        if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-            target_link_directories(${PROJECT_NAME}
-                PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/lib
-            )
-        else()
-            target_link_directories(${PROJECT_NAME}
-                PUBLIC ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/lib
-            )
-        endif()
-    endif()
-
-    target_compile_definitions(${PROJECT_NAME}
-        PUBLIC VORTEX_HAS_FEATURE_DUKTAPE=1
-    )
+    include(${PROJECT_SOURCE_DIR}/../cmake/AddDuktapeCpp.cmake)
 endif()
-
 if (VORTEX_ENABLE_FEATURE_CRYPTOPP)
-    if (VCPKG_TOOLCHAIN)
-        find_package(cryptopp CONFIG REQUIRED)
-
-        target_link_libraries(${PROJECT_NAME}
-	        PUBLIC cryptopp-static
-        )
-    else()
-        target_link_libraries(${PROJECT_NAME}
-	        PUBLIC cryptopp
-        )
-    endif()
-
-    target_compile_definitions(${PROJECT_NAME}
-        PUBLIC VORTEX_HAS_FEATURE_CRYPTOPP=1
-    )
+    include(${PROJECT_SOURCE_DIR}/../cmake/AddCryptopp.cmake)
 endif()
-
-target_compile_definitions(${PROJECT_NAME}
-    PUBLIC ${LIBMONGOCXX_DEFINITIONS}
-)

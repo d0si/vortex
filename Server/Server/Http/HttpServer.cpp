@@ -14,20 +14,20 @@ namespace ip = boost::asio::ip;
 namespace Vortex {
 	namespace Server {
 		namespace Http {
-			void HttpServer::start(Maze::Object config) {
-				this->config_ = config;
+			void HttpServer::start(const Maze::Element& config) {
+ 				this->config_ = config;
 
 				if (!Core::CommonRuntime::Instance.get_storage()->is_initialized()) {
-					Core::CommonRuntime::Instance.get_storage()->initialize(config["storage"].get_object());
+					Core::CommonRuntime::Instance.get_storage()->initialize(config.get("storage", Maze::Type::Object));
 				}
 
 				if (!Core::CommonRuntime::Instance.get_cache()->is_initialized()) {
-					Core::CommonRuntime::Instance.get_cache()->initialize(config["cache"].get_object());
+					Core::CommonRuntime::Instance.get_cache()->initialize(config.get("cache", Maze::Type::Object));
 				}
 
-				Maze::Object server_config;
+				Maze::Element server_config(Maze::Type::Object);
 				if (config_.is_object("server")) {
-					server_config = config_["server"].get_object();
+					server_config = config_.get("server");
 				}
 
 				ip::address address;

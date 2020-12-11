@@ -1,5 +1,4 @@
 #include <Core/Storage/Mongo/Mongo.h>
-#include <Maze/Element.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -9,7 +8,7 @@ namespace Vortex {
 					connect();
 				}
 
-				Mongo::Mongo(const Maze::Object& mongo_config) {
+				Mongo::Mongo(const Maze::Element& mongo_config) {
 					set_config(mongo_config);
 					connect();
 				}
@@ -24,7 +23,7 @@ namespace Vortex {
 #endif
 				}
 
-				void Mongo::set_config(const Maze::Object& mongo_config) {
+				void Mongo::set_config(const Maze::Element& mongo_config) {
 					mongo_config_ = mongo_config;
 
 					if (mongo_config_.is_bool("enabled")) {
@@ -149,7 +148,7 @@ namespace Vortex {
 						Collection old_collection = old_db.get_collection(*it);
 						Collection new_collection = new_db.get_collection(*it);
 
-						Maze::Array old_values = old_collection.find(Maze::Object());
+						Maze::Element old_values = old_collection.find(std::string("{}"));
 
 						new_collection.insert_many(old_values);
 					}

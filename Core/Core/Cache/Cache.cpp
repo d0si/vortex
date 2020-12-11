@@ -13,7 +13,7 @@ namespace Vortex {
 
             }
 
-            void Cache::initialize(const Maze::Object& cache_config) {
+            void Cache::initialize(const Maze::Element& cache_config) {
                 mtx_.lock();
                 cache_config_ = cache_config;
                 initialized_ = false;
@@ -25,9 +25,9 @@ namespace Vortex {
                     ));
                 default_backend_ = Backends::dummy_cache_exports.backend_name;
 
-                if (cache_config_.is_bool("enabled") && cache_config_["enabled"].get_bool() == true) {
+                if (cache_config.is_bool("enabled") && cache_config["enabled"].get_bool() == true) {
                     Backends::MemoryCacheBackend* memory_backend = static_cast<Backends::MemoryCacheBackend*>(Backends::memory_cache_exports.get_backend_instance());
-                    memory_backend->set_config(cache_config_["config"].get_object()["MemoryCache"].get_object());
+                    memory_backend->set_config(cache_config.get("config").get("MemoryCache"));
                     available_backends_.push_back(std::make_pair<std::string, ICacheBackend*>(
                         Backends::memory_cache_exports.backend_name,
                         static_cast<ICacheBackend*>(memory_backend)
@@ -40,7 +40,7 @@ namespace Vortex {
 
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     Backends::RedisBackend* redis_backend = static_cast<Backends::RedisBackend*>(Backends::redis_exports.get_backend_instance());
-                    redis_backend->set_config(cache_config_["config"].get_object()["Redis"].get_object());
+                    redis_backend->set_config(cache_config.get("config").get("Redis"));
 
                     if (redis_backend->is_enabled()) {
                         redis_backend->connect();

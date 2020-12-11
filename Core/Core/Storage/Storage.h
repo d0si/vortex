@@ -13,14 +13,14 @@ namespace Vortex {
 			private:
 				std::vector<std::pair<std::string, IStorageBackend*>> available_backends_;
 				std::string default_backend_;
-				Maze::Object storage_config_;
+				Maze::Element storage_config_;
 				bool initialized_ = false;
 				std::mutex mtx_;
 
 			public:
 				Storage();
 
-				void initialize(const Maze::Object& storage_config);
+				void initialize(const Maze::Element& storage_config);
 				const bool is_initialized() const;
 
 				IStorageBackend* get_backend();

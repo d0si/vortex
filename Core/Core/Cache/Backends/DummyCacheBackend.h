@@ -2,7 +2,7 @@
 #define VORTEX_CORE_CACHE_BACKENDS_DUMMYCACHEBACKEND_H
 
 #include <Core/Cache/ICacheBackend.h>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
     namespace Core {

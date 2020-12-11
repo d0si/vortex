@@ -2,7 +2,7 @@
 #define VORTEX_CORE_CACHE_ICACHEBACKEND_H
 
 #include <string>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
     namespace Core {
@@ -10,7 +10,7 @@ namespace Vortex {
             class ICacheBackend {
             public:
                 ICacheBackend() {};
-                ICacheBackend(const Maze::Object& config) {};
+                ICacheBackend(const Maze::Element& config) {};
                 virtual ~ICacheBackend() {};
 
                 virtual std::string get(const std::string& key) = 0;

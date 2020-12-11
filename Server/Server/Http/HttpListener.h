@@ -3,7 +3,7 @@
 
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Server {
@@ -12,11 +12,11 @@ namespace Vortex {
 			private:
 				boost::asio::io_context& ioC_;
 				boost::asio::ip::tcp::acceptor acceptor_;
-				Maze::Object config_;
+				Maze::Element config_;
 
 			public:
 				HttpListener(
-					Maze::Object config,
+					const Maze::Element& config,
 					boost::asio::io_context& ioC,
 					boost::asio::ip::tcp::endpoint endpoint);
 

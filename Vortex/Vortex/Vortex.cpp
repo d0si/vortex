@@ -3,8 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
-#include <Maze/Object.hpp>
-#include <Maze/Array.hpp>
+#include <Maze/Maze.hpp>
 #include <Server/Http/HttpServer.h>
 #include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
@@ -108,7 +107,7 @@ namespace Vortex {
 				exit_with_error(1000);
 			}
 			else {
-				Maze::Object config, server_config;
+				Maze::Element config(Maze::Type::Object), server_config(Maze::Type::Object);
 				server_config.set("port", port);
 				server_config.set("address", address);
 				server_config.set("thread_count", thread_count);
@@ -121,7 +120,7 @@ namespace Vortex {
 
 						if (boost::filesystem::exists(path_obj) && boost::filesystem::is_directory(path_obj)) {
 							data_dir = boost::filesystem::canonical(data_dir).string();
-							config.set("vortex", Maze::Object("data_dir", data_dir));
+							config.set("vortex", Maze::Element({ "data_dir" }, { data_dir }));
 						}
 						else {
 							std::cout << "Given data_dir path is not a directory." << std::endl;
@@ -226,7 +225,7 @@ namespace Vortex {
 	}
 
 	void start_from_config(const std::string& config_file_name) {
-		Maze::Object config;
+		Maze::Element config(Maze::Type::Object);
 
 		std::ifstream config_file(config_file_name);
 		if (config_file.is_open()) {
@@ -234,7 +233,7 @@ namespace Vortex {
 			buffer << config_file.rdbuf();
 
 			try {
-				config = Maze::Object::from_json(buffer.str());
+				config = Maze::Element::from_json(buffer.str());
 			}
 			catch (...) {
 				std::cout << "Unable to parse " << config_file_name << "." << std::endl;
@@ -248,28 +247,28 @@ namespace Vortex {
 			exit_with_error(1004);
 		}
 
-		if (config.is_array("servers") && !config["servers"].get_array().is_empty()) {
-			Maze::Array servers = config["servers"];
+		if (config.is_array("servers") && config.get("servers").has_children()) {
+			Maze::Element servers = config.get("servers");
 
 			for (auto it = servers.begin(); it != servers.end(); it++) {
-				Maze::Object global_config = config;
+				Maze::Element global_config = config;
 				global_config.remove("servers");
 
 				if (it->is_int()) {
 					if (global_config.is_object("server")) {
-						Maze::Object conf = global_config["server"].get_object();
+						Maze::Element conf = global_config.get("server");
 						conf.set("port", it->get_int());
 						global_config.set("server", conf);
 					}
 					else {
-						global_config.set("server", Maze::Object("port", it->get_int()));
+						global_config.set("server", Maze::Element({ "port" }, { it->get_int() }));
 					}
 
 					running_servers.push_back(std::thread(start_http_server, global_config));
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
 				else if (it->is_object()) {
-					global_config.apply(it->get_object());
+					global_config.apply(*it);
 
 					running_servers.push_back(std::thread(start_http_server, global_config));
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -290,15 +289,15 @@ namespace Vortex {
 	}
 
 	void start_server() {
-		start_server(Maze::Object());
+		start_server(Maze::Element(Maze::Type::Object));
 	}
 
-	void start_server(Maze::Object config) {
+	void start_server(const Maze::Element& config) {
 		if (config.is_object("server")) {
-			Maze::Object server_config = config["server"];
+			Maze::Element server_config = config.get("server");
 
 			if (server_config.is_string("type")) {
-				std::string type = server_config["type"];
+				std::string type = server_config.get("type").s();
 
 				if (type == "https") {
 					std::cout << "Https server is currently not yet implemented." << std::endl;
@@ -327,7 +326,7 @@ namespace Vortex {
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
-	void start_http_server(Maze::Object config) {
+	void start_http_server(const Maze::Element& config) {
 		Vortex::Server::Http::HttpServer server;
 
 		server.start(config);

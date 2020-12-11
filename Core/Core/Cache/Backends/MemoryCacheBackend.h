@@ -4,7 +4,7 @@
 #include <list>
 #include <boost/unordered_map.hpp>
 #include <Core/Cache/ICacheBackend.h>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
     namespace Core {
@@ -21,7 +21,7 @@ namespace Vortex {
 
                 class MemoryCacheBackend : public ICacheBackend {
                 private:
-                    Maze::Object cache_config_;
+                    Maze::Element cache_config_;
                     bool enabled_ = false;
                     MemoryCacheList cache_list_;
                     MemoryCacheMap cache_map_;
@@ -29,10 +29,10 @@ namespace Vortex {
 
                 public:
                     MemoryCacheBackend();
-                    MemoryCacheBackend(const Maze::Object& cache_config);
+                    MemoryCacheBackend(const Maze::Element& cache_config);
                     ~MemoryCacheBackend();
 
-                    void set_config(const Maze::Object& cache_config);
+                    void set_config(const Maze::Element& cache_config);
                     const bool is_enabled() const;
 
                     virtual std::string get(const std::string& key);

@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <mutex>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 #include <Core/Cache/ICacheBackend.h>
 
 namespace Vortex {
@@ -14,14 +14,14 @@ namespace Vortex {
 			private:
 				std::vector<std::pair<std::string, ICacheBackend*>> available_backends_;
 				std::string default_backend_;
-				Maze::Object cache_config_;
+				Maze::Element cache_config_;
 				bool initialized_ = false;
 				std::mutex mtx_;
 
 			public:
 				Cache();
 
-				void initialize(const Maze::Object& cache_config);
+				void initialize(const Maze::Element& cache_config);
 				const bool is_initialized() const;
 
 				std::string get(const std::string& key) const;

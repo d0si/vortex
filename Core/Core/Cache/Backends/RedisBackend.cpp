@@ -8,7 +8,7 @@ namespace Vortex {
 
                 }
 
-                RedisBackend::RedisBackend(const Maze::Object& redis_config) {
+                RedisBackend::RedisBackend(const Maze::Element& redis_config) {
                     set_config(redis_config);
                 }
 
@@ -31,7 +31,7 @@ namespace Vortex {
                             address = redis_config_["address"].get_string();
                         }
 
-                        if (redis_config_.is_string("port")) {
+                        if (redis_config_.is_int("port")) {
                             port = redis_config_["port"].get_int();
                         }
 
@@ -40,7 +40,7 @@ namespace Vortex {
 #endif
                 }
 
-                void RedisBackend::set_config(const Maze::Object& redis_config) {
+                void RedisBackend::set_config(const Maze::Element& redis_config) {
                     redis_config_ = redis_config;
 
                     if (redis_config_.is_bool("enabled")) {

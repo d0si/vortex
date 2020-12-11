@@ -12,13 +12,13 @@ namespace Vortex {
 				
 			}
 
-			void Storage::initialize(const Maze::Object& storage_config) {
+			void Storage::initialize(const Maze::Element& storage_config) {
 				mtx_.lock();
 				storage_config_ = storage_config;
 				initialized_ = false;
 
 				Filesystem::FilesystemBackend* fs_backend = static_cast<Core::Storage::Filesystem::FilesystemBackend*>(Core::Storage::Filesystem::filesystem_exports.get_backend_instance());
-				fs_backend->set_config(storage_config_["config"].get_object()["Filesystem"].get_object());
+				fs_backend->set_config(storage_config.get("config").get("Filesystem"));
 
 				available_backends_.push_back(std::make_pair<std::string, IStorageBackend*>(
 					Core::Storage::Filesystem::filesystem_exports.backend_name,
@@ -27,7 +27,7 @@ namespace Vortex {
 
 #ifdef VORTEX_HAS_FEATURE_MONGO
 				Mongo::MongoBackend* mongo_backend = static_cast<Core::Storage::Mongo::MongoBackend*>(Core::Storage::Mongo::mongo_exports.get_backend_instance());
-				mongo_backend->get_client()->set_config(storage_config_["config"].get_object()["Mongo"].get_object());
+				mongo_backend->get_client()->set_config(storage_config.get("config").get("Mongo"));
 
 				if (mongo_backend->get_client()->is_enabled()) {
 					mongo_backend->get_client()->connect();

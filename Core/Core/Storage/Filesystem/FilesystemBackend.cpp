@@ -1,7 +1,6 @@
 #include <Core/Storage/Filesystem/FilesystemBackend.h>
 #include <fstream>
 #include <sstream>
-#include <Maze/Array.hpp>
 #include <Core/Exception/StorageException.h>
 #include <Core/CommonRuntime.h>
 #include <Core/Util/String.h>
@@ -20,7 +19,7 @@ namespace Vortex {
 
                 }
 
-                void FilesystemBackend::set_config(const Maze::Object& filesystem_config) {
+                void FilesystemBackend::set_config(const Maze::Element& filesystem_config) {
                     filesystem_config_ = filesystem_config;
 
                     if (filesystem_config_.is_bool("cache_enabled")) {
@@ -42,39 +41,37 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::simple_insert(const std::string& database, const std::string& collection, const std::string& json_value) {
-                    Maze::Array collection_data = get_collection_entries(database, collection);
+                    Maze::Element collection_data = get_collection_entries(database, collection);
 
-                    Maze::Object value;
+                    Maze::Element value;
                     try {
-                        value = Maze::Object::from_json(json_value);
+                        value = Maze::Element::from_json(json_value);
                     }
                     catch (...) {
                         throw Exception::StorageException("Unable to parse json value");
                     }
 
-                    collection_data.push(value);
+                    collection_data.push_back(value);
 
                     save_collection_entries(database, collection, collection_data);
                 }
 
                 std::string FilesystemBackend::simple_find_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-                    Maze::Array collection_data = get_collection_entries(database, collection);
+                    Maze::Element collection_data = get_collection_entries(database, collection);
 
-                    Maze::Object simple_query;
+                    Maze::Element simple_query;
                     try {
-                        simple_query = Maze::Object::from_json(json_simple_query);
+                        simple_query = Maze::Element::from_json(json_simple_query);
                     }
                     catch (...) {
                         throw Exception::StorageException("Invalid query syntax");
                     }
 
-                    Maze::Array query_results;
+                    Maze::Element query_results(Maze::Type::Array);
 
-                    for (auto val : collection_data) {
-                        Maze::Object value = val.get_object();
-
-                        if (check_if_matches_simple_query(value, simple_query)) {
-                            query_results.push(value);
+                    for (const auto& val : collection_data) {
+                        if (check_if_matches_simple_query(val, simple_query)) {
+                            query_results.push_back(val);
                         }
                     }
 
@@ -82,21 +79,19 @@ namespace Vortex {
                 }
 
                 std::string FilesystemBackend::simple_find_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-                    Maze::Array collection_data = get_collection_entries(database, collection);
+                    Maze::Element collection_data = get_collection_entries(database, collection);
 
-                    Maze::Object simple_query;
+                    Maze::Element simple_query;
                     try {
-                        simple_query = Maze::Object::from_json(json_simple_query);
+                        simple_query = Maze::Element::from_json(json_simple_query);
                     }
                     catch (...) {
                         throw Exception::StorageException("Invalid query syntax");
                     }
 
                     for (auto val : collection_data) {
-                        Maze::Object value = val.get_object();
-
-                        if (check_if_matches_simple_query(value, simple_query)) {
-                            return value.to_json();
+                        if (check_if_matches_simple_query(val, simple_query)) {
+                            return val.to_json();
                         }
                     }
 
@@ -104,20 +99,20 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::simple_replace_first(const std::string& database, const std::string& collection, const std::string& json_simple_query, const std::string& replacement_json_value) {
-                    Maze::Array collection_data = get_collection_entries(database, collection);
-                    Maze::Array new_collection_data;
+                    Maze::Element collection_data = get_collection_entries(database, collection);
+                    Maze::Element new_collection_data(Maze::Type::Object);
 
-                    Maze::Object simple_query;
+                    Maze::Element simple_query;
                     try {
-                        simple_query = Maze::Object::from_json(json_simple_query);
+                        simple_query = Maze::Element::from_json(json_simple_query);
                     }
                     catch (...) {
                         throw Exception::StorageException("Invalid query syntax");
                     }
 
-                    Maze::Object replacement_value;
+                    Maze::Element replacement_value;
                     try {
-                        replacement_value = Maze::Object::from_json(replacement_json_value);
+                        replacement_value = Maze::Element::from_json(replacement_json_value);
                     }
                     catch (...) {
                         throw Exception::StorageException("Unable to parse replacement json value");
@@ -125,14 +120,12 @@ namespace Vortex {
 
                     bool is_replaced = false;
                     for (auto val : collection_data) {
-                        Maze::Object value = val.get_object();
-
-                        if (!is_replaced && check_if_matches_simple_query(value, simple_query)) {
-                            new_collection_data.push(replacement_value);
+                        if (!is_replaced && check_if_matches_simple_query(val, simple_query)) {
+                            new_collection_data.push_back(replacement_value);
                             is_replaced = true;
                         }
                         else {
-                            new_collection_data.push(value);
+                            new_collection_data.push_back(val);
                         }
                     }
 
@@ -140,21 +133,21 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::simple_delete_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-                    Maze::Array collection_data = get_collection_entries(database, collection);
+                    Maze::Element collection_data = get_collection_entries(database, collection);
 
-                    Maze::Object simple_query;
+                    Maze::Element simple_query;
                     try {
-                        simple_query = Maze::Object::from_json(json_simple_query);
+                        simple_query = Maze::Element::from_json(json_simple_query);
                     }
                     catch (...) {
                         throw Exception::StorageException("Invalid query syntax");
                     }
 
-                    for (size_t i = 0; i < collection_data.size(); ++i) {
-                        Maze::Object value = collection_data[i].get_object();
+                    for (size_t i = 0; i < collection_data.count_children(); ++i) {
+                        Maze::Element value = collection_data[i];
 
                         if (check_if_matches_simple_query(value, simple_query)) {
-                            collection_data.remove(i);
+                            collection_data.remove_at(i);
                         }
                     }
 
@@ -162,21 +155,21 @@ namespace Vortex {
                 }
 
                 void FilesystemBackend::simple_delete_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-                    Maze::Array collection_data = get_collection_entries(database, collection);
+                    Maze::Element collection_data = get_collection_entries(database, collection);
 
-                    Maze::Object simple_query;
+                    Maze::Element simple_query;
                     try {
-                        simple_query = Maze::Object::from_json(json_simple_query);
+                        simple_query = Maze::Element::from_json(json_simple_query);
                     }
                     catch (...) {
                         throw Exception::StorageException("Invalid query syntax");
                     }
 
-                    for (size_t i = 0; i < collection_data.size(); ++i) {
-                        Maze::Object value = collection_data[i].get_object();
+                    for (size_t i = 0; i < collection_data.count_children(); ++i) {
+                        Maze::Element value = collection_data[i];
 
                         if (check_if_matches_simple_query(value, simple_query)) {
-                            collection_data.remove(i);
+                            collection_data.remove_at(i);
 
                             save_collection_entries(database, collection, collection_data);
 
@@ -311,47 +304,50 @@ namespace Vortex {
                     }
                 }
 
-                bool FilesystemBackend::check_if_matches_simple_query(const Maze::Object& value, Maze::Object simple_query) const {
+                bool FilesystemBackend::check_if_matches_simple_query(const Maze::Element& value, Maze::Element simple_query) const {
                     bool value_valid = true;
 
-                    for (auto query_part : simple_query) {
-                        if (query_part.second.is_string()) {
-                            if (!value.exists(query_part.first) ||
-                                !(value[query_part.first].get_string() == query_part.second.get_string())) {
+                    for (auto it = simple_query.keys_begin(); it != simple_query.keys_end(); ++it) {
+                        const std::string key = *it;
+                        Maze::Element query_part = simple_query[key];
+
+                        if (query_part.is_string()) {
+                            if (!value.exists(key) ||
+                                !(value[key].get_string() == query_part.get_string())) {
                                 value_valid = false;
                                 break;
                             }
                         }
-                        else if (query_part.second.is_bool()) {
-                            if (!value.exists(query_part.first) ||
-                                !(value[query_part.first].get_bool() == query_part.second.get_bool())) {
+                        else if (query_part.is_bool()) {
+                            if (!value.exists(key) ||
+                                !(value[key].get_bool() == query_part.get_bool())) {
                                 value_valid = false;
                                 break;
                             }
                         }
-                        else if (query_part.second.is_double()) {
-                            if (!value.exists(query_part.first) ||
-                                !(value[query_part.first].get_double() == query_part.second.get_double())) {
+                        else if (query_part.is_double()) {
+                            if (!value.exists(key) ||
+                                !(value[key].get_double() == query_part.get_double())) {
                                 value_valid = false;
                                 break;
                             }
                         }
-                        else if (query_part.second.is_int()) {
-                            if (!value.exists(query_part.first) ||
-                                !(value[query_part.first].get_int() == query_part.second.get_int())) {
+                        else if (query_part.is_int()) {
+                            if (!value.exists(key) ||
+                                !(value[key].get_int() == query_part.get_int())) {
                                 value_valid = false;
                                 break;
                             }
                         }
-                        else if (query_part.second.is_array() && query_part.first == "$or") {
+                        else if (query_part.is_array() && key == "$or") {
                             bool or_query_valid = false;
 
-                            for (auto or_query_part : query_part.second.get_array()) {
+                            for (auto or_query_part : query_part) {
                                 if (!or_query_part.is_object()) {
                                     throw Exception::StorageException("Invalid part of $or query");
                                 }
 
-                                if (check_if_matches_simple_query(value, or_query_part.get_object())) {
+                                if (check_if_matches_simple_query(value, or_query_part)) {
                                     or_query_valid = true;
                                     break;
                                 }
@@ -362,9 +358,9 @@ namespace Vortex {
                                 break;
                             }
                         }
-                        else if (query_part.second.is_object()) {
-                            if (value.exists(query_part.first) && value.is_object(query_part.first)) {
-                                if (!check_if_matches_simple_query(value[query_part.first].get_object(), query_part.second.get_object())) {
+                        else if (query_part.is_object()) {
+                            if (value.exists(key) && value.is_object(key)) {
+                                if (!check_if_matches_simple_query(value[key], query_part)) {
                                     value_valid = false;
                                     break;
                                 }
@@ -374,8 +370,8 @@ namespace Vortex {
                                 break;
                             }
                         }
-                        else if (query_part.second.is_null()) {
-                            if (value.exists(query_part.first) && !value[query_part.first].is_null()) {
+                        else if (query_part.is_null()) {
+                            if (value.exists(key) && !value[key].is_null()) {
                                 value_valid = false;
                                 break;
                             }
@@ -388,12 +384,12 @@ namespace Vortex {
                     return value_valid;
                 }
 
-                Maze::Array FilesystemBackend::get_collection_entries(const std::string& database, const std::string& collection) const {
+                Maze::Element FilesystemBackend::get_collection_entries(const std::string& database, const std::string& collection) const {
                     const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
 
                     if (cache_enabled_) {
                         if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-                            return Maze::Array::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
+                            return Maze::Element::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
                         }
                     }
 
@@ -403,7 +399,7 @@ namespace Vortex {
 
                     std::string collection_file_path = filesystem_config_["root_path"].get_string() + '/' + database + '/' + collection + ".json";
                     if (!boost::filesystem::exists(collection_file_path)) {
-                        return Maze::Array();
+                        return Maze::Element(Maze::Type::Array);
                     }
 
                     std::ifstream collection_file(collection_file_path);
@@ -415,9 +411,9 @@ namespace Vortex {
                     buffer << collection_file.rdbuf();
                     collection_file.close();
 
-                    Maze::Array collection_data;
+                    Maze::Element collection_data;
                     try {
-                        Maze::Array result = Maze::Array::from_json(buffer.str());
+                        Maze::Element result = Maze::Element::from_json(buffer.str());
 
                         if (cache_enabled_) {
                             CommonRuntime::Instance.get_cache()->set(cache_key, buffer.str(), cache_expiry_);
@@ -429,10 +425,10 @@ namespace Vortex {
                         throw Exception::StorageException("Collection file is corrupted (unable to parse json)");
                     }
 
-                    return Maze::Array();
+                    return Maze::Element(Maze::Type::Array);
                 }
 
-                void FilesystemBackend::save_collection_entries(const std::string& database, const std::string& collection, const Maze::Array& values) const {
+                void FilesystemBackend::save_collection_entries(const std::string& database, const std::string& collection, const Maze::Element& values) const {
                     const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
 
                     if (in_memory_only_) {

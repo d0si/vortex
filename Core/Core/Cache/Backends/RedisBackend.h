@@ -5,7 +5,7 @@
 #include <cpp_redis/cpp_redis>
 #endif
 #include <Core/Cache/ICacheBackend.h>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
     namespace Core {
@@ -16,16 +16,16 @@ namespace Vortex {
 #ifdef VORTEX_HAS_FEATURE_REDIS
                     cpp_redis::client client_;
 #endif
-                    Maze::Object redis_config_;
+                    Maze::Element redis_config_;
                     bool enabled = false;
 
                 public:
                     RedisBackend();
-                    RedisBackend(const Maze::Object& redis_config);
+                    RedisBackend(const Maze::Element& redis_config);
                     ~RedisBackend();
 
                     void connect();
-                    void set_config(const Maze::Object& redis_config);
+                    void set_config(const Maze::Element& redis_config);
                     const bool is_enabled() const;
 
                     virtual std::string get(const std::string& key);

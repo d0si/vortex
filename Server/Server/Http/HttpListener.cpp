@@ -14,7 +14,7 @@ namespace Vortex {
 	namespace Server {
 		namespace Http {
 			HttpListener::HttpListener(
-				Maze::Object config,
+				const Maze::Element& config,
 				asio::io_context& ioC,
 				tcp::endpoint endpoint)
 				: config_(config), ioC_(ioC), acceptor_(asio::make_strand(ioC)) {

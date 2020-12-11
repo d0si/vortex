@@ -9,7 +9,7 @@ namespace Vortex {
 
                 }
 
-                MemoryCacheBackend::MemoryCacheBackend(const Maze::Object& cache_config) {
+                MemoryCacheBackend::MemoryCacheBackend(const Maze::Element& cache_config) {
                     set_config(cache_config);
                 }
 
@@ -17,7 +17,7 @@ namespace Vortex {
 
                 }
 
-                void MemoryCacheBackend::set_config(const Maze::Object& cache_config) {
+                void MemoryCacheBackend::set_config(const Maze::Element& cache_config) {
                     cache_config_ = cache_config;
 
                     if (cache_config_.is_bool("enabled")) {

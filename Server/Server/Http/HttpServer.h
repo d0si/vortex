@@ -1,17 +1,17 @@
 #ifndef VORTEX_SERVER_HTTP_HTTP_SERVER_H
 #define VORTEX_SERVER_HTTP_HTTP_SERVER_H
 
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Server {
 		namespace Http {
 			class HttpServer {
 			private:
-				Maze::Object config_;
+				Maze::Element config_;
 
 			public:
-				void start(Maze::Object config);
+				void start(const Maze::Element& config);
 			};
 		}  // namespace Http
 	}  // namespace Server

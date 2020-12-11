@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -11,7 +11,7 @@ namespace Vortex {
 				class IStorageBackend {
 				public:
 					IStorageBackend() {};
-					IStorageBackend(const Maze::Object& config) {};
+					IStorageBackend(const Maze::Element& config) {};
 					virtual ~IStorageBackend() {};
 
 					// Simple query

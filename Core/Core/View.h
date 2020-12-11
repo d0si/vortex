@@ -2,7 +2,7 @@
 #define VORTEX_CORE_FRAMEWORK_VIEW_H
 
 #include <string>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Core {
@@ -13,8 +13,8 @@ namespace Vortex {
 			Framework* framework_;
 
 			std::string rendered_;
-			Maze::Object template_;
-			Maze::Object page_;
+			Maze::Element template_;
+			Maze::Element page_;
 
 		public:
 			View(Framework* framework);

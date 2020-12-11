@@ -7,7 +7,7 @@
 #include <boost/beast/core/flat_buffer.hpp>
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
 
 namespace Vortex {
 	namespace Server {
@@ -18,11 +18,11 @@ namespace Vortex {
 				boost::beast::flat_buffer buffer_;
 				boost::beast::http::request<boost::beast::http::string_body> req_;
 				boost::beast::http::response<boost::beast::http::string_body> res_;
-				Maze::Object config_;
+				Maze::Element config_;
 
 			public:
 				explicit HttpSession(
-					Maze::Object config,
+					const Maze::Element& config,
 					boost::asio::ip::tcp::socket socket);
 
 				void run();

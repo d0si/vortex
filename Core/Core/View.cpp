@@ -43,8 +43,8 @@ namespace Vortex {
 		}
 
 		void View::finish() {
-			template_.clear();
-			page_.clear();
+			template_.remove_all_children();
+			page_.remove_all_children();
 			respond();
 		}
 
@@ -174,31 +174,33 @@ namespace Vortex {
 		}
 
 		void View::set_template(const std::string& name) {
-			template_.clear();
+			template_.remove_all_children();
 
 			std::string cache_key = "vortex.core.template.value." + framework_->application_.get_id() + "." + name;
 			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-				template_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
+				template_ = Maze::Element::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
 			}
 
-			if (template_.is_empty()) {
-				Maze::Object query("name", name);
-				query.set("app_id", framework_->application_.get_id());
+			if (!template_.has_children()) {
+				Maze::Element query(
+					{ "name", "app_id" },
+					{ name, framework_->application_.get_id() }
+				);
 				
 				template_ = framework_->application_.find_object_in_application_storage("templates", query);
 
-				if (template_.is_empty()) {
-					query.set_null("app_id");
+				if (!template_.has_children()) {
+					query["app_id"].set_as_null();
 					
 					template_ = framework_->application_.find_object_in_application_storage("templates", query);
 				}
 
-				if (!template_.is_empty()) {
+				if (template_.has_children()) {
 					CommonRuntime::Instance.get_cache()->set(cache_key, template_.to_json(0));
 				}
 			}
 
-			if (template_.is_empty()) {
+			if (!template_.has_children()) {
 				framework_->view_.echo("Template " + name + " not found");
 				framework_->exit();
 			}
@@ -213,35 +215,37 @@ namespace Vortex {
 		}
 
 		void View::set_page(const std::string& name) {
-			page_.clear();
+			page_.remove_all_children();
 
 			std::string cache_key = "vortex.core.page.value." + framework_->application_.get_id() + "." + name;
 			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-				page_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
+				page_ = Maze::Element::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
 			}
 
-			if (page_.is_empty()) {
-				Maze::Object query("name", name);
-				query.set("app_id", framework_->application_.get_id());
+			if (!page_.has_children()) {
+				Maze::Element query(
+					{ "name", "app_id" },
+					{ name, framework_->application_.get_id() }
+				);
 
 				page_ = framework_->application_.find_object_in_application_storage("pages", query);
 
-				if (page_.is_empty()) {
-					query.set_null("app_id");
+				if (!page_.has_children()) {
+					query["app_id"].set_as_null();
 					
 					page_ = framework_->application_.find_object_in_application_storage("pages", query);
 				}
 
-				if (!page_.is_empty()) {
+				if (page_.has_children()) {
 					CommonRuntime::Instance.get_cache()->set(cache_key, page_.to_json(0));
 				}
 			}
 
-			if (page_.is_empty()) {
+			if (!page_.has_children()) {
 				page_.set("contents", "Page " + name + " not found");
 			}
 		}
-
+		
 		std::string View::parse_page() {
 			if (page_.is_string("contents")) {
 				return parse(page_["contents"].get_string());
