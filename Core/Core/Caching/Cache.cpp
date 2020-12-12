@@ -1,4 +1,6 @@
 #include <Core/Caching/Cache.h>
+#include <boost/thread/mutex.hpp>
+#include <iostream>
 #include <sstream>
 #include <Core/Exceptions/CacheException.h>
 #ifdef HAS_FEATURE_CPPREDIS
@@ -10,9 +12,18 @@
 namespace Vortex::Core::Caching {
 
     void Cache::initialize(const Maze::Element& cache_config) {
-        _mtx.lock();
+        static boost::mutex mtx;
+
+        mtx.lock();
         _cache_config = cache_config;
         _initialized = false;
+
+        // Caching configuration
+        struct { bool caching_enabled; const std::string default_backend; }
+        configuration = {
+            cache_config.is_bool("enabled") && cache_config["enabled"].get_bool(),
+            cache_config.is_string("default_backend") ? cache_config["default_backend"].get_string() : ""
+        };
 
         Backends::DummyCacheBackend* dummy_backend = static_cast<Backends::DummyCacheBackend*>(Backends::dummy_cache_exports.get_backend_instance());
         _available_backends.push_back(std::make_pair<std::string, CacheBackendInterface*>(
@@ -21,7 +32,7 @@ namespace Vortex::Core::Caching {
             ));
         _default_backend = Backends::dummy_cache_exports.backend_name;
 
-        if (cache_config.is_bool("enabled") && cache_config["enabled"].get_bool() == true) {
+        if (configuration.caching_enabled) {
             Backends::MemoryCacheBackend* memory_backend = static_cast<Backends::MemoryCacheBackend*>(Backends::memory_cache_exports.get_backend_instance());
             memory_backend->set_config(cache_config.get("config").get("MemoryCache"));
             _available_backends.push_back(std::make_pair<std::string, CacheBackendInterface*>(
@@ -48,32 +59,34 @@ namespace Vortex::Core::Caching {
                 _default_backend = Backends::redis_exports.backend_name;
             }
 #endif
-        }
 
-        if (_cache_config.is_string("default_backend")) {
-            const std::string backend_name = cache_config["default_backend"].get_string();
-            bool backend_exists = false;
+            if (!configuration.default_backend.empty()) {
+                bool backend_exists = false;
 
-            for (auto& b : _available_backends) {
-                if (b.first == backend_name) {
-                    _default_backend = backend_name;
-                    backend_exists = true;
-                    break;
+                for (auto& b : _available_backends) {
+                    if (b.first == configuration.default_backend) {
+                        _default_backend = configuration.default_backend;
+                        backend_exists = true;
+                        break;
+                    }
+                }
+
+                if (!backend_exists) {
+                    throw Exceptions::CacheException(
+                        "Default backend unavailable",
+                        (std::stringstream()
+                            << "Cache backend '"
+                            << configuration.default_backend
+                            << "' set as default_backend is not available").str());
                 }
             }
-
-            if (!backend_exists) {
-                throw Exceptions::CacheException(
-                    "Default backend unavailable",
-                    (std::stringstream()
-                        << "Cache backend '"
-                        << backend_name
-                        << "' set as default_backend is not available").str().c_str());
-            }
+        }
+        else {
+            std::cout << "Caching is disabled in configuration." << std::endl;
         }
 
         _initialized = true;
-        _mtx.unlock();
+        mtx.unlock();
     }
 
     const bool Cache::is_initialized() const {
@@ -128,7 +141,7 @@ namespace Vortex::Core::Caching {
             (std::stringstream()
                 << "Cache backend '"
                 << backend_name
-                << "' is not available").str().c_str());
+                << "' is not available").str());
     }
 
 }

@@ -19,7 +19,6 @@ namespace Vortex::Core::Util {
             salt = generate_salt();
         }
 
-        const char* salt_char = salt.empty() ? generate_salt().c_str() : salt.c_str();
         CryptoPP::byte* salt_bytes = (CryptoPP::byte*)salt.c_str();
 
         std::string hash_string = salt + password;

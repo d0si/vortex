@@ -1,40 +1,39 @@
-#ifndef VORTEX_CORE_SCRIPT_DUKTAPEENGINE_H
-#define VORTEX_CORE_SCRIPT_DUKTAPEENGINE_H
+#pragma once
 
 #include <string>
-#include <Core/Script/IScriptEngine.h>
+#include <Core/Script/Script.h>
 
 namespace duk {
 	class Context;
 }
 
-namespace Vortex {
-	namespace Core {
-		class Framework;
+namespace Vortex::Core {
+	class Framework;
+}
 
-		namespace Script {
-			class DuktapeEngine : public IScriptEngine {
-			private:
-				duk::Context* ctx_;
-				Framework* framework_;
+namespace Vortex::Core::Script {
 
-			public:
-				DuktapeEngine();
-				~DuktapeEngine();
+	class DuktapeEngine : public ScriptEngineInterface {
+	public:
+		DuktapeEngine();
+		~DuktapeEngine();
 
-				virtual void setup(Framework* framework);
-				virtual void exec(const std::string& script);
-			};
+		virtual void setup(Framework* framework) override;
+		virtual void exec(const std::string& script) override;
 
-			IScriptEngine* get_new_duktape_engine();
+	private:
+		duk::Context* _ctx = nullptr;
+		Framework* _framework = nullptr;
+	};
 
-			static const ScriptEngineDetails duktape_exports = {
-				"DuktapeEngine",
-				"Duktape",
-				get_new_duktape_engine
-			};
-		}  // namespace Script
-	}  // namespace Core
-}  // namespace Vortex
 
-#endif  // VORTEX_CORE_SCRIPT_DUKTAPEENGINE_H
+	ScriptEngineInterface* get_new_duktape_engine();
+
+
+	static const ScriptEngineDetails duktape_exports = {
+		"DuktapeEngine",
+		"Duktape",
+		get_new_duktape_engine
+	};
+
+}

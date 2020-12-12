@@ -3,5 +3,5 @@
 #
 SET(VORTEX_SOURCES
     main.cpp
-#    Vortex/Vortex.cpp
+    Vortex/Vortex.cpp
 )

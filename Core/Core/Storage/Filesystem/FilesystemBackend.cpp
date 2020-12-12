@@ -383,7 +383,7 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
 
         if (_cache_enabled) {
-            if (CommonRuntime::instance().cache()->exists(cache_key.c_str())) {
+            if (CommonRuntime::instance().cache()->exists(cache_key)) {
                 return Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
             }
         }

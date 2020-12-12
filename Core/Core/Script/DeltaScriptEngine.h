@@ -1,37 +1,34 @@
-#ifndef VORTEX_CORE_SCRIPT_DELTASCRIPTENGINE_H
-#define VORTEX_CORE_SCRIPT_DELTASCRIPTENGINE_H
+#pragma once
 
-#include <Core/Script/IScriptEngine.h>
+#include <Core/Script/Script.h>
 
 namespace DeltaScript {
 	class Context;
 }
 
-namespace Vortex {
-	namespace Core {
-		namespace Script {
-			class DeltaScriptEngine : public IScriptEngine {
-			private:
-				DeltaScript::Context* ctx_ = nullptr;
-				Framework* framework_;
+namespace Vortex::Core::Script {
 
-			public:
-				DeltaScriptEngine();
-				~DeltaScriptEngine();
+	class DeltaScriptEngine : public ScriptEngineInterface {
+	public:
+		DeltaScriptEngine();
+		~DeltaScriptEngine();
 
-				void setup(Framework* framework);
-				void exec(const std::string& script);
-			};
+		virtual void setup(Framework* framework) override;
+		virtual void exec(const std::string& script) override;
 
-			IScriptEngine* get_new_deltascript_engine();
+	private:
+		DeltaScript::Context* _ctx = nullptr;
+		Framework* _framework;
+	};
 
-			static const ScriptEngineDetails deltascript_exports = {
-				"DeltaScriptEngine",
-				"DeltaScript",
-				get_new_deltascript_engine
-			};
-		}  // namespace Script
-	}  // namespace Core
-}  // namespace Vortex
+	
+	ScriptEngineInterface* get_new_deltascript_engine();
 
-#endif  // VORTEX_CORE_SCRIPT_DELTASCRIPTENGINE_H
+
+	static const ScriptEngineDetails deltascript_exports = {
+		"DeltaScriptEngine",
+		"DeltaScript",
+		get_new_deltascript_engine
+	};
+
+}  // namespace Vortex::Core::Script

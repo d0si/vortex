@@ -21,16 +21,17 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
     Vortex::Core
-#    Vortex::Server
+    Vortex::Server
     ${Boost_LIBRARIES}
 )
+
+include(${PROJECT_SOURCE_DIR}/../cmake/AddFeaturesEnabledDefinitions.cmake)
 
 if (!WIN32)
     target_link_libraries(${PROJECT_NAME}
         pthread
     )
 endif()
-
 
 #
 # Copy sample config file into build directory

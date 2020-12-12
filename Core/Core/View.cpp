@@ -2,256 +2,256 @@
 #include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
 
-namespace Vortex {
-	namespace Core {
-		View::View(Framework* framework) : framework_(framework) {
-		}
+namespace Vortex::Core {
 
-		void View::output() {
-			rendered_ += parse_template();
+    View::View(Framework* framework)
+        : _framework(framework) {}
 
-			respond();
-		}
+    void View::output() {
+        _rendered += parse_template();
 
-		void View::respond() {
-			framework_->response_->body() = rendered_;
-		}
+        respond();
+    }
 
-		void View::echo(const std::string& contents) {
-			rendered_ += contents;
-		}
+    void View::respond() {
+        _framework->response_->body() = _rendered;
+    }
 
-		void View::set_content_type(const std::string& content_type) {
-			framework_->response_->set(boost::beast::http::field::content_type, content_type);
-		}
+    void View::echo(const std::string& contents) {
+        _rendered += contents;
+    }
 
-		void View::set_status_code(int status_code) {
-			framework_->response_->result(boost::beast::http::int_to_status(status_code));
-		}
+    void View::set_content_type(const std::string& content_type) {
+        _framework->response_->set(boost::beast::http::field::content_type, content_type);
+    }
 
-		void View::set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params) {
-			set_cookie(cookie_name + '=' + value + ";" + (params.length() > 0 ? params + ";" : ""));
-		}
+    void View::set_status_code(int status_code) {
+        _framework->response_->result(boost::beast::http::int_to_status(status_code));
+    }
 
-		void View::set_cookie(const std::string& cookie_string) {
-			framework_->response_->insert(boost::beast::http::field::set_cookie, cookie_string);
-		}
+    void View::set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params) {
+        set_cookie(cookie_name + '=' + value + ";" + (params.length() > 0 ? params + ";" : ""));
+    }
 
-		void View::clear() {
-			framework_->response_->body() = "";
-			rendered_.clear();
-		}
+    void View::set_cookie(const std::string& cookie_string) {
+        _framework->response_->insert(boost::beast::http::field::set_cookie, cookie_string);
+    }
 
-		void View::finish() {
-			template_.remove_all_children();
-			page_.remove_all_children();
-			respond();
-		}
+    void View::clear() {
+        _framework->response_->body() = "";
+        _rendered.clear();
+    }
 
-		std::string View::parse(const std::string& code) {
-			const std::string old_rendered = rendered_;
-			rendered_.clear();
+    void View::finish() {
+        _template.remove_all_children();
+        _page.remove_all_children();
+        respond();
+    }
 
-			enum class grabbing_stage {
-				String, Script, Echo, Comment
-			};
+    std::string View::parse(const std::string& code) {
+        const std::string old_rendered = _rendered;
+        _rendered.clear();
 
-			std::string script_code;
-			grabbing_stage stage = grabbing_stage::String;
+        enum class grabbing_stage {
+            String, Script, Echo, Comment
+        };
 
-			for (size_t i = 0; i < code.length(); ++i) {
-				char current = code[i];
+        std::string script_code;
+        grabbing_stage stage = grabbing_stage::String;
 
-				if (stage == grabbing_stage::String) {
-					if (current == '{') {
-						char next = code[i + 1];
+        for (size_t i = 0; i < code.length(); ++i) {
+            char current = code[i];
 
-						if (next == '{') {
-							stage = grabbing_stage::Script;
-							script_code.clear();
-							++i;
-						}
-						else if (next == '=') {
-							stage = grabbing_stage::Echo;
-							script_code.clear();
-							++i;
-						}
-						else if (next == '#') {
-							stage = grabbing_stage::Comment;
-							script_code.clear();
-							++i;
-						}
-						else if (next == '\\') {
-							rendered_ += current;
-							i++;
-						}
-						else {
-							rendered_ += current;
-						}
-					}
-					else {
-						rendered_ += current;
-					}
-				}
-				else if (stage == grabbing_stage::Script) {
-					if (current == '}') {
-						char next = code[i + 1];
+            if (stage == grabbing_stage::String) {
+                if (current == '{') {
+                    char next = code[i + 1];
 
-						if (next == '}') {
-							framework_->script_.exec(script_code);
+                    if (next == '{') {
+                        stage = grabbing_stage::Script;
+                        script_code.clear();
+                        ++i;
+                    }
+                    else if (next == '=') {
+                        stage = grabbing_stage::Echo;
+                        script_code.clear();
+                        ++i;
+                    }
+                    else if (next == '#') {
+                        stage = grabbing_stage::Comment;
+                        script_code.clear();
+                        ++i;
+                    }
+                    else if (next == '\\') {
+                        _rendered += current;
+                        i++;
+                    }
+                    else {
+                        _rendered += current;
+                    }
+                }
+                else {
+                    _rendered += current;
+                }
+            }
+            else if (stage == grabbing_stage::Script) {
+                if (current == '}') {
+                    char next = code[i + 1];
 
-							script_code.clear();
+                    if (next == '}') {
+                        _framework->script_.exec(script_code);
 
-							stage = grabbing_stage::String;
-							++i;
+                        script_code.clear();
 
-							/*if (code[i + 2] == '\n') {
-								++i;
-							}*/
-						}
-						else if (next == '\\') {
-							script_code += current;
-							++i;
-						}
-						else {
-							script_code += current;
-						}
-					}
-					else {
-						script_code += current;
-					}
-				}
-				else if (stage == grabbing_stage::Echo) {
-					if (current == '=') {
-						char next = code[i + 1];
+                        stage = grabbing_stage::String;
+                        ++i;
 
-						if (next == '}') {
-							framework_->script_.exec("var results = (" + script_code + "); if (results != undefined) { view.echo(results); }");
+                        /*if (code[i + 2] == '\n') {
+                            ++i;
+                        }*/
+                    }
+                    else if (next == '\\') {
+                        script_code += current;
+                        ++i;
+                    }
+                    else {
+                        script_code += current;
+                    }
+                }
+                else {
+                    script_code += current;
+                }
+            }
+            else if (stage == grabbing_stage::Echo) {
+                if (current == '=') {
+                    char next = code[i + 1];
 
-							script_code.clear();
+                    if (next == '}') {
+                        _framework->script_.exec("var results = (" + script_code + "); if (results != undefined) { view.echo(results); }");
 
-							stage = grabbing_stage::String;
-							++i;
+                        script_code.clear();
 
-							/*if (code[i + 2] == '\n') {
-								++i;
-							}*/
-						}
-						else if (next == '\\') {
-							script_code += current;
-							++i;
-						}
-						else {
-							script_code += current;
-						}
-					}
-					else {
-						script_code += current;
-					}
-				}
-				else if (stage == grabbing_stage::Comment) {
-					if (current == '#') {
-						char next = code[i + 1];
+                        stage = grabbing_stage::String;
+                        ++i;
 
-						if (next == '}') {
-							stage = grabbing_stage::String;
-							++i;
+                        /*if (code[i + 2] == '\n') {
+                            ++i;
+                        }*/
+                    }
+                    else if (next == '\\') {
+                        script_code += current;
+                        ++i;
+                    }
+                    else {
+                        script_code += current;
+                    }
+                }
+                else {
+                    script_code += current;
+                }
+            }
+            else if (stage == grabbing_stage::Comment) {
+                if (current == '#') {
+                    char next = code[i + 1];
 
-							/*if (code[i + 2] == '\n') {
-								++i;
-							}*/
-						}
-						else if (next == '\\') {
-							++i;
-						}
-					}
-				}
-			}
+                    if (next == '}') {
+                        stage = grabbing_stage::String;
+                        ++i;
 
-			std::string new_rendered = rendered_;
-			rendered_ = old_rendered;
-			return new_rendered;
-		}
+                        /*if (code[i + 2] == '\n') {
+                            ++i;
+                        }*/
+                    }
+                    else if (next == '\\') {
+                        ++i;
+                    }
+                }
+            }
+        }
 
-		void View::set_template(const std::string& name) {
-			template_.remove_all_children();
+        std::string new_rendered = _rendered;
+        _rendered = old_rendered;
+        return new_rendered;
+    }
 
-			std::string cache_key = "vortex.core.template.value." + framework_->application_.get_id() + "." + name;
-			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-				template_ = Maze::Element::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
-			}
+    void View::set_template(const std::string& name) {
+        _template.remove_all_children();
 
-			if (!template_.has_children()) {
-				Maze::Element query(
-					{ "name", "app_id" },
-					{ name, framework_->application_.get_id() }
-				);
-				
-				template_ = framework_->application_.find_object_in_application_storage("templates", query);
+        std::string cache_key = "vortex.core.template.value." + _framework->application_.get_id() + "." + name;
+        if (CommonRuntime::instance().cache()->exists(cache_key)) {
+            _template = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        }
 
-				if (!template_.has_children()) {
-					query["app_id"].set_as_null();
-					
-					template_ = framework_->application_.find_object_in_application_storage("templates", query);
-				}
+        if (!_template.has_children()) {
+            Maze::Element query(
+                { "name", "app_id" },
+                { name, _framework->application_.get_id() }
+            );
 
-				if (template_.has_children()) {
-					CommonRuntime::Instance.get_cache()->set(cache_key, template_.to_json(0));
-				}
-			}
+            _template = _framework->application_.find_object_in_application_storage("templates", query);
 
-			if (!template_.has_children()) {
-				framework_->view_.echo("Template " + name + " not found");
-				framework_->exit();
-			}
-		}
+            if (!_template.has_children()) {
+                query["app_id"].set_as_null();
 
-		std::string View::parse_template() {
-			if (template_.is_string("contents")) {
-				return parse(template_["contents"].get_string());
-			}
+                _template = _framework->application_.find_object_in_application_storage("templates", query);
+            }
 
-			return "";
-		}
+            if (_template.has_children()) {
+                CommonRuntime::instance().cache()->set(cache_key, _template.to_json(0));
+            }
+        }
 
-		void View::set_page(const std::string& name) {
-			page_.remove_all_children();
+        if (!_template.has_children()) {
+            _framework->view_.echo("Template " + name + " not found");
+            _framework->exit();
+        }
+    }
 
-			std::string cache_key = "vortex.core.page.value." + framework_->application_.get_id() + "." + name;
-			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-				page_ = Maze::Element::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
-			}
+    std::string View::parse_template() {
+        if (_template.is_string("contents")) {
+            return parse(_template["contents"].get_string());
+        }
 
-			if (!page_.has_children()) {
-				Maze::Element query(
-					{ "name", "app_id" },
-					{ name, framework_->application_.get_id() }
-				);
+        return "";
+    }
 
-				page_ = framework_->application_.find_object_in_application_storage("pages", query);
+    void View::set_page(const std::string& name) {
+        _page.remove_all_children();
 
-				if (!page_.has_children()) {
-					query["app_id"].set_as_null();
-					
-					page_ = framework_->application_.find_object_in_application_storage("pages", query);
-				}
+        std::string cache_key = "vortex.core.page.value." + _framework->application_.get_id() + "." + name;
+        if (CommonRuntime::instance().cache()->exists(cache_key)) {
+            _page = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        }
 
-				if (page_.has_children()) {
-					CommonRuntime::Instance.get_cache()->set(cache_key, page_.to_json(0));
-				}
-			}
+        if (!_page.has_children()) {
+            Maze::Element query(
+                { "name", "app_id" },
+                { name, _framework->application_.get_id() }
+            );
 
-			if (!page_.has_children()) {
-				page_.set("contents", "Page " + name + " not found");
-			}
-		}
-		
-		std::string View::parse_page() {
-			if (page_.is_string("contents")) {
-				return parse(page_["contents"].get_string());
-			}
+            _page = _framework->application_.find_object_in_application_storage("pages", query);
 
-			return "";
-		}
-	}  // namespace Core
-}  // namespace Vortex
+            if (!_page.has_children()) {
+                query["app_id"].set_as_null();
+
+                _page = _framework->application_.find_object_in_application_storage("pages", query);
+            }
+
+            if (_page.has_children()) {
+                CommonRuntime::instance().cache()->set(cache_key, _page.to_json(0));
+            }
+        }
+
+        if (!_page.has_children()) {
+            _page.set("contents", "Page " + name + " not found");
+        }
+    }
+
+    std::string View::parse_page() {
+        if (_page.is_string("contents")) {
+            return parse(_page["contents"].get_string());
+        }
+
+        return "";
+    }
+
+}

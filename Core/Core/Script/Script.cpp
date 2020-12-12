@@ -1,9 +1,9 @@
 #include <Core/Script/Script.h>
 #include <Core/Framework.h>
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
+#ifdef HAS_FEATURE_DUKTAPE
 #include <Core/Script/DuktapeEngine.h>
 #endif
-#ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
+#ifdef HAS_FEATURE_DELTASCRIPT
 #include <Core/Script/DeltaScriptEngine.h>
 #endif
 #include <Core/Script/DummyEngine.h>
@@ -22,9 +22,9 @@ namespace Vortex::Core::Script {
 
 	void Script::setup() {
 		const Maze::Element& script_config = _framework->get_config().get("script");
-#ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
+#ifdef HAS_FEATURE_DELTASCRIPT
 		_default_engine_name = "DeltaScript";
-#elif defined(VORTEX_HAS_FEATURE_DUKTAPE)
+#elif defined(HAS_FEATURE_DUKTAPE)
 		_default_engine_name = Core::Script::duktape_exports.engine_name;
 #endif
 
@@ -34,13 +34,13 @@ namespace Vortex::Core::Script {
 			}
 		}
 
-#ifdef VORTEX_HAS_FEATURE_DELTASCRIPT
+#ifdef HAS_FEATURE_DELTASCRIPT
 		if (_default_engine_name == Core::Script::deltascript_exports.engine_name) {
 			_initialized_engine = Core::Script::deltascript_exports.get_new_engine_instance();
 		}
 #endif
 
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
+#ifdef HAS_FEATURE_DUKTAPE
 		if (_default_engine_name == Core::Script::duktape_exports.engine_name) {
 			_initialized_engine = Core::Script::duktape_exports.get_new_engine_instance();
 		}

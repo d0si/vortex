@@ -1,31 +1,30 @@
-#ifndef VORTEX_CORE_FRAMEWORK_HOST_H
-#define VORTEX_CORE_FRAMEWORK_HOST_H
+#pragma once
 
 #include <string>
 #include <Maze/Maze.hpp>
+#include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		class Framework;
+namespace Vortex::Core {
 
-		class Host {
-		private:
-			Framework* framework_;
-			Maze::Element host_;
+    class Framework;
 
-		public:
-			Host(Framework* framework);
 
-			void find(const std::string& hostname);
+    class Host {
+    public:
+        VORTEX_CORE_API Host(Framework* framework);
 
-			const std::string& get_id() const;
-			const std::string& get_hostname() const;
-			const std::string& get_app_id() const;
-			const Maze::Element get_config() const;
-			const std::string& get_script() const;
-			const std::string& get_post_script() const;
-		};
-	}  // namespace Core
-}  // namespace Vortex
+        VORTEX_CORE_API void find(const std::string& hostname);
 
-#endif  // VORTEX_CORE_FRAMEWORK_HOST_H
+        VORTEX_CORE_API const std::string& get_id() const;
+        VORTEX_CORE_API const std::string& get_hostname() const;
+        VORTEX_CORE_API const std::string& get_app_id() const;
+        VORTEX_CORE_API const Maze::Element get_config() const;
+        VORTEX_CORE_API const std::string& get_script() const;
+        VORTEX_CORE_API const std::string& get_post_script() const;
+
+    private:
+        Framework* _framework;
+        Maze::Element _host;
+    };
+
+}  // namespace Vortex::Core

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <mutex>
 #include <string>
 #include <vector>
 #include <Maze/Maze.hpp>
@@ -49,7 +48,6 @@ namespace Vortex::Core::Caching {
         std::string _default_backend;
         Maze::Element _cache_config;
         bool _initialized = false;
-        std::mutex _mtx;
     };
 
 }  // namespace Vortex::Core::Caching

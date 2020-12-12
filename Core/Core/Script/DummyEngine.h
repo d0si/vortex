@@ -6,14 +6,12 @@ namespace Vortex::Core::Script {
 
 	class DummyEngine : public ScriptEngineInterface {
 	public:
-		virtual void setup(Framework* framework) { }
-		virtual void exec(const std::string& script) { }
+		virtual void setup(Framework* framework) override;
+		virtual void exec(const std::string& script) override;
 	};
 
 
-	ScriptEngineInterface* get_new_dummy_engine() {
-		return new DummyEngine();
-	}
+	ScriptEngineInterface* get_new_dummy_engine();
 
 
 	static const ScriptEngineDetails dummy_exports = {

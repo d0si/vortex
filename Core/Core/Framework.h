@@ -1,9 +1,9 @@
-#ifndef VORTEX_CORE_FRAMEWORK_FRAMEWORK_H
-#define VORTEX_CORE_FRAMEWORK_FRAMEWORK_H
+#pragma once
 
 #include <string>
 #include <boost/beast/http.hpp>
 #include <Maze/Maze.hpp>
+#include <Core/DLLSupport.h>
 #include <Core/Router.h>
 #include <Core/Host.h>
 #include <Core/Application.h>
@@ -11,35 +11,33 @@
 #include <Core/View.h>
 #include <Core/Script/Script.h>
 
-namespace Vortex {
-	namespace Core {
-		class Framework {
-		public:
-			std::string client_ip_;
-			boost::beast::http::request<boost::beast::http::string_body>* request_;
-			boost::beast::http::response<boost::beast::http::string_body>* response_;
-			Maze::Element config_;
+namespace Vortex::Core {
 
-			Router router_;
-			Host host_;
-			Application application_;
-			Controller controller_;
-			View view_;
-			Script::Script script_;
+	class Framework {
+	public:
+		std::string client_ip_;
+		boost::beast::http::request<boost::beast::http::string_body>* request_;
+		boost::beast::http::response<boost::beast::http::string_body>* response_;
+		Maze::Element config_;
 
-			Framework(
-				const Maze::Element& config,
-				std::string client_ip,
-				boost::beast::http::request<boost::beast::http::string_body>* request,
-				boost::beast::http::response<boost::beast::http::string_body>* response);
+		Router router_;
+		Host host_;
+		Application application_;
+		Controller controller_;
+		View view_;
+		Script::Script script_;
 
-			void setup();
-			void run();
-			void exit();
+		VORTEX_CORE_API Framework(
+			const Maze::Element& config,
+			std::string client_ip,
+			boost::beast::http::request<boost::beast::http::string_body>* request,
+			boost::beast::http::response<boost::beast::http::string_body>* response);
 
-			const Maze::Element& get_config() const;
-		};
-	}  // namespace Core
-}  // namespace Vortex
+		VORTEX_CORE_API void setup();
+		VORTEX_CORE_API void run();
+		VORTEX_CORE_API void exit();
 
-#endif  // VORTEX_CORE_FRAMEWORK_FRAMEWORK_H
+		VORTEX_CORE_API const Maze::Element& get_config() const;
+	};
+
+}  // namespace Vortex::Core

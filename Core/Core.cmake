@@ -12,9 +12,10 @@ set(CORE_SOURCES
     Core/Exceptions/StorageException.cpp
     Core/Exceptions/VortexException.cpp
 
+    Core/Script/DeltaScriptEngine.cpp
+    Core/Script/DummyEngine.cpp
+    Core/Script/DuktapeEngine.cpp
     Core/Script/Script.cpp
-#    Core/Script/DuktapeEngine.cpp
-#    Core/Script/DeltaScriptEngine.cpp
 
     Core/Storage/Storage.cpp
     Core/Storage/Mongo/Mongo.cpp
@@ -29,11 +30,11 @@ set(CORE_SOURCES
     Core/Util/String.cpp
     Core/Util/Time.cpp
     
-#    Core/Framework.cpp
+    Core/Framework.cpp
     Core/CommonRuntime.cpp
-#    Core/Router.cpp
-#    Core/Host.cpp
-#    Core/Application.cpp
-#    Core/Controller.cpp
-#    Core/View.cpp
+    Core/Router.cpp
+    Core/Host.cpp
+    Core/Application.cpp
+    Core/Controller.cpp
+    Core/View.cpp
 )

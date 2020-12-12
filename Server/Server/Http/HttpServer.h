@@ -1,20 +1,16 @@
-#ifndef VORTEX_SERVER_HTTP_HTTP_SERVER_H
-#define VORTEX_SERVER_HTTP_HTTP_SERVER_H
+#pragma once
 
 #include <Maze/Maze.hpp>
+#include <Server/DLLSupport.h>
 
-namespace Vortex {
-	namespace Server {
-		namespace Http {
-			class HttpServer {
-			private:
-				Maze::Element config_;
+namespace Vortex::Server::Http {
 
-			public:
-				void start(const Maze::Element& config);
-			};
-		}  // namespace Http
-	}  // namespace Server
-}  // namespace Vortex
+    class HttpServer {
+    public:
+        VORTEX_SERVER_API void start(const Maze::Element& config);
 
-#endif  // VORTEX_SERVER_HTTP_HTTP_SERVER_H
+    private:
+        Maze::Element _config;
+    };
+
+}  // namespace Vortex::Server::Http

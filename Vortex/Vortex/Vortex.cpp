@@ -7,7 +7,7 @@
 #include <Server/Http/HttpServer.h>
 #include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
-#ifdef VORTEX_HAS_FEATURE_MONGO
+#ifdef HAS_FEATURE_MONGO
 #include <mongocxx/instance.hpp>
 #endif
 
@@ -17,7 +17,7 @@ namespace Vortex {
 	std::vector<std::thread> running_servers;
 
 	void start_vortex(std::vector<std::string> args) {
-#ifdef VORTEX_HAS_FEATURE_MONGO
+#ifdef HAS_FEATURE_MONGO
 		mongocxx::instance instance{};
 #endif
 
@@ -300,12 +300,12 @@ namespace Vortex {
 				std::string type = server_config.get("type").s();
 
 				if (type == "https") {
-					std::cout << "Https server is currently not yet implemented." << std::endl;
+					std::cout << "Https server is not yet implemented." << std::endl;
 
 					return;
 				}
 				else if (type == "websocket") {
-					std::cout << "Websocket server is currently not yet implemented." << std::endl;
+					std::cout << "Websocket server is not yet implemented." << std::endl;
 
 					return;
 				}
@@ -315,7 +315,7 @@ namespace Vortex {
 					return;
 				}
 				else {
-					std::cout << "'" << type << "' server does not exist." << std::endl;
+					std::cout << "Server type '" << type << "' does not exist." << std::endl;
 
 					return;
 				}

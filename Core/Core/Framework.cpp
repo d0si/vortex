@@ -1,65 +1,65 @@
 #include <Core/Framework.h>
 
-namespace Vortex {
-	namespace Core {
-		Framework::Framework(
-			const Maze::Element& config,
-			std::string client_ip,
-			boost::beast::http::request<boost::beast::http::string_body>* request,
-			boost::beast::http::response<boost::beast::http::string_body>* response
-		)
-			: config_(config),
-			client_ip_(client_ip),
-			request_(request),
-			response_(response),
-			router_(this),
-			host_(this),
-			application_(this),
-			controller_(this),
-			view_(this),
-			script_(this) {
+namespace Vortex::Core {
 
-		}
+	Framework::Framework(
+		const Maze::Element& config,
+		std::string client_ip,
+		boost::beast::http::request<boost::beast::http::string_body>* request,
+		boost::beast::http::response<boost::beast::http::string_body>* response
+	)
+		: config_(config),
+		client_ip_(client_ip),
+		request_(request),
+		response_(response),
+		router_(this),
+		host_(this),
+		application_(this),
+		controller_(this),
+		view_(this),
+		script_(this) {
 
-		void Framework::setup() {
-			host_.find(router_.get_hostname());
+	}
 
-			script_.setup();
+	void Framework::setup() {
+		host_.find(router_.get_hostname());
 
-			application_.find(host_.get_app_id());
+		script_.setup();
 
-			config_.apply(application_.get_config());
-			config_.apply(host_.get_config());
+		application_.find(host_.get_app_id());
 
-			router_.setup();
+		config_.apply(application_.get_config());
+		config_.apply(host_.get_config());
 
-			controller_.find(
-				application_.get_id(),
-				router_.get_controller(),
-				request_->method_string().to_string());
-		}
+		router_.setup();
 
-		void Framework::run() {
-			script_.exec(application_.get_script());
-			script_.exec(host_.get_script());
-			script_.exec(controller_.get_script());
+		controller_.find(
+			application_.get_id(),
+			router_.get_controller(),
+			request_->method_string().to_string());
+	}
 
-			script_.exec(application_.get_post_script());
-			script_.exec(host_.get_post_script());
-			script_.exec(controller_.get_post_script());
+	void Framework::run() {
+		script_.exec(application_.get_script());
+		script_.exec(host_.get_script());
+		script_.exec(controller_.get_script());
 
-			view_.output();
-			throw(0);
-		}
+		script_.exec(application_.get_post_script());
+		script_.exec(host_.get_post_script());
+		script_.exec(controller_.get_post_script());
 
-		void Framework::exit() {
-			view_.respond();
+		view_.output();
+		throw(0);
+	}
 
-			throw(0);
-		}
+	void Framework::exit() {
+		view_.respond();
 
-		const Maze::Element& Framework::get_config() const {
-			return this->config_;
-		}
-	}  // namespace Core
-}  // namespace Vortex
+		throw(0);
+	}
+
+	const Maze::Element& Framework::get_config() const {
+		return this->config_;
+	}
+
+}

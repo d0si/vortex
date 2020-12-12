@@ -11,83 +11,92 @@ using std::string;
 using std::vector;
 namespace ip = boost::asio::ip;
 
-namespace Vortex {
-	namespace Server {
-		namespace Http {
-			void HttpServer::start(const Maze::Element& config) {
- 				this->config_ = config;
+namespace Vortex::Server::Http {
 
-				if (!Core::CommonRuntime::Instance.get_storage()->is_initialized()) {
-					Core::CommonRuntime::Instance.get_storage()->initialize(config.get("storage", Maze::Type::Object));
-				}
+    void HttpServer::start(const Maze::Element& config) {
+        _config = config;
 
-				if (!Core::CommonRuntime::Instance.get_cache()->is_initialized()) {
-					Core::CommonRuntime::Instance.get_cache()->initialize(config.get("cache", Maze::Type::Object));
-				}
+        try {
+            if (!Core::CommonRuntime::instance().storage()->is_initialized()) {
+                Core::CommonRuntime::instance().storage()->initialize(config.get("storage", Maze::Type::Object));
+            }
 
-				Maze::Element server_config(Maze::Type::Object);
-				if (config_.is_object("server")) {
-					server_config = config_.get("server");
-				}
+            if (!Core::CommonRuntime::instance().cache()->is_initialized()) {
+                Core::CommonRuntime::instance().cache()->initialize(config.get("cache", Maze::Type::Object));
+            }
+        }
+        catch (const std::exception& e) {
+            std::cout << "Unable to initialize storage or caching. " << e.what() << std::endl;
 
-				ip::address address;
+            return;
+        }
 
-				if (server_config.is_string("address")) {
-					try {
-						address = ip::make_address(server_config["address"].get_string());
-					}
-					catch (...) {
-						std::cout << "Server startup error: IP address resolution failed." << std::endl;
+        Maze::Element server_config(Maze::Type::Object);
+        if (_config.is_object("server")) {
+            server_config = _config.get("server");
+        }
 
-						return;
-					}
-				}
-				else {
-					address = ip::make_address("127.0.0.1");
-				}
+        ip::address address;
 
-				unsigned short port;
-				if (server_config.is_int("port")) {
-					port = (unsigned short)server_config["port"].get_int();
-				}
-				else {
-					port = 8080;
-				}
+        if (server_config.is_string("address")) {
+            try {
+                address = ip::make_address(server_config["address"].get_string());
+            }
+            catch (...) {
+                std::cout << "Server startup error: IP address resolution failed." << std::endl;
 
-				int thread_count;
-				if (server_config.is_int("thread_count")) {
-					thread_count = server_config["thread_count"].get_int();
-				}
-				else {
-					thread_count = 4;
-				}
+                return;
+            }
+        }
+        else {
+            address = ip::make_address("127.0.0.1");
+        }
 
-				try {
-					boost::asio::io_context ioContext{ thread_count };
+        unsigned short port;
+        if (server_config.is_int("port")) {
+            port = (unsigned short)server_config["port"].get_int();
+        }
+        else {
+            port = 8080;
+        }
 
-					std::make_shared<HttpListener>(
-						config_,
-						ioContext,
-						ip::tcp::endpoint{ address, port })
-						->run();
+        int thread_count;
+        if (server_config.is_int("thread_count")) {
+            thread_count = server_config["thread_count"].get_int();
+        }
+        else {
+            thread_count = 4;
+        }
 
-					std::cout << "Starting http server on port " << port << std::endl;
+        try {
+            boost::asio::io_context io_context{ thread_count };
 
-					vector<std::thread> threads;
-					threads.reserve(thread_count - 1);
+            std::make_shared<HttpListener>(
+                _config,
+                io_context,
+                ip::tcp::endpoint{ address, port })
+                ->run();
 
-					for (int i = thread_count - 1; i > 0; --i) {
-						threads.emplace_back([&ioContext] {
-							ioContext.run();
-							});
-					}
+            std::cout << "Starting http server on port " << port << std::endl;
 
-					ioContext.run();
-				}
-				catch (std::exception const& e) {
-					std::cout << "Server failed to start. " << e.what() << std::endl;
-				}
-			}
-		}  // namespace Http
-	}  // namespace Server
-}  // namespace Vortex
+            int thread_count_z = thread_count - 1;
+            if (thread_count_z < 1)
+                thread_count_z = 1;
+
+            vector<std::thread> threads;
+            threads.reserve(thread_count_z);
+
+            for (int i = thread_count_z; i > 0; --i) {
+                threads.emplace_back([&io_context] {
+                    io_context.run();
+                    });
+            }
+
+            io_context.run();
+        }
+        catch (std::exception const& e) {
+            std::cout << "Server failed to start. " << e.what() << std::endl;
+        }
+    }
+
+}
