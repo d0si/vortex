@@ -25,7 +25,7 @@ namespace Vortex::Core {
         }
 
         if (!_application.has_children()) {
-            _framework->view_.echo("Application associated with this hostname does not exist");
+            _framework->view()->echo("Application associated with this hostname does not exist");
             _framework->exit();
         }
     }
@@ -58,8 +58,8 @@ namespace Vortex::Core {
         std::string database;
         Maze::Element result;
 
-        if (_framework->get_config().get("application").is_string("database")) {
-            database = _framework->get_config().get("application").get("database").s();
+        if (_framework->config()->get("application").is_string("database")) {
+            database = _framework->config()->get("application").get("database").s();
 
             if (Core::CommonRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
                 result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()

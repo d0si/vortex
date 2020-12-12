@@ -25,7 +25,7 @@ namespace Vortex::Core {
                         method
                     });
 
-            _controller = _framework->application_.find_object_in_application_storage("controllers", query);
+            _controller = _framework->application()->find_object_in_application_storage("controllers", query);
 
             if (_controller.has_children()) {
                 CommonRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
@@ -33,7 +33,7 @@ namespace Vortex::Core {
         }
 
         if (!_controller.has_children()) {
-            _framework->view_.echo("Controller " + name + " not found.");
+            _framework->view()->echo("Controller " + name + " not found.");
             _framework->exit();
         }
     }

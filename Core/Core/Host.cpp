@@ -23,7 +23,7 @@ namespace Vortex::Core {
 		}
 
 		if (!_host.has_children()) {
-			_framework->view_.echo("Nothing is running on this hostname");
+			_framework->view()->echo("Nothing is running on this hostname");
 			_framework->exit();
 		}
 	}

@@ -1,65 +1,95 @@
 #include <Core/Framework.h>
+#include <Core/Exceptions/ExitFrameworkException.h>
 
 namespace Vortex::Core {
 
-	Framework::Framework(
-		const Maze::Element& config,
-		std::string client_ip,
-		boost::beast::http::request<boost::beast::http::string_body>* request,
-		boost::beast::http::response<boost::beast::http::string_body>* response
-	)
-		: config_(config),
-		client_ip_(client_ip),
-		request_(request),
-		response_(response),
-		router_(this),
-		host_(this),
-		application_(this),
-		controller_(this),
-		view_(this),
-		script_(this) {
+    Framework::Framework(
+        const Maze::Element& config,
+        std::string client_ip,
+        boost::beast::http::request<boost::beast::http::string_body>* request,
+        boost::beast::http::response<boost::beast::http::string_body>* response)
+        : _config(config), _client_ip(client_ip),
+        _request(request), _response(response),
+        _router(this), _host(this),
+        _application(this), _controller(this),
+        _view(this), _script(this) {}
 
-	}
+    void Framework::setup() {
+        _host.find(_router.get_hostname());
 
-	void Framework::setup() {
-		host_.find(router_.get_hostname());
+        _script.setup();
 
-		script_.setup();
+        _application.find(_host.get_app_id());
 
-		application_.find(host_.get_app_id());
+        _config.apply(_application.get_config());
+        _config.apply(_host.get_config());
 
-		config_.apply(application_.get_config());
-		config_.apply(host_.get_config());
+        _router.setup();
 
-		router_.setup();
+        _controller.find(
+            _application.get_id(),
+            _router.get_controller(),
+            _request->method_string().to_string());
+    }
 
-		controller_.find(
-			application_.get_id(),
-			router_.get_controller(),
-			request_->method_string().to_string());
-	}
+    void Framework::run() {
+        _script.exec(_application.get_script());
+        _script.exec(_host.get_script());
+        _script.exec(_controller.get_script());
 
-	void Framework::run() {
-		script_.exec(application_.get_script());
-		script_.exec(host_.get_script());
-		script_.exec(controller_.get_script());
+        _script.exec(_application.get_post_script());
+        _script.exec(_host.get_post_script());
+        _script.exec(_controller.get_post_script());
 
-		script_.exec(application_.get_post_script());
-		script_.exec(host_.get_post_script());
-		script_.exec(controller_.get_post_script());
+        _view.output();
 
-		view_.output();
-		throw(0);
-	}
+        throw Exceptions::ExitFrameworkException();
+    }
 
-	void Framework::exit() {
-		view_.respond();
+    void Framework::exit() {
+        _view.respond();
 
-		throw(0);
-	}
+        throw Exceptions::ExitFrameworkException();
+    }
 
-	const Maze::Element& Framework::get_config() const {
-		return this->config_;
-	}
+    const std::string& Framework::client_ip() const {
+        return _client_ip;
+    }
+
+    boost::beast::http::request<boost::beast::http::string_body>* Framework::request() {
+        return _request;
+    }
+
+    boost::beast::http::response<boost::beast::http::string_body>* Framework::response() {
+        return _response;
+    }
+
+    Maze::Element* Framework::config() {
+        return &_config;
+    }
+
+    Router* Framework::router() {
+        return &_router;
+    }
+
+    Host* Framework::host() {
+        return &_host;
+    }
+
+    Application* Framework::application() {
+        return &_application;
+    }
+
+    Controller* Framework::controller() {
+        return &_controller;
+    }
+
+    View* Framework::view() {
+        return &_view;
+    }
+
+    Script::Script* Framework::script() {
+        return &_script;
+    }
 
 }

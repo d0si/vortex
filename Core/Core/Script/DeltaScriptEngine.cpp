@@ -26,50 +26,50 @@ namespace Vortex::Core::Script {
 
 #ifdef HAS_FEATURE_DELTASCRIPT
         _ctx->add_native_function("function view.echo(value)", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.echo(var->find_child("value")->var->get_string());
+            ((Framework*)(data))->view()->echo(var->find_child("value")->var->get_string());
             }, _framework);
         _ctx->add_native_function("function view.set_content_type(value)", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.set_content_type(var->find_child("value")->var->get_string());
+            ((Framework*)(data))->view()->set_content_type(var->find_child("value")->var->get_string());
             }, _framework);
         _ctx->add_native_function("function view.set_status_code(value)", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.set_status_code(var->find_child("value")->var->get_int());
+            ((Framework*)(data))->view()->set_status_code(var->find_child("value")->var->get_int());
             }, _framework);
         _ctx->add_native_function("function view.set_cookie(value)", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.set_cookie(var->find_child("value")->var->get_string());
+            ((Framework*)(data))->view()->set_cookie(var->find_child("value")->var->get_string());
             }, _framework);
         _ctx->add_native_function("function view.set_template(value)", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.set_template(var->find_child("value")->var->get_string());
+            ((Framework*)(data))->view()->set_template(var->find_child("value")->var->get_string());
             }, _framework);
         _ctx->add_native_function("function view.set_page(value)", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.set_page(var->find_child("value")->var->get_string());
+            ((Framework*)(data))->view()->set_page(var->find_child("value")->var->get_string());
             }, _framework);
         _ctx->add_native_function("function view.parse_page()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->view_.parse_page()
+                ((Framework*)(data))->view()->parse_page()
             );
             }, _framework);
         _ctx->add_native_function("function view.finish()", [](DeltaScript::Variable* var, void* data) {
-            ((Framework*)(data))->view_.finish();
+            ((Framework*)(data))->view()->finish();
             }, _framework);
 
         _ctx->add_native_function("function router.get_hostname()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router_.get_hostname()
+                ((Framework*)(data))->router()->get_hostname()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_lang()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router_.get_lang()
+                ((Framework*)(data))->router()->get_lang()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_controller()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router_.get_controller()
+                ((Framework*)(data))->router()->get_controller()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_args()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_as_array();
-            std::vector<std::string> args = ((Framework*)(data))->router_.get_args();
+            std::vector<std::string> args = ((Framework*)(data))->router()->get_args();
 
             for (int i = 0; i < args.size(); ++i) {
                 var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(args[i]));
@@ -78,19 +78,19 @@ namespace Vortex::Core::Script {
             }, _framework);
         _ctx->add_native_function("function router.get_post()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router_.get_post()
+                ((Framework*)(data))->router()->get_post()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_cookie(cookie_name)", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router_.get_cookie(var->find_child("cookie_name")->var->get_string())
+                ((Framework*)(data))->router()->get_cookie(var->find_child("cookie_name")->var->get_string())
             );
             }, _framework);
         _ctx->add_native_function("function router.get_cookies_json()", [](DeltaScript::Variable* var, void* data) {
-            auto cookies = ((Framework*)(data))->router_.get_cookies();
+            auto cookies = ((Framework*)(data))->router()->get_cookies();
             Maze::Element cookies_obj(Maze::Type::Object);
 
-            for (auto cookie : cookies) {
+            for (const auto& cookie : cookies) {
                 cookies_obj.set(cookie.first, cookie.second);
             }
 
@@ -101,12 +101,12 @@ namespace Vortex::Core::Script {
 
         _ctx->add_native_function("function application.get_title()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->application_.get_title()
+                ((Framework*)(data))->application()->get_title()
             );
             }, _framework);
         _ctx->add_native_function("function application.get_id()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->application_.get_id()
+                ((Framework*)(data))->application()->get_id()
             );
             }, _framework);
 
@@ -193,19 +193,19 @@ namespace Vortex::Core::Script {
                 _ctx->execute(script);
             }
             catch (DeltaScript::DeltaScriptException& e) {
-                _framework->view_.echo("<i>Script error (DeltaScript engine):</i><pre>" + e.message + "</pre>");
-                _framework->view_.respond();
+                _framework->view()->echo("<i>Script error (DeltaScript engine):</i><pre>" + e.message + "</pre>");
+                _framework->view()->respond();
                 _framework->exit();
             }
             catch (...) {
-                _framework->view_.echo("<i>Script error (DeltaScript engine)</i>");
-                _framework->view_.respond();
+                _framework->view()->echo("<i>Script error (DeltaScript engine)</i>");
+                _framework->view()->respond();
                 _framework->exit();
             }
         }
 #else
-        _framework->view_.echo("DeltaScript script engine is unavailable.");
-        _framework->view_.respond();
+        _framework->view()->echo("DeltaScript script engine is unavailable.");
+        _framework->view()->respond();
         _framework->exit();
 #endif
     }

@@ -33,6 +33,9 @@
   "modules": [
     {
       "path": "VortexDbApp.dll"
+    },
+    {
+      "path": "MinimalModuleSample.dll"
     }
   ]
 }

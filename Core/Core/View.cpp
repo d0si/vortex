@@ -14,7 +14,7 @@ namespace Vortex::Core {
     }
 
     void View::respond() {
-        _framework->response_->body() = _rendered;
+        _framework->response()->body() = _rendered;
     }
 
     void View::echo(const std::string& contents) {
@@ -22,11 +22,11 @@ namespace Vortex::Core {
     }
 
     void View::set_content_type(const std::string& content_type) {
-        _framework->response_->set(boost::beast::http::field::content_type, content_type);
+        _framework->response()->set(boost::beast::http::field::content_type, content_type);
     }
 
     void View::set_status_code(int status_code) {
-        _framework->response_->result(boost::beast::http::int_to_status(status_code));
+        _framework->response()->result(boost::beast::http::int_to_status(status_code));
     }
 
     void View::set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params) {
@@ -34,11 +34,11 @@ namespace Vortex::Core {
     }
 
     void View::set_cookie(const std::string& cookie_string) {
-        _framework->response_->insert(boost::beast::http::field::set_cookie, cookie_string);
+        _framework->response()->insert(boost::beast::http::field::set_cookie, cookie_string);
     }
 
     void View::clear() {
-        _framework->response_->body() = "";
+        _framework->response()->body() = "";
         _rendered.clear();
     }
 
@@ -98,7 +98,7 @@ namespace Vortex::Core {
                     char next = code[i + 1];
 
                     if (next == '}') {
-                        _framework->script_.exec(script_code);
+                        _framework->script()->exec(script_code);
 
                         script_code.clear();
 
@@ -126,7 +126,7 @@ namespace Vortex::Core {
                     char next = code[i + 1];
 
                     if (next == '}') {
-                        _framework->script_.exec("var results = (" + script_code + "); if (results != undefined) { view.echo(results); }");
+                        _framework->script()->exec("var results = (" + script_code + "); if (results != undefined) { view.echo(results); }");
 
                         script_code.clear();
 
@@ -176,7 +176,7 @@ namespace Vortex::Core {
     void View::set_template(const std::string& name) {
         _template.remove_all_children();
 
-        std::string cache_key = "vortex.core.template.value." + _framework->application_.get_id() + "." + name;
+        std::string cache_key = "vortex.core.template.value." + _framework->application()->get_id() + "." + name;
         if (CommonRuntime::instance().cache()->exists(cache_key)) {
             _template = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
         }
@@ -184,15 +184,15 @@ namespace Vortex::Core {
         if (!_template.has_children()) {
             Maze::Element query(
                 { "name", "app_id" },
-                { name, _framework->application_.get_id() }
+                { name, _framework->application()->get_id() }
             );
 
-            _template = _framework->application_.find_object_in_application_storage("templates", query);
+            _template = _framework->application()->find_object_in_application_storage("templates", query);
 
             if (!_template.has_children()) {
                 query["app_id"].set_as_null();
 
-                _template = _framework->application_.find_object_in_application_storage("templates", query);
+                _template = _framework->application()->find_object_in_application_storage("templates", query);
             }
 
             if (_template.has_children()) {
@@ -201,7 +201,7 @@ namespace Vortex::Core {
         }
 
         if (!_template.has_children()) {
-            _framework->view_.echo("Template " + name + " not found");
+            _framework->view()->echo("Template " + name + " not found");
             _framework->exit();
         }
     }
@@ -217,7 +217,7 @@ namespace Vortex::Core {
     void View::set_page(const std::string& name) {
         _page.remove_all_children();
 
-        std::string cache_key = "vortex.core.page.value." + _framework->application_.get_id() + "." + name;
+        std::string cache_key = "vortex.core.page.value." + _framework->application()->get_id() + "." + name;
         if (CommonRuntime::instance().cache()->exists(cache_key)) {
             _page = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
         }
@@ -225,15 +225,15 @@ namespace Vortex::Core {
         if (!_page.has_children()) {
             Maze::Element query(
                 { "name", "app_id" },
-                { name, _framework->application_.get_id() }
+                { name, _framework->application()->get_id() }
             );
 
-            _page = _framework->application_.find_object_in_application_storage("pages", query);
+            _page = _framework->application()->find_object_in_application_storage("pages", query);
 
             if (!_page.has_children()) {
                 query["app_id"].set_as_null();
 
-                _page = _framework->application_.find_object_in_application_storage("pages", query);
+                _page = _framework->application()->find_object_in_application_storage("pages", query);
             }
 
             if (_page.has_children()) {

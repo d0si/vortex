@@ -21,7 +21,7 @@ namespace Vortex::Core::Script {
 	}
 
 	void Script::setup() {
-		const Maze::Element& script_config = _framework->get_config().get("script");
+		const Maze::Element& script_config = _framework->config()->get("script");
 #ifdef HAS_FEATURE_DELTASCRIPT
 		_default_engine_name = "DeltaScript";
 #elif defined(HAS_FEATURE_DUKTAPE)

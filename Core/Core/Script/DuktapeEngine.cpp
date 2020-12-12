@@ -17,35 +17,35 @@ namespace DuktapeBindings {
             : _framework(framework) {}
 
         void echo(std::string content) {
-            _framework->view_.echo(content);
+            _framework->view()->echo(content);
         }
 
         void set_content_type(std::string content_type) {
-            _framework->view_.set_content_type(content_type);
+            _framework->view()->set_content_type(content_type);
         }
 
         void set_status_code(int status_code) {
-            _framework->view_.set_status_code(status_code);
+            _framework->view()->set_status_code(status_code);
         }
 
         void set_cookie(const std::string& cookie_string) {
-            _framework->view_.set_cookie(cookie_string);
+            _framework->view()->set_cookie(cookie_string);
         }
 
         void set_template(std::string name) {
-            _framework->view_.set_template(name);
+            _framework->view()->set_template(name);
         }
 
         void set_page(std::string name) {
-            _framework->view_.set_page(name);
+            _framework->view()->set_page(name);
         }
 
         std::string parse_page() {
-            return _framework->view_.parse_page();
+            return _framework->view()->parse_page();
         }
 
         void finish() {
-            return _framework->view_.finish();
+            return _framework->view()->finish();
         }
 
         template<class Inspector>
@@ -74,34 +74,34 @@ namespace DuktapeBindings {
             : _framework(framework) {}
 
         std::string get_hostname() const {
-            return _framework->router_.get_hostname();
+            return _framework->router()->get_hostname();
         }
 
         std::string get_lang() const {
-            return _framework->router_.get_lang();
+            return _framework->router()->get_lang();
         }
 
         std::string get_controller() const {
-            return _framework->router_.get_controller();
+            return _framework->router()->get_controller();
         }
 
         std::vector<std::string> get_args() const {
-            return _framework->router_.get_args();
+            return _framework->router()->get_args();
         }
 
         std::string get_post() const {
-            return _framework->router_.get_post();
+            return _framework->router()->get_post();
         }
 
         std::string get_cookie(const std::string& cookie_name) const {
-            return _framework->router_.get_cookie(cookie_name);
+            return _framework->router()->get_cookie(cookie_name);
         }
 
         std::string get_cookies_json() const {
-            auto cookies = _framework->router_.get_cookies();
+            auto cookies = _framework->router()->get_cookies();
             Maze::Element cookies_obj(Maze::Type::Object);
 
-            for (auto cookie : cookies) {
+            for (const auto& cookie : cookies) {
                 cookies_obj.set(cookie.first, cookie.second);
             }
 
@@ -138,11 +138,11 @@ namespace DuktapeBindings {
             : _framework(framework) {}
 
         std::string get_id() {
-            return _framework->application_.get_id();
+            return _framework->application()->get_id();
         }
 
         std::string get_title() {
-            return _framework->application_.get_title();
+            return _framework->application()->get_title();
         }
 
         template<class Inspector>
@@ -271,19 +271,19 @@ namespace Vortex::Core::Script {
             }
             catch (duk::DuktapeException& e) {
                 std::string message = e.what();
-                _framework->view_.echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
-                _framework->view_.respond();
+                _framework->view()->echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
+                _framework->view()->respond();
                 _framework->exit();
             }
             catch (...) {
-                _framework->view_.echo("<i>Script error (duktape engine)</i>");
-                _framework->view_.respond();
+                _framework->view()->echo("<i>Script error (duktape engine)</i>");
+                _framework->view()->respond();
                 _framework->exit();
             }
         }
 #else
-        _framework->view_.echo("Duktape script engine is unavailable.");
-        _framework->view_.respond();
+        _framework->view()->echo("Duktape script engine is unavailable.");
+        _framework->view()->respond();
         _framework->exit();
 #endif
     }

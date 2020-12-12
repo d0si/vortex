@@ -4,6 +4,7 @@
 #include <boost/beast/http.hpp>
 #include <Core/Framework.h>
 #include <Core/Exceptions/VortexException.h>
+#include <Core/Exceptions/ExitFrameworkException.h>
 #ifdef HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
@@ -78,8 +79,11 @@ namespace Vortex::Server::Http {
 
             framework->run();
         }
-        catch (int e) {
-            e;
+        catch (Core::Exceptions::ExitFrameworkException) {
+
+        }
+        catch (int) {
+
 #ifdef HAS_FEATURE_MONGO
         }
         catch (mongocxx::exception e) {

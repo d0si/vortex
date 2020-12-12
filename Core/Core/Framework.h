@@ -15,18 +15,6 @@ namespace Vortex::Core {
 
 	class Framework {
 	public:
-		std::string client_ip_;
-		boost::beast::http::request<boost::beast::http::string_body>* request_;
-		boost::beast::http::response<boost::beast::http::string_body>* response_;
-		Maze::Element config_;
-
-		Router router_;
-		Host host_;
-		Application application_;
-		Controller controller_;
-		View view_;
-		Script::Script script_;
-
 		VORTEX_CORE_API Framework(
 			const Maze::Element& config,
 			std::string client_ip,
@@ -37,7 +25,29 @@ namespace Vortex::Core {
 		VORTEX_CORE_API void run();
 		VORTEX_CORE_API void exit();
 
-		VORTEX_CORE_API const Maze::Element& get_config() const;
+		VORTEX_CORE_API const std::string& client_ip() const;
+		VORTEX_CORE_API boost::beast::http::request<boost::beast::http::string_body>* request();
+		VORTEX_CORE_API boost::beast::http::response<boost::beast::http::string_body>* response();
+		VORTEX_CORE_API Maze::Element* config();
+		VORTEX_CORE_API Router* router();
+		VORTEX_CORE_API Host* host();
+		VORTEX_CORE_API Application* application();
+		VORTEX_CORE_API Controller* controller();
+		VORTEX_CORE_API View* view();
+		VORTEX_CORE_API Script::Script* script();
+
+	private:
+		std::string _client_ip;
+		boost::beast::http::request<boost::beast::http::string_body>* _request;
+		boost::beast::http::response<boost::beast::http::string_body>* _response;
+		Maze::Element _config;
+
+		Router _router;
+		Host _host;
+		Application _application;
+		Controller _controller;
+		View _view;
+		Script::Script _script;
 	};
 
 }  // namespace Vortex::Core
