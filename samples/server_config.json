@@ -29,5 +29,10 @@
         "enabled": false
       }
     }
-  }
+  },
+  "modules": [
+    {
+      "path": "VortexDbApp.dll"
+    }
+  ]
 }

@@ -12,6 +12,8 @@ set(CORE_SOURCES
     Core/Exceptions/StorageException.cpp
     Core/Exceptions/VortexException.cpp
 
+    Core/Modules/ModuleLoader.cpp
+
     Core/Script/DeltaScriptEngine.cpp
     Core/Script/DummyEngine.cpp
     Core/Script/DuktapeEngine.cpp
