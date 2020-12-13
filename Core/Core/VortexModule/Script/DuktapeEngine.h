@@ -1,29 +1,23 @@
 #pragma once
 
-#include <string>
-#include <Core/Script/Script.h>
+#include <Core/VortexModule/Script/Script.h>
 
 namespace duk {
 	class Context;
 }
 
-namespace Vortex::Core {
-	class Framework;
-}
-
-namespace Vortex::Core::Script {
+namespace Vortex::Core::VortexModule::Script {
 
 	class DuktapeEngine : public ScriptEngineInterface {
 	public:
 		DuktapeEngine();
 		~DuktapeEngine();
 
-		virtual void setup(Framework* framework) override;
+		virtual void init(FrameworkInterface* framework) override;
 		virtual void exec(const std::string& script) override;
 
 	private:
 		duk::Context* _ctx = nullptr;
-		Framework* _framework = nullptr;
 	};
 
 
@@ -36,4 +30,4 @@ namespace Vortex::Core::Script {
 		get_new_duktape_engine
 	};
 
-}
+}  // namespace Vortex::Core::VortexModule::Script

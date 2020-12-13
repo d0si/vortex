@@ -1,20 +1,19 @@
-#include <Core/Application.h>
+#include <Core/VortexModule/Application.h>
 #include <Core/CommonRuntime.h>
-#include <Core/Framework.h>
 
-namespace Vortex::Core {
+namespace Vortex::Core::VortexModule {
 
-    Application::Application(Framework* framework)
-        : _framework(framework) {}
+    Application::Application(FrameworkInterface* framework)
+        : ApplicationInterface(framework) {}
 
-    void Application::find(const std::string& app_id) {
-        const std::string cache_key = "vortex.core.application.value." + app_id;
+    void Application::init(const std::string& application_id) {
+        const std::string cache_key = "vortex.core.application.value." + application_id;
         if (CommonRuntime::instance().cache()->exists(cache_key)) {
             _application = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
         }
 
         if (!_application.has_children()) {
-            Maze::Element query({ "_id" }, { Maze::Element({"$oid"}, {app_id}) });
+            Maze::Element query({ "_id" }, { Maze::Element({"$oid"}, {application_id}) });
 
             _application = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_find_first("vortex", "apps", query.to_json()));
@@ -30,15 +29,15 @@ namespace Vortex::Core {
         }
     }
 
-    const std::string& Application::get_id() const {
-        return _application.get("_id").get("$oid").s();
+    std::string Application::id() {
+        return _application.get("_id").get("$oid").get_string();
     }
 
-    const std::string& Application::get_title() const {
-        return _application.get("title").s();
+    std::string Application::title() {
+        return _application.get("title").get_string();
     }
 
-    const Maze::Element Application::get_config() const {
+    Maze::Element Application::config() {
         if (_application.is_object("config")) {
             return _application.get("config");
         }
@@ -46,15 +45,15 @@ namespace Vortex::Core {
         return Maze::Element(Maze::Type::Object);
     }
 
-    const std::string& Application::get_script() const {
-        return _application.get("script").s();
+    std::string Application::script() {
+        return _application.get("script").get_string();
     }
 
-    const std::string& Application::get_post_script() const {
-        return _application.get("post_script").s();
+    std::string Application::post_script() {
+        return _application.get("post_script").get_string();
     }
 
-    Maze::Element Application::find_object_in_application_storage(const std::string& collection, const Maze::Element& query, bool search_other_storages) const {
+    Maze::Element Application::find_object_in_application_storage(const std::string& collection, const Maze::Element& query, bool search_other_storages) {
         std::string database;
         Maze::Element result;
 
@@ -71,8 +70,8 @@ namespace Vortex::Core {
             }
         }
 
-        if (get_id().length() > 0) {
-            database = get_id();
+        if (id().length() > 0) {
+            database = id();
 
             if (Core::CommonRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
                 result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()

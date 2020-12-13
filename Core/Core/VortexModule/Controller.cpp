@@ -1,14 +1,13 @@
-#include <Core/Controller.h>
+#include <Core/VortexModule/Controller.h>
 #include <Core/CommonRuntime.h>
-#include <Core/Framework.h>
 
-namespace Vortex::Core {
+namespace Vortex::Core::VortexModule {
 
-    Controller::Controller(Framework* framework)
-        : _framework(framework) {}
+    Controller::Controller(FrameworkInterface* framework)
+        : ControllerInterface(framework) {}
 
-    void Controller::find(std::string app_id, std::string name, std::string method) {
-        std::string cache_key = "vortex.core.controller.value." + app_id + "." + name + "." + method;
+    void Controller::init(const std::string& application_id, const std::string& name, const std::string& method) {
+        std::string cache_key = "vortex.core.controller.value." + application_id + "." + name + "." + method;
         if (CommonRuntime::instance().cache()->exists(cache_key)) {
             _controller = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
         }
@@ -18,7 +17,7 @@ namespace Vortex::Core {
                 { "$or", "name", "method" },
                     {
                         Maze::Element({
-                            Maze::Element({"app_id"}, {app_id}),
+                            Maze::Element({"app_id"}, {application_id}),
                             Maze::Element({"app_id"}, {Maze::Element::get_null_element()}),
                         }),
                         name,
@@ -38,15 +37,15 @@ namespace Vortex::Core {
         }
     }
 
-    const std::string& Controller::get_id() const {
-        return _controller.get("_id").get("$oid").s();
+    std::string Controller::id() {
+        return _controller.get("_id").get("$oid").get_string();
     }
 
-    const std::string& Controller::get_name() const {
-        return _controller.get("name").s();
+    std::string Controller::name() {
+        return _controller.get("name").get_string();
     }
 
-    const Maze::Element Controller::get_app_ids() const {
+    Maze::Element Controller::app_ids() {
         if (_controller.is_array("app_ids")) {
             return _controller.get("app_ids");
         }
@@ -54,20 +53,20 @@ namespace Vortex::Core {
         return Maze::Element(Maze::Type::Array);
     }
 
-    const std::string& Controller::get_script() const {
-        return _controller.get("script").s();
+    std::string Controller::script() {
+        return _controller.get("script").get_string();
     }
 
-    const std::string& Controller::get_post_script() const {
-        return _controller.get("post_script").s();
+    std::string Controller::post_script() {
+        return _controller.get("post_script").get_string();
     }
 
-    const std::string& Controller::get_content_type() const {
-        return _controller.get("content_type").s();
+    std::string Controller::content_type() {
+        return _controller.get("content_type").get_string();
     }
 
-    const std::string& Controller::get_method() const {
-        return _controller.get("method").s();
+    std::string Controller::method() {
+        return _controller.get("method").get_string();
     }
 
 }

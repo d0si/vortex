@@ -1,11 +1,10 @@
-#include <Core/View.h>
+#include <Core/VortexModule/View.h>
 #include <Core/CommonRuntime.h>
-#include <Core/Framework.h>
 
-namespace Vortex::Core {
+namespace Vortex::Core::VortexModule {
 
-    View::View(Framework* framework)
-        : _framework(framework) {}
+    View::View(FrameworkInterface* framework)
+        : ViewInterface(framework) {}
 
     void View::output() {
         _rendered += parse_template();
@@ -176,7 +175,7 @@ namespace Vortex::Core {
     void View::set_template(const std::string& name) {
         _template.remove_all_children();
 
-        std::string cache_key = "vortex.core.template.value." + _framework->application()->get_id() + "." + name;
+        std::string cache_key = "vortex.core.template.value." + _framework->application()->id() + "." + name;
         if (CommonRuntime::instance().cache()->exists(cache_key)) {
             _template = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
         }
@@ -184,7 +183,7 @@ namespace Vortex::Core {
         if (!_template.has_children()) {
             Maze::Element query(
                 { "name", "app_id" },
-                { name, _framework->application()->get_id() }
+                { name, _framework->application()->id() }
             );
 
             _template = _framework->application()->find_object_in_application_storage("templates", query);
@@ -217,7 +216,7 @@ namespace Vortex::Core {
     void View::set_page(const std::string& name) {
         _page.remove_all_children();
 
-        std::string cache_key = "vortex.core.page.value." + _framework->application()->get_id() + "." + name;
+        std::string cache_key = "vortex.core.page.value." + _framework->application()->id() + "." + name;
         if (CommonRuntime::instance().cache()->exists(cache_key)) {
             _page = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
         }
@@ -225,7 +224,7 @@ namespace Vortex::Core {
         if (!_page.has_children()) {
             Maze::Element query(
                 { "name", "app_id" },
-                { name, _framework->application()->get_id() }
+                { name, _framework->application()->id() }
             );
 
             _page = _framework->application()->find_object_in_application_storage("pages", query);

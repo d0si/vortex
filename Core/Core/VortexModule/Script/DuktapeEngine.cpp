@@ -1,8 +1,7 @@
-#include <Core/Script/DuktapeEngine.h>
+#include <Core/VortexModule/Script/DuktapeEngine.h>
 #ifdef HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
-#include <Core/Framework.h>
 #include <Core/CommonRuntime.h>
 
 #ifdef HAS_FEATURE_DUKTAPE
@@ -13,7 +12,7 @@ namespace DuktapeBindings {
     public:
         View() {}
 
-        View(Vortex::Core::Framework* framework)
+        View(Vortex::Core::FrameworkInterface* framework)
             : _framework(framework) {}
 
         void echo(std::string content) {
@@ -62,7 +61,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        Vortex::Core::Framework* _framework;
+        Vortex::Core::FrameworkInterface* _framework;
     };
 
 
@@ -70,35 +69,35 @@ namespace DuktapeBindings {
     public:
         Router() {}
 
-        Router(Vortex::Core::Framework* framework)
+        Router(Vortex::Core::FrameworkInterface* framework)
             : _framework(framework) {}
 
         std::string get_hostname() const {
-            return _framework->router()->get_hostname();
+            return _framework->router()->hostname();
         }
 
         std::string get_lang() const {
-            return _framework->router()->get_lang();
+            return _framework->router()->lang();
         }
 
         std::string get_controller() const {
-            return _framework->router()->get_controller();
+            return _framework->router()->controller();
         }
 
         std::vector<std::string> get_args() const {
-            return _framework->router()->get_args();
+            return _framework->router()->args();
         }
 
         std::string get_post() const {
-            return _framework->router()->get_post();
+            return _framework->router()->request_post_body();
         }
 
         std::string get_cookie(const std::string& cookie_name) const {
-            return _framework->router()->get_cookie(cookie_name);
+            return _framework->router()->cookie(cookie_name);
         }
 
         std::string get_cookies_json() const {
-            auto cookies = _framework->router()->get_cookies();
+            auto cookies = _framework->router()->cookies();
             Maze::Element cookies_obj(Maze::Type::Object);
 
             for (const auto& cookie : cookies) {
@@ -126,7 +125,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        Vortex::Core::Framework* _framework;
+        Vortex::Core::FrameworkInterface* _framework;
     };
 
 
@@ -134,15 +133,15 @@ namespace DuktapeBindings {
     public:
         Application() {}
 
-        Application(Vortex::Core::Framework* framework)
+        Application(Vortex::Core::FrameworkInterface* framework)
             : _framework(framework) {}
 
         std::string get_id() {
-            return _framework->application()->get_id();
+            return _framework->application()->id();
         }
 
         std::string get_title() {
-            return _framework->application()->get_title();
+            return _framework->application()->title();
         }
 
         template<class Inspector>
@@ -153,7 +152,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        Vortex::Core::Framework* _framework;
+        Vortex::Core::FrameworkInterface* _framework;
     };
 
 
@@ -225,7 +224,7 @@ DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Storage);
 
 #endif  // HAS_FEATURE_DUKTAPE
 
-namespace Vortex::Core::Script {
+namespace Vortex::Core::VortexModule::Script {
 
     DuktapeEngine::DuktapeEngine() {
 #ifdef HAS_FEATURE_DUKTAPE
@@ -241,7 +240,7 @@ namespace Vortex::Core::Script {
 #endif
     }
 
-    void DuktapeEngine::setup(Framework* framework) {
+    void DuktapeEngine::init(FrameworkInterface* framework) {
         _framework = framework;
 
 #ifdef HAS_FEATURE_DUKTAPE

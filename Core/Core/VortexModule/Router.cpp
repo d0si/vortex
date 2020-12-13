@@ -1,10 +1,9 @@
-#include <Core/Router.h>
-#include <Core/Framework.h>
+#include <Core/VortexModule/Router.h>
 
-namespace Vortex::Core {
+namespace Vortex::Core::VortexModule {
 
-    Router::Router(Framework* framework)
-        : _framework(framework) {
+    Router::Router(FrameworkInterface* framework)
+        : RouterInterface(framework) {
         _lang = "en";
         _controller = "index";
 
@@ -12,7 +11,7 @@ namespace Vortex::Core {
         _request_uri = target.substr(1, target.length() - 1);
     }
 
-    void Router::setup() {
+    void Router::init() {
         Maze::Element router_config = _framework->config()->get("router", Maze::Type::Object);
 
         if (router_config.is_object("routes")) {
@@ -202,27 +201,27 @@ namespace Vortex::Core {
         }
     }
 
-    std::string Router::get_hostname() {
+    std::string Router::hostname() {
         return _framework->request()->base()[boost::beast::http::field::host].to_string();
     }
 
-    std::string Router::get_lang() {
+    std::string Router::lang() {
         return _lang;
     }
 
-    std::string Router::get_controller() {
+    std::string Router::controller() {
         return _controller;
     }
 
-    std::vector<std::string> Router::get_args() {
+    std::vector<std::string> Router::args() {
         return _args;
     }
 
-    std::string Router::get_post() const {
+    std::string Router::request_post_body() {
         return _framework->request()->body();
     }
 
-    std::map<std::string, std::string> Router::get_cookies() {
+    std::map<std::string, std::string> Router::cookies() {
         if (!_cookies_initialized) {
             std::string cookies_string = _framework->request()->base()[boost::beast::http::field::cookie].to_string();
 
@@ -264,8 +263,8 @@ namespace Vortex::Core {
         return _cookies;
     }
 
-    std::string Router::get_cookie(const std::string& cookie_name, bool* cookie_exists) {
-        const auto& cookies = get_cookies();
+    std::string Router::cookie(const std::string& cookie_name, bool* cookie_exists) {
+        const auto& cookies = this->cookies();
 
         const auto& it = cookies.find(cookie_name);
         if (it != cookies.end()) {

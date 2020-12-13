@@ -1,13 +1,12 @@
-#include <Core/Router.h>
+#include <Core/VortexModule/Host.h>
 #include <Core/CommonRuntime.h>
-#include <Core/Framework.h>
 
-namespace Vortex::Core {
+namespace Vortex::Core::VortexModule {
 
-	Host::Host(Framework* framework)
-		: _framework(framework) {}
+	Host::Host(FrameworkInterface* framework)
+		: HostInterface(framework) {}
 
-	void Host::find(const std::string& hostname) {
+	void Host::init(const std::string& hostname) {
 		std::string cache_key = "vortex.core.host.value." + hostname;
 		if (CommonRuntime::instance().cache()->exists(cache_key)) {
 			_host = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
@@ -28,19 +27,19 @@ namespace Vortex::Core {
 		}
 	}
 
-	const std::string& Host::get_id() const {
-		return _host.get("_id").get("$oid").s();
+	std::string Host::id() {
+		return _host.get("_id").get("$oid").get_string();
 	}
 
-	const std::string& Host::get_hostname() const {
-		return _host.get("hostname").s();
+	std::string Host::hostname() {
+		return _host.get("hostname").get_string();
 	}
 
-	const std::string& Host::get_app_id() const {
-		return _host.get("app_id").s();
+	std::string Host::application_id() {
+		return _host.get("app_id").get_string();
 	}
 
-	const Maze::Element Host::get_config() const {
+	Maze::Element Host::config() {
 		if (_host.is_object("config")) {
 			return _host.get("config");
 		}
@@ -48,12 +47,12 @@ namespace Vortex::Core {
 		return Maze::Element(Maze::Type::Object);
 	}
 
-	const std::string& Host::get_script() const {
-		return _host.get("script").s();
+	std::string Host::script() {
+		return _host.get("script").get_string();
 	}
 
-	const std::string& Host::get_post_script() const {
-		return _host.get("post_script").s();
+	std::string Host::post_script() {
+		return _host.get("post_script").get_string();
 	}
 
 }

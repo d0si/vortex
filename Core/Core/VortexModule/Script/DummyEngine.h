@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Core/Script/Script.h>
+#include <Core/VortexModule/Script/Script.h>
 
-namespace Vortex::Core::Script {
+namespace Vortex::Core::VortexModule::Script {
 
 	class DummyEngine : public ScriptEngineInterface {
 	public:
-		virtual void setup(Framework* framework) override;
+		virtual void init(FrameworkInterface* framework) override;
 		virtual void exec(const std::string& script) override;
 	};
 
@@ -20,4 +20,4 @@ namespace Vortex::Core::Script {
 		get_new_dummy_engine
 	};
 
-}
+}  // namespace Vortex::Core::VortexModule::Script

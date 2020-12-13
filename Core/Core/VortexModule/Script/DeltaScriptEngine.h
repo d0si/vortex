@@ -1,24 +1,23 @@
 #pragma once
 
-#include <Core/Script/Script.h>
+#include <Core/VortexModule/Script/Script.h>
 
 namespace DeltaScript {
 	class Context;
 }
 
-namespace Vortex::Core::Script {
+namespace Vortex::Core::VortexModule::Script {
 
 	class DeltaScriptEngine : public ScriptEngineInterface {
 	public:
 		DeltaScriptEngine();
 		~DeltaScriptEngine();
 
-		virtual void setup(Framework* framework) override;
+		virtual void init(FrameworkInterface* framework) override;
 		virtual void exec(const std::string& script) override;
 
 	private:
 		DeltaScript::Context* _ctx = nullptr;
-		Framework* _framework;
 	};
 
 	
@@ -31,4 +30,4 @@ namespace Vortex::Core::Script {
 		get_new_deltascript_engine
 	};
 
-}  // namespace Vortex::Core::Script
+}  // namespace Vortex::Core::VortexModule::Script

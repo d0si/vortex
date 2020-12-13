@@ -2,25 +2,20 @@
 
 #include <string>
 #include <Core/DLLSupport.h>
+#include <Core/Interfaces.h>
 
-namespace Vortex::Core {
-
-    class Framework;
-
-}  // Vortex::Core
-
-namespace Vortex::Core::Script {
+namespace Vortex::Core::VortexModule::Script {
 
     class ScriptEngineInterface {
     public:
         VORTEX_CORE_API ScriptEngineInterface() = default;
         VORTEX_CORE_API virtual ~ScriptEngineInterface() = default;
 
-        VORTEX_CORE_API virtual void setup(Framework* framework) = 0;
+        VORTEX_CORE_API virtual void init(FrameworkInterface* framework) = 0;
         VORTEX_CORE_API virtual void exec(const std::string& script) = 0;
 
-    private:
-        Framework* _framework = nullptr;
+    protected:
+        FrameworkInterface* _framework = nullptr;
     };
 
 
@@ -34,18 +29,17 @@ namespace Vortex::Core::Script {
     };
 
 
-    class Script {
+    class Script : public ScriptInterface {
     public:
-        VORTEX_CORE_API Script(Framework* framework);
-        VORTEX_CORE_API ~Script();
+        VORTEX_CORE_API Script(FrameworkInterface* framework);
+        VORTEX_CORE_API virtual ~Script();
 
-        VORTEX_CORE_API void setup();
-        VORTEX_CORE_API void exec(const std::string& script);
+        VORTEX_CORE_API virtual void init() override;
+        VORTEX_CORE_API virtual void exec(const std::string& script) override;
 
     private:
-        Framework* _framework;
         ScriptEngineInterface* _initialized_engine = nullptr;
         std::string _default_engine_name = "Dummy";
     };
 
-}  // namespace Vortex::Core::Script
+}  // namespace Vortex::Core::VortexModule::Script

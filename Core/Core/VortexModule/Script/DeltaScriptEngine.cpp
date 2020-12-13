@@ -1,11 +1,10 @@
-#include <Core/Script/DeltaScriptEngine.h>
+#include <Core/VortexModule/Script/DeltaScriptEngine.h>
 #ifdef HAS_FEATURE_DELTASCRIPT
 #include <DeltaScript/DeltaScript.h>
 #endif
-#include <Core/Framework.h>
 #include <Core/CommonRuntime.h>
 
-namespace Vortex::Core::Script {
+namespace Vortex::Core::VortexModule::Script {
 
     DeltaScriptEngine::DeltaScriptEngine() {
 #ifdef HAS_FEATURE_DELTASCRIPT
@@ -21,7 +20,7 @@ namespace Vortex::Core::Script {
 #endif
     }
 
-    void DeltaScriptEngine::setup(Framework* framework) {
+    void DeltaScriptEngine::init(FrameworkInterface* framework) {
         _framework = framework;
 
 #ifdef HAS_FEATURE_DELTASCRIPT
@@ -54,22 +53,22 @@ namespace Vortex::Core::Script {
 
         _ctx->add_native_function("function router.get_hostname()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router()->get_hostname()
+                ((Framework*)(data))->router()->hostname()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_lang()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router()->get_lang()
+                ((Framework*)(data))->router()->lang()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_controller()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router()->get_controller()
+                ((Framework*)(data))->router()->controller()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_args()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_as_array();
-            std::vector<std::string> args = ((Framework*)(data))->router()->get_args();
+            std::vector<std::string> args = ((Framework*)(data))->router()->args();
 
             for (int i = 0; i < args.size(); ++i) {
                 var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(args[i]));
@@ -78,16 +77,16 @@ namespace Vortex::Core::Script {
             }, _framework);
         _ctx->add_native_function("function router.get_post()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router()->get_post()
+                ((Framework*)(data))->router()->request_post_body()
             );
             }, _framework);
         _ctx->add_native_function("function router.get_cookie(cookie_name)", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->router()->get_cookie(var->find_child("cookie_name")->var->get_string())
+                ((Framework*)(data))->router()->cookie(var->find_child("cookie_name")->var->get_string())
             );
             }, _framework);
         _ctx->add_native_function("function router.get_cookies_json()", [](DeltaScript::Variable* var, void* data) {
-            auto cookies = ((Framework*)(data))->router()->get_cookies();
+            auto cookies = ((Framework*)(data))->router()->cookies();
             Maze::Element cookies_obj(Maze::Type::Object);
 
             for (const auto& cookie : cookies) {
@@ -101,12 +100,12 @@ namespace Vortex::Core::Script {
 
         _ctx->add_native_function("function application.get_title()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->application()->get_title()
+                ((Framework*)(data))->application()->title()
             );
             }, _framework);
         _ctx->add_native_function("function application.get_id()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                ((Framework*)(data))->application()->get_id()
+                ((Framework*)(data))->application()->id()
             );
             }, _framework);
 
