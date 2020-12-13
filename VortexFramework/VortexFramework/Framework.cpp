@@ -1,13 +1,15 @@
-#include <Core/VortexModule/Framework.h>
+#include <VortexFramework/Framework.h>
 #include <Core/Exceptions/ExitFrameworkException.h>
-#include <Core/VortexModule/Router.h>
-#include <Core/VortexModule/Host.h>
-#include <Core/VortexModule/Application.h>
-#include <Core/VortexModule/Controller.h>
-#include <Core/VortexModule/View.h>
-#include <Core/VortexModule/Script/Script.h>
+#include <VortexFramework/Router.h>
+#include <VortexFramework/Host.h>
+#include <VortexFramework/Application.h>
+#include <VortexFramework/Controller.h>
+#include <VortexFramework/View.h>
+#include <VortexFramework/Script/Script.h>
 
-namespace Vortex::Core::VortexModule {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework {
 
     Framework::Framework(
         const Maze::Element& config,

@@ -7,6 +7,7 @@
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
 #include <Maze/Maze.hpp>
+#include <Core/Modules/DependencyInjection.h>
 
 namespace Vortex::Server::Http {
 
@@ -14,7 +15,8 @@ namespace Vortex::Server::Http {
 	public:
 		explicit HttpSession(
 			const Maze::Element& config,
-			boost::asio::ip::tcp::socket socket);
+			boost::asio::ip::tcp::socket socket,
+			Core::Modules::DependencyInjector* session_di);
 
 		void run();
 		void do_read();
@@ -32,6 +34,7 @@ namespace Vortex::Server::Http {
 		boost::beast::http::request<boost::beast::http::string_body> _req;
 		boost::beast::http::response<boost::beast::http::string_body> _res;
 		Maze::Element _config;
+		Core::Modules::DependencyInjector* _session_di;
 	};
 
 }  // namespace Vortex::Server::Http

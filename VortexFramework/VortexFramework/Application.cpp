@@ -1,7 +1,9 @@
-#include <Core/VortexModule/Application.h>
+#include <VortexFramework/Application.h>
 #include <Core/CommonRuntime.h>
 
-namespace Vortex::Core::VortexModule {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework {
 
     Application::Application(FrameworkInterface* framework)
         : ApplicationInterface(framework) {}

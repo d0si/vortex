@@ -1,19 +1,19 @@
 #pragma once
 
-#include <Core/VortexModule/Script/Script.h>
+#include <VortexFramework/Script/Script.h>
 
 namespace DeltaScript {
 	class Context;
 }
 
-namespace Vortex::Core::VortexModule::Script {
+namespace Vortex::VortexFramework::Script {
 
 	class DeltaScriptEngine : public ScriptEngineInterface {
 	public:
 		DeltaScriptEngine();
 		~DeltaScriptEngine();
 
-		virtual void init(FrameworkInterface* framework) override;
+		virtual void init(Core::FrameworkInterface* framework) override;
 		virtual void exec(const std::string& script) override;
 
 	private:
@@ -30,4 +30,4 @@ namespace Vortex::Core::VortexModule::Script {
 		get_new_deltascript_engine
 	};
 
-}  // namespace Vortex::Core::VortexModule::Script
+}  // namespace Vortex::VortexFramework::Script

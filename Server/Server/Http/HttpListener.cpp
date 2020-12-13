@@ -15,8 +15,9 @@ namespace Vortex::Server::Http {
     HttpListener::HttpListener(
         const Maze::Element& config,
         asio::io_context& io_ctx,
-        tcp::endpoint endpoint)
-        : _config(config), _io_ctx(io_ctx), _acceptor(asio::make_strand(io_ctx)) {
+        tcp::endpoint endpoint,
+        Core::Modules::DependencyInjector* server_di)
+        : _config(config), _io_ctx(io_ctx), _acceptor(asio::make_strand(io_ctx)), _server_di(server_di) {
         error_code ec;
 
         _acceptor.open(endpoint.protocol(), ec);
@@ -72,7 +73,8 @@ namespace Vortex::Server::Http {
         else {
             std::make_shared<HttpSession>(
                 _config,
-                std::move(socket))
+                std::move(socket),
+                _server_di->di_scope())
                 ->run();
         }
 

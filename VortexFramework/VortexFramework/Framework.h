@@ -6,9 +6,9 @@
 #include <Core/DLLSupport.h>
 #include <Core/Interfaces.h>
 
-namespace Vortex::Core::VortexModule {
+namespace Vortex::VortexFramework {
 
-	class Framework : public FrameworkInterface {
+	class Framework : public Core::FrameworkInterface {
 	public:
 		VORTEX_CORE_API Framework(
 			const Maze::Element& config,
@@ -25,12 +25,12 @@ namespace Vortex::Core::VortexModule {
 		VORTEX_CORE_API virtual boost::beast::http::request<boost::beast::http::string_body>* request() override;
 		VORTEX_CORE_API virtual boost::beast::http::response<boost::beast::http::string_body>* response() override;
 		VORTEX_CORE_API virtual Maze::Element* config() override;
-		VORTEX_CORE_API virtual RouterInterface* router() override;
-		VORTEX_CORE_API virtual HostInterface* host() override;
-		VORTEX_CORE_API virtual ApplicationInterface* application() override;
-		VORTEX_CORE_API virtual ControllerInterface* controller() override;
-		VORTEX_CORE_API virtual ViewInterface* view() override;
-		VORTEX_CORE_API virtual ScriptInterface* script() override;
+		VORTEX_CORE_API virtual Core::RouterInterface* router() override;
+		VORTEX_CORE_API virtual Core::HostInterface* host() override;
+		VORTEX_CORE_API virtual Core::ApplicationInterface* application() override;
+		VORTEX_CORE_API virtual Core::ControllerInterface* controller() override;
+		VORTEX_CORE_API virtual Core::ViewInterface* view() override;
+		VORTEX_CORE_API virtual Core::ScriptInterface* script() override;
 
 	private:
 		std::string _client_ip;
@@ -38,12 +38,12 @@ namespace Vortex::Core::VortexModule {
 		boost::beast::http::response<boost::beast::http::string_body>* _response;
 		Maze::Element _config;
 
-		RouterInterface* _router;
-		HostInterface* _host;
-		ApplicationInterface* _application;
-		ControllerInterface* _controller;
-		ViewInterface* _view;
-		ScriptInterface* _script;
+		Core::RouterInterface* _router;
+		Core::HostInterface* _host;
+		Core::ApplicationInterface* _application;
+		Core::ControllerInterface* _controller;
+		Core::ViewInterface* _view;
+		Core::ScriptInterface* _script;
 	};
 
-}  // namespace Vortex::Core::VortexModule
+}  // namespace Vortex::VortexFramework

@@ -1,6 +1,8 @@
-#include <Core/VortexModule/Router.h>
+#include <VortexFramework/Router.h>
 
-namespace Vortex::Core::VortexModule {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework {
 
     Router::Router(FrameworkInterface* framework)
         : RouterInterface(framework) {

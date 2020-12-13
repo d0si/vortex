@@ -2,11 +2,11 @@
 
 #include <Core/Interfaces.h>
 
-namespace Vortex::Core::VortexModule {
+namespace Vortex::VortexFramework {
 
-    class Controller : public ControllerInterface {
+    class Controller : public Core::ControllerInterface {
     public:
-        VORTEX_CORE_API Controller(FrameworkInterface* framework);
+        VORTEX_CORE_API Controller(Core::FrameworkInterface* framework);
         VORTEX_CORE_API virtual ~Controller() override = default;
 
         VORTEX_CORE_API virtual void init(const std::string& application_id,
@@ -24,4 +24,4 @@ namespace Vortex::Core::VortexModule {
         Maze::Element _controller;
     };
 
-}  // namespace Vortex::Core::VortexModule
+}  // namespace Vortex::VortexFramework

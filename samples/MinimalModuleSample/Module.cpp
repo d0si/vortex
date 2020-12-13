@@ -18,9 +18,10 @@ namespace ModuleSample {
         return nullptr;
     }
 
+    void SampleModule::register_di(DependencyInjector* di) {}
 }
 
-VORTEX_APP_API Vortex::Core::Modules::Module* get_vortex_module() {
+VORTEX_APP_API Module* get_vortex_module() {
     return new ModuleSample::SampleModule;
 }
 

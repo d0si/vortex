@@ -13,8 +13,9 @@ namespace ip = boost::asio::ip;
 
 namespace Vortex::Server::Http {
 
-    void HttpServer::start(const Maze::Element& config) {
+    void HttpServer::start(const Maze::Element& config, Core::Modules::DependencyInjector* di) {
         _config = config;
+        _server_di = di;
 
         try {
             if (!Core::CommonRuntime::instance().storage()->is_initialized()) {
@@ -74,7 +75,8 @@ namespace Vortex::Server::Http {
             std::make_shared<HttpListener>(
                 _config,
                 io_context,
-                ip::tcp::endpoint{ address, port })
+                ip::tcp::endpoint{ address, port },
+                _server_di)
                 ->run();
 
             std::cout << "Starting http server on port " << port << std::endl;

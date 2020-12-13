@@ -2,11 +2,11 @@
 
 #include <Core/Interfaces.h>
 
-namespace Vortex::Core::VortexModule {
+namespace Vortex::VortexFramework {
 
-    class Host : public HostInterface {
+    class Host : public Core::HostInterface {
     public:
-        VORTEX_CORE_API Host(FrameworkInterface* framework);
+        VORTEX_CORE_API Host(Core::FrameworkInterface* framework);
         VORTEX_CORE_API virtual ~Host() override = default;
 
         VORTEX_CORE_API virtual void init(const std::string& hostname) override;
@@ -22,4 +22,4 @@ namespace Vortex::Core::VortexModule {
         Maze::Element _host;
     };
 
-}  // namespace Vortex::Core::VortexModule
+}  // namespace Vortex::VortexFramework

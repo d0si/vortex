@@ -1,7 +1,9 @@
-#include <Core/VortexModule/Controller.h>
+#include <VortexFramework/Controller.h>
 #include <Core/CommonRuntime.h>
 
-namespace Vortex::Core::VortexModule {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework {
 
     Controller::Controller(FrameworkInterface* framework)
         : ControllerInterface(framework) {}

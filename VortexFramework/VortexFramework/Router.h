@@ -2,11 +2,11 @@
 
 #include <Core/Interfaces.h>
 
-namespace Vortex::Core::VortexModule {
+namespace Vortex::VortexFramework {
 
-	class Router : public RouterInterface {
+	class Router : public Core::RouterInterface {
 	public:
-		VORTEX_CORE_API Router(FrameworkInterface* framework);
+		VORTEX_CORE_API Router(Core::FrameworkInterface* framework);
 		VORTEX_CORE_API virtual ~Router() override = default;
 
 		VORTEX_CORE_API virtual void init() override;
@@ -30,4 +30,4 @@ namespace Vortex::Core::VortexModule {
 		bool _cookies_initialized = false;
 	};
 
-}  // namespace Vortex::Core::VortexModule
+}  // namespace Vortex::VortexFramework

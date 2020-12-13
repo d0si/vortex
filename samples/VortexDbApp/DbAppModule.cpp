@@ -24,6 +24,7 @@ namespace Vortex::App::Db {
         return nullptr;
     }
 
+    void DbAppModule::register_di(DependencyInjector* di) {}
 }
 
 VORTEX_APP_API Module* get_vortex_module() {

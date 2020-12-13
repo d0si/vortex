@@ -1,7 +1,9 @@
-#include <Core/VortexModule/View.h>
+#include <VortexFramework/View.h>
 #include <Core/CommonRuntime.h>
 
-namespace Vortex::Core::VortexModule {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework {
 
     View::View(FrameworkInterface* framework)
         : ViewInterface(framework) {}

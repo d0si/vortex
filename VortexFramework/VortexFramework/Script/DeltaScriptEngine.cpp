@@ -1,10 +1,12 @@
-#include <Core/VortexModule/Script/DeltaScriptEngine.h>
+#include <VortexFramework/Script/DeltaScriptEngine.h>
 #ifdef HAS_FEATURE_DELTASCRIPT
 #include <DeltaScript/DeltaScript.h>
 #endif
 #include <Core/CommonRuntime.h>
 
-namespace Vortex::Core::VortexModule::Script {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework::Script {
 
     DeltaScriptEngine::DeltaScriptEngine() {
 #ifdef HAS_FEATURE_DELTASCRIPT

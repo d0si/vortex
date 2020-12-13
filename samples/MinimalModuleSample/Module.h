@@ -11,6 +11,8 @@ namespace ModuleSample {
 
         virtual const std::vector<std::string> plugin_names() override;
         virtual Vortex::Core::Modules::Plugin* plugin(const std::string& plugin_name) override;
+        
+        virtual void register_di(Vortex::Core::Modules::DependencyInjector* di) override;
     };
 
 }  // namespace ModuleSample

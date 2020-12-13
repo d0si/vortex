@@ -1,8 +1,10 @@
-#include <Core/VortexModule/Script/DuktapeEngine.h>
+#include <VortexFramework/Script/DuktapeEngine.h>
 #ifdef HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
 #include <Core/CommonRuntime.h>
+
+using namespace Vortex::Core;
 
 #ifdef HAS_FEATURE_DUKTAPE
 
@@ -12,7 +14,7 @@ namespace DuktapeBindings {
     public:
         View() {}
 
-        View(Vortex::Core::FrameworkInterface* framework)
+        View(FrameworkInterface* framework)
             : _framework(framework) {}
 
         void echo(std::string content) {
@@ -61,7 +63,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        Vortex::Core::FrameworkInterface* _framework;
+        FrameworkInterface* _framework;
     };
 
 
@@ -69,7 +71,7 @@ namespace DuktapeBindings {
     public:
         Router() {}
 
-        Router(Vortex::Core::FrameworkInterface* framework)
+        Router(FrameworkInterface* framework)
             : _framework(framework) {}
 
         std::string get_hostname() const {
@@ -125,7 +127,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        Vortex::Core::FrameworkInterface* _framework;
+        FrameworkInterface* _framework;
     };
 
 
@@ -133,7 +135,7 @@ namespace DuktapeBindings {
     public:
         Application() {}
 
-        Application(Vortex::Core::FrameworkInterface* framework)
+        Application(FrameworkInterface* framework)
             : _framework(framework) {}
 
         std::string get_id() {
@@ -152,7 +154,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        Vortex::Core::FrameworkInterface* _framework;
+        FrameworkInterface* _framework;
     };
 
 
@@ -224,7 +226,7 @@ DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Storage);
 
 #endif  // HAS_FEATURE_DUKTAPE
 
-namespace Vortex::Core::VortexModule::Script {
+namespace Vortex::VortexFramework::Script {
 
     DuktapeEngine::DuktapeEngine() {
 #ifdef HAS_FEATURE_DUKTAPE

@@ -1,12 +1,13 @@
 #pragma once
 
-#include <Core/DLLSupport.h>
 #include <string>
 #include <vector>
+#include <Core/DLLSupport.h>
+#include <Core/Modules/Plugin.h>
 
 namespace Vortex::Core::Modules {
 
-    class Plugin;
+    class DependencyInjector;
 
     class Module {
     public:
@@ -16,6 +17,8 @@ namespace Vortex::Core::Modules {
 
         VORTEX_CORE_API virtual const std::vector<std::string> plugin_names() = 0;
         VORTEX_CORE_API virtual Plugin* plugin(const std::string& plugin_name) = 0;
+
+        VORTEX_CORE_API virtual void register_di(DependencyInjector* di) = 0;
     };
 
 }  // namespace Vortex::Core::Modules

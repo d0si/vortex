@@ -2,7 +2,7 @@
 #include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
-#include <Core/Framework.h>
+#include <Core/Modules/DependencyInjection.h>
 #include <Core/Exceptions/VortexException.h>
 #include <Core/Exceptions/ExitFrameworkException.h>
 #ifdef HAS_FEATURE_MONGO
@@ -18,8 +18,9 @@ namespace Vortex::Server::Http {
 
     HttpSession::HttpSession(
         const Maze::Element& config,
-        tcp::socket socket)
-        : _config(config), _stream(std::move(socket)) {}
+        tcp::socket socket,
+        Core::Modules::DependencyInjector* session_di)
+        : _config(config), _stream(std::move(socket)), _session_di(session_di) {}
 
     void HttpSession::run() {
         do_read();
@@ -66,16 +67,16 @@ namespace Vortex::Server::Http {
         _res.set(boost::beast::http::field::content_type, "text/html");
         _res.result(boost::beast::http::status::ok);
 
-        Vortex::Core::Framework* framework = nullptr;
+        Vortex::Core::FrameworkInterface* framework = nullptr;
 
         try {
-            framework = new Vortex::Core::Framework(
+            framework = _session_di->activate_framework(
                 _config,
                 _stream.socket().remote_endpoint().address().to_string(),
                 &_req,
                 &_res);
 
-            framework->setup();
+            framework->init();
 
             framework->run();
         }
@@ -96,6 +97,11 @@ namespace Vortex::Server::Http {
             _res.result(boost::beast::http::status::internal_server_error);
             std::string what = e.what();
             _res.body() = "Exception - " + what;
+        }
+        catch (Maze::MazeException e) {
+            _res.result(boost::beast::http::status::internal_server_error);
+            std::string what = e.what();
+            _res.body() = "Runtime error: " + what;
         }
         catch (std::runtime_error e) {
             _res.result(boost::beast::http::status::internal_server_error);

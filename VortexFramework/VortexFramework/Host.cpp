@@ -1,7 +1,9 @@
-#include <Core/VortexModule/Host.h>
+#include <VortexFramework/Host.h>
 #include <Core/CommonRuntime.h>
 
-namespace Vortex::Core::VortexModule {
+using namespace Vortex::Core;
+
+namespace Vortex::VortexFramework {
 
 	Host::Host(FrameworkInterface* framework)
 		: HostInterface(framework) {}
