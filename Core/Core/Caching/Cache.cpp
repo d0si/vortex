@@ -1,7 +1,6 @@
 #include <Core/Caching/Cache.h>
 #include <boost/thread/mutex.hpp>
 #include <iostream>
-#include <sstream>
 #include <Core/Exceptions/CacheException.h>
 #ifdef HAS_FEATURE_CPPREDIS
 #include <Core/Caching/Backends/RedisBackend.h>
@@ -74,10 +73,7 @@ namespace Vortex::Core::Caching {
                 if (!backend_exists) {
                     throw Exceptions::CacheException(
                         "Default backend unavailable",
-                        (std::stringstream()
-                            << "Cache backend '"
-                            << configuration.default_backend
-                            << "' set as default_backend is not available").str());
+                        "Cache backend '" + configuration.default_backend + "' set as default_backend is not available");
                 }
             }
         }
@@ -138,10 +134,7 @@ namespace Vortex::Core::Caching {
 
         throw Exceptions::CacheException(
             "Backend unavailable",
-            (std::stringstream()
-                << "Cache backend '"
-                << backend_name
-                << "' is not available").str());
+            "Cache backend '" + backend_name + "' is not available");
     }
 
 }

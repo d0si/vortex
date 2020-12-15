@@ -34,7 +34,7 @@ namespace Vortex::Core::Storage::Filesystem {
             }
         }
     }
-    
+
     void FilesystemBackend::simple_insert(const std::string& database, const std::string& collection, const std::string& json_value) {
         Maze::Element collection_data = get_collection_entries(database, collection);
 
@@ -400,15 +400,12 @@ namespace Vortex::Core::Storage::Filesystem {
         std::ifstream collection_file(collection_file_path);
         if (!collection_file.is_open()) {
             throw Exceptions::StorageException(
-                (std::stringstream()
-                    << "Unable to open collection file for "
-                    << database
-                    << "/"
-                    << collection).str());
+                "Unable to open collection file for " + database + "/" + collection);
         }
 
-        std::string value = (std::stringstream()
-            << collection_file.rdbuf()).str();
+        std::stringstream value_stream;
+        value_stream << collection_file.rdbuf();
+        std::string value = value_stream.str();
         collection_file.close();
 
         Maze::Element collection_data;
@@ -456,11 +453,7 @@ namespace Vortex::Core::Storage::Filesystem {
         std::ofstream collection_file(collection_file_path, std::ofstream::trunc);
         if (!collection_file.is_open()) {
             throw Exceptions::StorageException(
-                (std::stringstream()
-                    << "Unable to open collection file for "
-                    << database
-                    << "/"
-                    << collection).str());
+                "Unable to open collection file for " + database + "/" + collection);
         }
 
         collection_file << values.to_json(4);
