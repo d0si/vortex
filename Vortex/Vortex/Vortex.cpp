@@ -22,16 +22,13 @@ namespace Vortex {
 #endif
 
 		for (size_t i = 1; i < args.size(); ++i) {
-			if (args[i] == "help" || args[i] == "--help" || args[i] == "-h") {
-				show_help();
-				return;
-			}
+			if (args[i] == "help" || args[i] == "--help" || args[i] == "-h")
+				return show_help();
 		}
 
 		if (args.size() <= 1) {
 			// No additional arguments were supplied
 			start_from_config("server_config.json");
-
 		}
 		else if (args[1] == "start") {
 			bool errors_detected = false;
@@ -248,27 +245,26 @@ namespace Vortex {
 		}
 
 		if (config.is_array("servers") && config.get("servers").has_children()) {
-			Maze::Element servers = config.get("servers");
+			const Maze::Element& servers = config.get("servers");
 
-			for (auto it = servers.begin(); it != servers.end(); it++) {
+			for (const Maze::Element& server : servers) {
 				Maze::Element global_config = config;
 				global_config.remove("servers");
 
-				if (it->is_int()) {
+				if (server.is_int()) {
 					if (global_config.is_object("server")) {
-						Maze::Element conf = global_config.get("server");
-						conf.set("port", it->get_int());
-						global_config.set("server", conf);
+						Maze::Element& conf = global_config.get_ref("server");
+						conf.set("port", server.get_int());
 					}
 					else {
-						global_config.set("server", Maze::Element({ "port" }, { it->get_int() }));
+						global_config.set("server", Maze::Element({ "port" }, { server.get_int() }));
 					}
 
 					running_servers.push_back(std::thread(start_http_server, global_config));
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				}
-				else if (it->is_object()) {
-					global_config.apply(*it);
+				else if (server.is_object()) {
+					global_config.apply(server);
 
 					running_servers.push_back(std::thread(start_http_server, global_config));
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -276,7 +272,7 @@ namespace Vortex {
 				else {
 					std::cout << "Server config is invalid: "
 						<< std::endl
-						<< it->to_json()
+						<< server.to_json()
 						<< std::endl;
 					exit_with_error(1005);
 				}
@@ -294,10 +290,10 @@ namespace Vortex {
 
 	void start_server(const Maze::Element& config) {
 		if (config.is_object("server")) {
-			Maze::Element server_config = config.get("server");
+			const Maze::Element& server_config = config.get("server");
 
 			if (server_config.is_string("type")) {
-				std::string type = server_config.get("type").s();
+				const std::string& type = server_config.get("type").s();
 
 				if (type == "https") {
 					std::cout << "Https server is not yet implemented." << std::endl;
@@ -311,6 +307,7 @@ namespace Vortex {
 				}
 				else if (type == "http") {
 					running_servers.push_back(std::thread(start_http_server, config));
+					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 					return;
 				}

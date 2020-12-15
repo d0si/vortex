@@ -16,7 +16,7 @@ namespace Vortex::Core::Exceptions {
         VORTEX_CORE_API const std::string& details() { return _details; }
         VORTEX_CORE_API const std::string& category() { return _category; }
 
-        VORTEX_CORE_API virtual const char* what() const override;
+        VORTEX_CORE_API virtual const char* what() const noexcept override;
 
     private:
         std::string _message;

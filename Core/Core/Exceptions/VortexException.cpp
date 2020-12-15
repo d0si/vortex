@@ -18,7 +18,7 @@ namespace Vortex::Core::Exceptions {
             << _details).str();
     }
 
-    inline char const* VortexException::what() const {
+    inline char const* VortexException::what() const noexcept {
         return _what.c_str();
     }
 
