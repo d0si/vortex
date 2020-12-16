@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
-#include <Core/DllSupport.h>
+#include <Core/DLLSupport.h>
 #include <Core/Modules/Module.h>
 
 namespace Vortex::Core::Modules {
