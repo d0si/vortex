@@ -1,50 +1,51 @@
 #include <Core/Script/DuktapeEngine.h>
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
+#ifdef HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
 #include <Core/Framework.h>
 #include <Core/CommonRuntime.h>
 
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
-namespace DuktapeBindings {
-    class View {
-    private:
-        Vortex::Core::Framework* framework_;
+#ifdef HAS_FEATURE_DUKTAPE
 
+namespace DuktapeBindings {
+
+    class View {
     public:
         View() {}
-        View(Vortex::Core::Framework* framework) : framework_(framework) {}
+
+        View(Vortex::Core::Framework* framework)
+            : _framework(framework) {}
 
         void echo(std::string content) {
-            framework_->view_.echo(content);
+            _framework->view_.echo(content);
         }
 
         void set_content_type(std::string content_type) {
-            framework_->view_.set_content_type(content_type);
+            _framework->view_.set_content_type(content_type);
         }
 
         void set_status_code(int status_code) {
-            framework_->view_.set_status_code(status_code);
+            _framework->view_.set_status_code(status_code);
         }
 
         void set_cookie(const std::string& cookie_string) {
-            framework_->view_.set_cookie(cookie_string);
+            _framework->view_.set_cookie(cookie_string);
         }
 
         void set_template(std::string name) {
-            framework_->view_.set_template(name);
+            _framework->view_.set_template(name);
         }
 
         void set_page(std::string name) {
-            framework_->view_.set_page(name);
+            _framework->view_.set_page(name);
         }
 
         std::string parse_page() {
-            return framework_->view_.parse_page();
+            return _framework->view_.parse_page();
         }
 
         void finish() {
-            return framework_->view_.finish();
+            return _framework->view_.finish();
         }
 
         template<class Inspector>
@@ -59,43 +60,46 @@ namespace DuktapeBindings {
             i.method("parse_page", &View::parse_page);
             i.method("finish", &View::finish);
         }
+
+    private:
+        Vortex::Core::Framework* _framework;
     };
 
-    class Router {
-    private:
-        Vortex::Core::Framework* framework_;
 
+    class Router {
     public:
         Router() {}
-        Router(Vortex::Core::Framework* framework) : framework_(framework) {}
+
+        Router(Vortex::Core::Framework* framework)
+            : _framework(framework) {}
 
         std::string get_hostname() const {
-            return framework_->router_.get_hostname();
+            return _framework->router_.get_hostname();
         }
 
         std::string get_lang() const {
-            return framework_->router_.get_lang();
+            return _framework->router_.get_lang();
         }
 
         std::string get_controller() const {
-            return framework_->router_.get_controller();
+            return _framework->router_.get_controller();
         }
 
         std::vector<std::string> get_args() const {
-            return framework_->router_.get_args();
+            return _framework->router_.get_args();
         }
 
         std::string get_post() const {
-            return framework_->router_.get_post();
+            return _framework->router_.get_post();
         }
 
         std::string get_cookie(const std::string& cookie_name) const {
-            return framework_->router_.get_cookie(cookie_name);
+            return _framework->router_.get_cookie(cookie_name);
         }
 
         std::string get_cookies_json() const {
-            auto cookies = framework_->router_.get_cookies();
-            Maze::Object cookies_obj;
+            auto cookies = _framework->router_.get_cookies();
+            Maze::Element cookies_obj(Maze::Type::Object);
 
             for (auto cookie : cookies) {
                 cookies_obj.set(cookie.first, cookie.second);
@@ -120,22 +124,25 @@ namespace DuktapeBindings {
             i.method("get_cookie", &Router::get_cookie);
             i.method("get_cookies_json", &Router::get_cookies_json);
         }
+
+    private:
+        Vortex::Core::Framework* _framework;
     };
 
-    class Application {
-    private:
-        Vortex::Core::Framework* framework_;
 
+    class Application {
     public:
         Application() {}
-        Application(Vortex::Core::Framework* framework) : framework_(framework) {}
+
+        Application(Vortex::Core::Framework* framework)
+            : _framework(framework) {}
 
         std::string get_id() {
-            return framework_->application_.get_id();
+            return _framework->application_.get_id();
         }
 
         std::string get_title() {
-            return framework_->application_.get_title();
+            return _framework->application_.get_title();
         }
 
         template<class Inspector>
@@ -144,49 +151,53 @@ namespace DuktapeBindings {
             i.method("get_id", &Application::get_id);
             i.method("get_title", &Application::get_title);
         }
+
+    private:
+        Vortex::Core::Framework* _framework;
     };
+
 
     class Storage {
     public:
         Storage() {}
 
         void simple_insert(const std::string& database, const std::string& collection, const std::string& json_value) {
-            Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_insert(database, collection, json_value);
         }
 
         std::string simple_find_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            return Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_find_all(database, collection, json_simple_query);
         }
 
         std::string simple_find_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            return Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_find_first(database, collection, json_simple_query);
         }
 
         void simple_replace_first(const std::string& database, const std::string& collection, const std::string& json_simple_query, const std::string& replacement_json_value) {
-            Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_replace_first(database, collection, json_simple_query, replacement_json_value);
         }
 
         void simple_delete_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_delete_all(database, collection, json_simple_query);
         }
 
         void simple_delete_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            return Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->simple_delete_first(database, collection, json_simple_query);
         }
 
         std::vector<std::string> get_database_list() {
-            return Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->get_database_list();
         }
 
         std::vector<std::string> get_collection_list(const std::string& database) {
-            return Vortex::Core::CommonRuntime::Instance.get_storage()->get_backend()
+            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
                 ->get_collection_list(database);
         }
 
@@ -203,82 +214,82 @@ namespace DuktapeBindings {
             i.method("get_collection_list", &Storage::get_collection_list);
         }
     };
-}  // namespace duktape_bindings
+
+}  // namespace DuktapeBindings
+
 
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::View);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Router);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Application);
 DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Storage);
 
-#endif  // VORTEX_HAS_FEATURE_CRYPTOPP
+#endif  // HAS_FEATURE_DUKTAPE
 
-namespace Vortex {
-    namespace Core {
-        namespace Script {
-            DuktapeEngine::DuktapeEngine() {
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
-                ctx_ = new duk::Context();
+namespace Vortex::Core::Script {
+
+    DuktapeEngine::DuktapeEngine() {
+#ifdef HAS_FEATURE_DUKTAPE
+        _ctx = new duk::Context();
 #endif
-            }
+    }
 
-            DuktapeEngine::~DuktapeEngine() {
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
-                if (ctx_ != nullptr) {
-                    delete ctx_;
-                }
+    DuktapeEngine::~DuktapeEngine() {
+#ifdef HAS_FEATURE_DUKTAPE
+        if (_ctx != nullptr) {
+            delete _ctx;
+        }
 #endif
-            }
+    }
 
-            void DuktapeEngine::setup(Framework* framework) {
-                framework_ = framework;
+    void DuktapeEngine::setup(Framework* framework) {
+        _framework = framework;
 
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
-                ctx_->registerClass<DuktapeBindings::View>();
-                auto view = std::make_shared<DuktapeBindings::View>(framework_);
-                ctx_->registerClass<DuktapeBindings::Router>();
-                auto router = std::make_shared<DuktapeBindings::Router>(framework_);
-                ctx_->registerClass<DuktapeBindings::Application>();
-                auto application = std::make_shared<DuktapeBindings::Application>(framework_);
-                ctx_->registerClass<DuktapeBindings::Storage>();
-                auto storage = std::make_shared<DuktapeBindings::Storage>();
+#ifdef HAS_FEATURE_DUKTAPE
+        _ctx->registerClass<DuktapeBindings::View>();
+        auto view = std::make_shared<DuktapeBindings::View>(_framework);
+        _ctx->registerClass<DuktapeBindings::Router>();
+        auto router = std::make_shared<DuktapeBindings::Router>(_framework);
+        _ctx->registerClass<DuktapeBindings::Application>();
+        auto application = std::make_shared<DuktapeBindings::Application>(_framework);
+        _ctx->registerClass<DuktapeBindings::Storage>();
+        auto storage = std::make_shared<DuktapeBindings::Storage>();
 
-                ctx_->addGlobal("__view", view);
-                ctx_->addGlobal("__router", router);
-                ctx_->addGlobal("__application", application);
-                ctx_->addGlobal("__storage", storage);
+        _ctx->addGlobal("__view", view);
+        _ctx->addGlobal("__router", router);
+        _ctx->addGlobal("__application", application);
+        _ctx->addGlobal("__storage", storage);
 
-                exec("view=__view;router=__router;application=__application;storage=__storage;");
+        exec("view=__view;router=__router;application=__application;storage=__storage;");
 #endif
-            }
+    }
 
-            void DuktapeEngine::exec(const std::string& script) {
-#ifdef VORTEX_HAS_FEATURE_DUKTAPE
-                if (script.length() > 0) {
-                    try {
-                        ctx_->evalStringNoRes(script.c_str());
-                    }
-                    catch (duk::DuktapeException & e) {
-                        std::string message = e.what();
-                        framework_->view_.echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
-                        framework_->view_.respond();
-                        framework_->exit();
-                    }
-                    catch (...) {
-                        framework_->view_.echo("<i>Script error (duktape engine)</i>");
-                        framework_->view_.respond();
-                        framework_->exit();
-                    }
-                }
+    void DuktapeEngine::exec(const std::string& script) {
+#ifdef HAS_FEATURE_DUKTAPE
+        if (script.length() > 0) {
+            try {
+                _ctx->evalStringNoRes(script.c_str());
+            }
+            catch (duk::DuktapeException& e) {
+                std::string message = e.what();
+                _framework->view_.echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
+                _framework->view_.respond();
+                _framework->exit();
+            }
+            catch (...) {
+                _framework->view_.echo("<i>Script error (duktape engine)</i>");
+                _framework->view_.respond();
+                _framework->exit();
+            }
+        }
 #else
-                framework_->view_.echo("Duktape script engine is unavailable.");
-                framework_->view_.respond();
-                framework_->exit();
+        _framework->view_.echo("Duktape script engine is unavailable.");
+        _framework->view_.respond();
+        _framework->exit();
 #endif
-            }
+    }
 
-            IScriptEngine* get_new_duktape_engine() {
-                return new DuktapeEngine();
-            }
-        }  // namespace Script
-    }  // namespace Core
-}  // namespace Vortex
+    ScriptEngineInterface* get_new_duktape_engine() {
+        return new DuktapeEngine();
+    }
+
+}

@@ -3,7 +3,7 @@
     {
       "server": {
         "ip": "0.0.0.0",
-        "port": 8080,
+        "port": 8081,
         "thread_count": 2
       }
     }
@@ -15,18 +15,18 @@
         "enabled": false
       },
       "Filesystem": {
-        "root_path": "../../../../samples",
+        "root_path": "../../../samples",
         "cache_enabled": true,
         "in_memory_only": true
       }
     }
   },
   "cache": {
-    "enabled": true,
+    "enabled": false,
     "default_backend": "MemoryCache",
     "config": {
       "MemoryCache": {
-        "enabled": true
+        "enabled": false
       }
     }
   }

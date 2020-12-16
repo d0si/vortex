@@ -1,19 +1,13 @@
-#ifndef VORTEX_CORE_UTIL_PASSWORD_H
-#define VORTEX_CORE_UTIL_PASSWORD_H
+#pragma once
 
 #include <string>
+#include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		namespace Util {
-			namespace Password {
-				std::string hash_password(std::string password);
-				std::string hash_password(std::string password, std::string salt, unsigned int iterations = 100000);
-				bool verify_password(std::string password, std::string hashed_password);
-				std::string generate_salt();
-			}  // namespace Password
-		}  // namespace Util
-	}  // namespace Core
-}  // namespace Vortex
+namespace Vortex::Core::Util::Password {
 
-#endif  // VORTEX_CORE_UTIL_PASSWORD_H
+    VORTEX_CORE_API const std::string hash_password(const std::string& password);
+    VORTEX_CORE_API const std::string hash_password(const std::string& password, const std::string& salt, const unsigned int iterations = 100000);
+    VORTEX_CORE_API bool verify_password(const std::string& password, const std::string& hashed_password);
+    VORTEX_CORE_API const std::string generate_salt();
+
+}  // namespace Vortex::Core::Util::Password 

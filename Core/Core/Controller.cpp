@@ -1,67 +1,71 @@
 #include <Core/Controller.h>
 #include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
-#include <Maze/Element.hpp>
 
-namespace Vortex {
-	namespace Core {
-		Controller::Controller(Framework* framework) : framework_(framework) {
+namespace Vortex::Core {
 
-		}
+    Controller::Controller(Framework* framework)
+        : _framework(framework) {}
 
-		void Controller::find(std::string app_id, std::string name, std::string method) {
-			std::string cache_key = "vortex.core.controller.value." + app_id + "." + name + "." + method;
-			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-				controller_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
-			}
+    void Controller::find(std::string app_id, std::string name, std::string method) {
+        std::string cache_key = "vortex.core.controller.value." + app_id + "." + name + "." + method;
+        if (CommonRuntime::instance().cache()->exists(cache_key)) {
+            _controller = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        }
 
-			if (controller_.is_empty()) {
-				Maze::Object query;
-				query.set("$or", Maze::Array()
-					<< Maze::Object("app_id", app_id)
-					<< Maze::Object("app_id", Maze::Element::get_null()));
-				query.set("name", name);
-				query.set("method", method);
+        if (!_controller.has_children()) {
+            Maze::Element or_query(Maze::Type::Array);
+            or_query << Maze::Element({ "app_id" }, { Maze::Element(app_id) })
+                << Maze::Element({ "app_id" }, { Maze::Element::get_null_element() });
 
-				controller_ = framework_->application_.find_object_in_application_storage("controllers", query);
+            Maze::Element query(Maze::Type::Object);
+            query.set("$or", or_query);
+            query.set("name", name);
+            query.set("method", method);
 
-				if (!controller_.is_empty()) {
-					CommonRuntime::Instance.get_cache()->set(cache_key, controller_.to_json(0));
-				}
-			}
+            _controller = _framework->application_.find_object_in_application_storage("controllers", query);
 
-			if (controller_.is_empty()) {
-				framework_->view_.echo("Controller " + name + " not found.");
-				framework_->exit();
-			}
-		}
+            if (_controller.has_children()) {
+                CommonRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
+            }
+        }
 
-		std::string Controller::get_id() {
-			return controller_["_id"].get_object()["$oid"].get_string();
-		}
+        if (!_controller.has_children()) {
+            _framework->view_.echo("Controller " + name + " not found.");
+            _framework->exit();
+        }
+    }
 
-		std::string Controller::get_name() {
-			return controller_["name"].get_string();
-		}
+    const std::string& Controller::get_id() const {
+        return _controller.get("_id").get("$oid").s();
+    }
 
-		Maze::Array Controller::get_app_ids() {
-			return controller_["app_ids"].get_array();
-		}
+    const std::string& Controller::get_name() const {
+        return _controller.get("name").s();
+    }
 
-		std::string Controller::get_script() {
-			return controller_["script"].get_string();
-		}
+    const Maze::Element Controller::get_app_ids() const {
+        if (_controller.is_array("app_ids")) {
+            return _controller.get("app_ids");
+        }
 
-		std::string Controller::get_post_script() {
-			return controller_["post_script"].get_string();
-		}
+        return Maze::Element(Maze::Type::Array);
+    }
 
-		std::string Controller::get_content_type() {
-			return controller_["content_type"].get_string();
-		}
+    const std::string& Controller::get_script() const {
+        return _controller.get("script").s();
+    }
 
-		std::string Controller::get_method() {
-			return controller_["method"].get_string();
-		}
-	}  // namespace Core
-}  // namespace Vortex
+    const std::string& Controller::get_post_script() const {
+        return _controller.get("post_script").s();
+    }
+
+    const std::string& Controller::get_content_type() const {
+        return _controller.get("content_type").s();
+    }
+
+    const std::string& Controller::get_method() const {
+        return _controller.get("method").s();
+    }
+
+}

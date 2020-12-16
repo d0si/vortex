@@ -1,19 +1,19 @@
 #include <Core/CommonRuntime.h>
 
-namespace Vortex {
-	namespace Core {
-		CommonRuntime::CommonRuntime() {
+namespace Vortex::Core {
 
-		}
+    Storage::Storage* CommonRuntime::storage() {
+        return &_storage;
+    }
 
-		Core::Storage::Storage* CommonRuntime::get_storage() {
-			return &this->storage_;
-		}
+    Caching::Cache* CommonRuntime::cache() {
+        return &_cache;
+    }
 
-		Core::Cache::Cache* CommonRuntime::get_cache() {
-			return &this->cache_;
-		}
+    CommonRuntime& CommonRuntime::instance() {
+        return s_instance;
+    }
 
-		CommonRuntime CommonRuntime::Instance;
-	}  // namespace Core
-}  // namespace Vortex
+    CommonRuntime CommonRuntime::s_instance;
+
+}

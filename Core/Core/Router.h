@@ -1,40 +1,39 @@
-#ifndef VORTEX_CORE_FRAMEWORK_ROUTER_H
-#define VORTEX_CORE_FRAMEWORK_ROUTER_H
+#pragma once
 
 #include <string>
 #include <vector>
 #include <map>
+#include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		class Framework;
+namespace Vortex::Core {
 
-		class Router {
-		private:
-			Framework* framework_;
+	class Framework;
 
-			std::string request_uri_;
-			std::string lang_;
-			std::string controller_;
-			std::vector<std::string> args_;
-			std::map<std::string, std::string> cookies_;
-			bool cookies_initialized_ = false;
 
-		public:
-			Router(Framework* framework);
+	class Router {
+	public:
+		VORTEX_CORE_API Router(Framework* framework);
 
-			void setup();
-			std::string get_hostname();
-			std::string get_lang();
-			std::string get_controller();
-			std::vector<std::string> get_args();
-			
-			std::string get_post() const;
+		VORTEX_CORE_API void setup();
+		VORTEX_CORE_API std::string get_hostname();
+		VORTEX_CORE_API std::string get_lang();
+		VORTEX_CORE_API std::string get_controller();
+		VORTEX_CORE_API std::vector<std::string> get_args();
 
-			std::map<std::string, std::string> get_cookies();
-			std::string get_cookie(const std::string& cookie_name, bool* cookie_exists = nullptr);
-		};
-	}  // namespace Core
-}  // namespace Vortex
+		VORTEX_CORE_API std::string get_post() const;
 
-#endif  // VORTEX_CORE_FRAMEWORK_ROUTER_H
+		VORTEX_CORE_API std::map<std::string, std::string> get_cookies();
+		VORTEX_CORE_API std::string get_cookie(const std::string& cookie_name, bool* cookie_exists = nullptr);
+
+	private:
+		Framework* _framework;
+
+		std::string _request_uri;
+		std::string _lang;
+		std::string _controller;
+		std::vector<std::string> _args;
+		std::map<std::string, std::string> _cookies;
+		bool _cookies_initialized = false;
+	};
+
+}  // namespace Vortex::Core

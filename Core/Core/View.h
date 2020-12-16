@@ -1,44 +1,43 @@
-#ifndef VORTEX_CORE_FRAMEWORK_VIEW_H
-#define VORTEX_CORE_FRAMEWORK_VIEW_H
+#pragma once
 
 #include <string>
-#include <Maze/Object.hpp>
+#include <Maze/Maze.hpp>
+#include <Core/DLLSupport.h>
 
-namespace Vortex {
-	namespace Core {
-		class Framework;
+namespace Vortex::Core {
 
-		class View {
-		private:
-			Framework* framework_;
+	class Framework;
 
-			std::string rendered_;
-			Maze::Object template_;
-			Maze::Object page_;
 
-		public:
-			View(Framework* framework);
+	class View {
+	public:
+		VORTEX_CORE_API View(Framework* framework);
 
-			void output();
-			void respond();
+		VORTEX_CORE_API void output();
+		VORTEX_CORE_API void respond();
 
-			void echo(const std::string& contents);
-			void set_content_type(const std::string& content_type);
-			void set_status_code(int status_code);
-			void set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params = "");
-			void set_cookie(const std::string& cookie_string);
+		VORTEX_CORE_API void echo(const std::string& contents);
+		VORTEX_CORE_API void set_content_type(const std::string& content_type);
+		VORTEX_CORE_API void set_status_code(int status_code);
+		VORTEX_CORE_API void set_cookie(const std::string& cookie_name, const std::string& value, const std::string& params = "");
+		VORTEX_CORE_API void set_cookie(const std::string& cookie_string);
 
-			void clear();
-			void finish();
-			std::string parse(const std::string& code);
+		VORTEX_CORE_API void clear();
+		VORTEX_CORE_API void finish();
+		VORTEX_CORE_API std::string parse(const std::string& code);
 
-			void set_template(const std::string& name);
-			std::string parse_template();
+		VORTEX_CORE_API void set_template(const std::string& name);
+		VORTEX_CORE_API std::string parse_template();
 
-			void set_page(const std::string& name);
-			std::string parse_page();
-		};
-	}  // namespace Core
-}  // namespace Vortex
+		VORTEX_CORE_API void set_page(const std::string& name);
+		VORTEX_CORE_API std::string parse_page();
 
-#endif  // VORTEX_CORE_FRAMEWORK_VIEW_H
+	private:
+		Framework* _framework;
+
+		std::string _rendered;
+		Maze::Element _template;
+		Maze::Element _page;
+	};
+
+}  // namespace Vortex::Core

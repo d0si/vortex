@@ -1,28 +1,23 @@
-#ifndef VORTEX_CORE_SCRIPT_DUMMYENGINE_H
-#define VORTEX_CORE_SCRIPT_DUMMYENGINE_H
+#pragma once
 
-#include <Core/Script/IScriptEngine.h>
+#include <Core/Script/Script.h>
 
-namespace Vortex {
-	namespace Core {
-		namespace Script {
-			class DummyEngine : public IScriptEngine {
-			public:
-				virtual void setup(Framework* framework) { }
-				virtual void exec(const std::string& script) { }
-			};
+namespace Vortex::Core::Script {
 
-			IScriptEngine* get_new_dummy_engine() {
-				return new DummyEngine();
-			}
+	class DummyEngine : public ScriptEngineInterface {
+	public:
+		virtual void setup(Framework* framework) override;
+		virtual void exec(const std::string& script) override;
+	};
 
-			static const ScriptEngineDetails dummy_exports = {
-				"DummyEngine",
-				"Dummy",
-				get_new_dummy_engine
-			};
-		}  // namespace Script
-	}  // namespace Core
-}  // namespace Vortex
 
-#endif  // VORTEX_CORE_SCRIPT_DUMMYENGINE_H
+	ScriptEngineInterface* get_new_dummy_engine();
+
+
+	static const ScriptEngineDetails dummy_exports = {
+		"DummyEngine",
+		"Dummy",
+		get_new_dummy_engine
+	};
+
+}

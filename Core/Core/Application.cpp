@@ -1,96 +1,97 @@
 #include <Core/Application.h>
 #include <Core/CommonRuntime.h>
 #include <Core/Framework.h>
-#include <Maze/Element.hpp>
 
-namespace Vortex {
-	namespace Core {
-		Application::Application(Framework* framework) : framework_(framework) {
+namespace Vortex::Core {
 
-		}
+    Application::Application(Framework* framework)
+        : _framework(framework) {}
 
-		void Application::find(const std::string& app_id) {
-			const std::string cache_key = "vortex.core.application.value." + app_id;
-			if (CommonRuntime::Instance.get_cache()->exists(cache_key)) {
-				application_ = Maze::Object::from_json(CommonRuntime::Instance.get_cache()->get(cache_key));
-			}
+    void Application::find(const std::string& app_id) {
+        const std::string cache_key = "vortex.core.application.value." + app_id;
+        if (CommonRuntime::instance().cache()->exists(cache_key)) {
+            _application = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        }
 
-			if (application_.is_empty()) {
-				Maze::Object query;
-				query.set("_id", Maze::Object("$oid", app_id));
+        if (!_application.has_children()) {
+            Maze::Element query({ "_id" }, { Maze::Element({"$oid"}, {app_id}) });
 
-				application_ = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first("vortex", "apps", query.to_json()));
+            _application = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+                ->simple_find_first("vortex", "apps", query.to_json()));
 
-				if (!application_.is_empty()) {
-					CommonRuntime::Instance.get_cache()->set(cache_key, application_.to_json(0));
-				}
-			}
+            if (_application.has_children()) {
+                CommonRuntime::instance().cache()->set(cache_key, _application.to_json(0));
+            }
+        }
 
-			if (application_.is_empty()) {
-				framework_->view_.echo("Application associated with this hostname does not exist");
-				framework_->exit();
-			}
-		}
+        if (!_application.has_children()) {
+            _framework->view_.echo("Application associated with this hostname does not exist");
+            _framework->exit();
+        }
+    }
 
-		std::string Application::get_id() const {
-			return application_["_id"].get_object()["$oid"].get_string();
-		}
+    const std::string& Application::get_id() const {
+        return _application.get("_id").get("$oid").s();
+    }
 
-		std::string Application::get_title() const {
-			return application_["title"].get_string();
-		}
+    const std::string& Application::get_title() const {
+        return _application.get("title").s();
+    }
 
-		Maze::Object Application::get_config() const {
-			return application_["config"].get_object();
-		}
+    const Maze::Element Application::get_config() const {
+        if (_application.is_object("config")) {
+            return _application.get("config");
+        }
 
-		std::string Application::get_script() const {
-			return application_["script"].get_string();
-		}
+        return Maze::Element(Maze::Type::Object);
+    }
 
-		std::string Application::get_post_script() const {
-			return application_["post_script"].get_string();
-		}
+    const std::string& Application::get_script() const {
+        return _application.get("script").s();
+    }
 
-		Maze::Object Application::find_object_in_application_storage(const std::string& collection, const Maze::Object& query, bool search_other_storages) const {
-			std::string database;
-			Maze::Object result;
+    const std::string& Application::get_post_script() const {
+        return _application.get("post_script").s();
+    }
 
-			if (framework_->get_config()["application"].get_object().is_string("database")) {
-				database = framework_->get_config()["application"].get_object()["database"].get_string();
+    Maze::Element Application::find_object_in_application_storage(const std::string& collection, const Maze::Element& query, bool search_other_storages) const {
+        std::string database;
+        Maze::Element result;
 
-				if (Core::CommonRuntime::Instance.get_storage()->get_backend()->collection_exists(database, collection)) {
-					result = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-						->simple_find_first(database, collection, query.to_json()));
+        if (_framework->get_config().get("application").is_string("database")) {
+            database = _framework->get_config().get("application").get("database").s();
 
-					if (!result.is_empty()) {
-						return result;
-					}
-				}
-			}
+            if (Core::CommonRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
+                result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+                    ->simple_find_first(database, collection, query.to_json()));
 
-			if (get_id().length() > 0) {
-				database = get_id();
+                if (result.has_children()) {
+                    return result;
+                }
+            }
+        }
 
-				if (Core::CommonRuntime::Instance.get_storage()->get_backend()->collection_exists(database, collection)) {
-					result = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-						->simple_find_first(database, collection, query.to_json()));
+        if (get_id().length() > 0) {
+            database = get_id();
 
-					if (!result.is_empty()) {
-						return result;
-					}
-				}
-			}
+            if (Core::CommonRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
+                result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+                    ->simple_find_first(database, collection, query.to_json()));
 
-			if (search_other_storages) {
-				database = "vortex";
+                if (result.has_children()) {
+                    return result;
+                }
+            }
+        }
 
-				result = Maze::Object::from_json(Core::CommonRuntime::Instance.get_storage()->get_backend()
-					->simple_find_first(database, collection, query.to_json()));
-			}
+        if (search_other_storages) {
+            database = "vortex";
 
-			return result;
-		}
-	}  // namespace Core
-}  // namespace Vortex
+            result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+                ->simple_find_first(database, collection, query.to_json()));
+        }
+
+        return result;
+    }
+
+}
