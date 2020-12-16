@@ -19,15 +19,15 @@ namespace Vortex::Server::Http {
 
         try {
             if (!Core::CommonRuntime::instance().storage()->is_initialized()) {
-                Core::CommonRuntime::instance().storage()->initialize(config.get("storage", Maze::Type::Object));
+                Core::CommonRuntime::instance().storage()->initialize(config.get_const_ref("storage", Maze::Type::Object));
             }
 
             if (!Core::CommonRuntime::instance().cache()->is_initialized()) {
-                Core::CommonRuntime::instance().cache()->initialize(config.get("cache", Maze::Type::Object));
+                Core::CommonRuntime::instance().cache()->initialize(config.get_const_ref("cache", Maze::Type::Object));
             }
         }
         catch (const std::exception& e) {
-            std::cout << "Unable to initialize storage or caching. " << e.what() << std::endl;
+            std::cout << "Unable to initialize storage or caching - " << e.what() << std::endl;
 
             return;
         }

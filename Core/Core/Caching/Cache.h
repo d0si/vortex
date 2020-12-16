@@ -19,7 +19,7 @@ namespace Vortex::Core::Caching {
     };
 
 
-    VORTEX_CORE_API typedef CacheBackendInterface* (*GetCacheBackendInstanceFunction)();
+    typedef CacheBackendInterface* (*GetCacheBackendInstanceFunction)();
 
 
     struct VORTEX_CORE_API CacheBackendDetails {

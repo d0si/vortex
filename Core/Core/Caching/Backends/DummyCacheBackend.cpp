@@ -16,7 +16,7 @@ namespace Vortex::Core::Caching::Backends {
 
     void DummyCacheBackend::set_expiry(const std::string& key, int seconds) {}
 
-    CacheBackendInterface* Backends::get_dummy_cache_backend() {
+    CacheBackendInterface* get_dummy_cache_backend() {
         static DummyCacheBackend instance;
         return &instance;
     }

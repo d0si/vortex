@@ -13,15 +13,16 @@ namespace Vortex::Core::Util {
         return hash_password(password, generate_salt());
     }
 
-    const std::string Password::hash_password(const std::string& password, std::string& salt, const unsigned int iterations) {
+    const std::string Password::hash_password(const std::string& password, const std::string& salt, const unsigned int iterations) {
 #ifdef HAS_FEATURE_CRYPTOPP
-        if (salt.empty()) {
-            salt = generate_salt();
+        std::string local_salt = salt;
+        if (local_salt.empty()) {
+            local_salt = generate_salt();
         }
 
-        CryptoPP::byte* salt_bytes = (CryptoPP::byte*)salt.c_str();
+        CryptoPP::byte* salt_bytes = (CryptoPP::byte*)local_salt.c_str();
 
-        std::string hash_string = salt + password;
+        std::string hash_string = local_salt + password;
 
         CryptoPP::SHA256 hash;
         CryptoPP::byte digest[CryptoPP::SHA256::DIGESTSIZE];
@@ -44,7 +45,7 @@ namespace Vortex::Core::Util {
         encoder.Put(digest, sizeof(digest));
         encoder.MessageEnd();
 
-        return "$v1$" + salt + "$" + hash_output;
+        return "$v1$" + local_salt + "$" + hash_output;
 #else
         throw std::runtime_error("HAS_FEATURE_CRYPTOPP is not defined. Crypto++ features are not available.");
 #endif
@@ -84,7 +85,7 @@ namespace Vortex::Core::Util {
         return new_password_hash == hashed_password;
     }
 
-    std::string Password::generate_salt() {
+    const std::string Password::generate_salt() {
 #ifdef HAS_FEATURE_CRYPTOPP
         CryptoPP::byte salt[SALT_LENGTH];
 

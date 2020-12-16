@@ -6,8 +6,7 @@
 #
 # Add the Maze project
 #
-cmake_policy(SET CMP0077 NEW) # This allows new policy to override option variables
-set(MAZE_BUILD_SHARED_LIBS OFF)
+set(MAZE_BUILD_SHARED_LIBS ON)
 set(MAZE_BUILD_TESTS OFF)
 set(MAZE_CODE_COVERAGE OFF)
 

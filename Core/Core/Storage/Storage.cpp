@@ -1,5 +1,6 @@
 #include <Core/Storage/Storage.h>
 #include <Core/Storage/Filesystem/FilesystemBackend.h>
+#include <Core/Exceptions/StorageException.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <Core/Storage/Mongo/MongoBackend.h>
 #endif
@@ -53,8 +54,7 @@ namespace Vortex::Core::Storage {
                     }
 
                     if (!backend_exists) {
-                        throw std::runtime_error("Storage backend " + backend_name + " requested in config is not available");
-                        // TODO: Throw more useful exception
+                        throw Exceptions::StorageException("Storage backend " + backend_name + " requested in config is not available");
                     }
                 }
 
@@ -72,7 +72,7 @@ namespace Vortex::Core::Storage {
 
     StorageBackendInterface* Storage::get_backend(const std::string& backend_name) {
         if (!_initialized) {
-            throw std::runtime_error("Storage instance is not initialized");
+            throw Exceptions::StorageException("Storage instance is not initialized");
         }
 
         if (_available_backends.size() == 0) {

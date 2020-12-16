@@ -34,7 +34,7 @@ namespace Vortex::Core::Storage {
     };
 
 
-    typedef VORTEX_CORE_API StorageBackendInterface* (*GetStorageBackendInstanceFunction)();
+    typedef StorageBackendInterface* (*GetStorageBackendInstanceFunction)();
 
 
     struct VORTEX_CORE_API StorageBackendDetails {
