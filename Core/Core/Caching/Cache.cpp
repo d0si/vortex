@@ -89,7 +89,7 @@ namespace Vortex::Core::Caching {
         return _initialized;
     }
 
-    inline const std::string Cache::get(const std::string& key) const {
+    const std::string Cache::get(const std::string& key) const {
         return get_backend()->get(key);
     }
 

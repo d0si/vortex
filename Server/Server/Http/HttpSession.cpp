@@ -82,23 +82,23 @@ namespace Vortex::Server::Http {
             e;
 #ifdef HAS_FEATURE_MONGO
         }
-        catch (mongocxx::exception e) {
+        catch (const mongocxx::exception& e) {
             _res.result(boost::beast::http::status::internal_server_error);
             std::string what = e.what();
             _res.body() = "MongoDb exception: " + what;
 #endif
         }
-        catch (Core::Exceptions::VortexException e) {
+        catch (const Core::Exceptions::VortexException& e) {
             _res.result(boost::beast::http::status::internal_server_error);
             std::string what = e.what();
             _res.body() = "Exception - " + what;
         }
-        catch (std::runtime_error e) {
+        catch (const std::runtime_error& e) {
             _res.result(boost::beast::http::status::internal_server_error);
             std::string what = e.what();
             _res.body() = "Runtime error: " + what;
         }
-        catch (std::exception e) {
+        catch (const std::exception& e) {
             _res.result(boost::beast::http::status::internal_server_error);
             std::string what = e.what();
             _res.body() = "Runtime error: " + what;

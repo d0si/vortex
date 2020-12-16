@@ -4,7 +4,7 @@ project(Vortex)
 #
 # Include project file list variables
 #
-include(Vortex.cmake)
+include(VortexLauncher.cmake)
 
 
 #

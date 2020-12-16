@@ -10,7 +10,7 @@ namespace Vortex::Core {
         return &_cache;
     }
 
-    inline CommonRuntime& CommonRuntime::instance() {
+    CommonRuntime& CommonRuntime::instance() {
         return s_instance;
     }
 

@@ -58,7 +58,7 @@ namespace Vortex::Core::Caching::Backends {
 
     bool MemoryCacheBackend::exists(const std::string& key) {
         if (_enabled) {
-            auto& it = _cache_map.find(key);
+            const auto& it = _cache_map.find(key);
             if (it != _cache_map.end()) {
                 if (it->second->second.expiry_timestamp == 0 ||
                     get_current_time_millis() - it->second->second.expiry_timestamp < 0) {
@@ -75,7 +75,7 @@ namespace Vortex::Core::Caching::Backends {
 
     void MemoryCacheBackend::remove(const std::string& key) {
         if (_enabled) {
-            auto& it = _cache_map.find(key);
+            const auto& it = _cache_map.find(key);
             if (it != _cache_map.end()) {
                 _cache_list.erase(it->second);
                 _cache_map.erase(key);
@@ -85,7 +85,7 @@ namespace Vortex::Core::Caching::Backends {
 
     void MemoryCacheBackend::set_expiry(const std::string& key, int seconds) {
         if (_enabled) {
-            auto& it = _cache_map.find(key);
+            const auto& it = _cache_map.find(key);
             if (it != _cache_map.end()) {
                 if (it->second->second.expiry_timestamp == 0 ||
                     get_current_time_millis() - it->second->second.expiry_timestamp < 0) {

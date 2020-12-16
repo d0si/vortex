@@ -14,16 +14,14 @@ namespace Vortex::Core {
         }
 
         if (!_controller.has_children()) {
-            Maze::Element query(
-                { "$or", "name", "method" },
-                    {
-                        Maze::Element({
-                            Maze::Element({"app_id"}, {app_id}),
-                            Maze::Element({"app_id"}, {Maze::Element::get_null_element()}),
-                        }),
-                        name,
-                        method
-                    });
+            Maze::Element or_query(Maze::Type::Array);
+            or_query << Maze::Element({ "app_id" }, { Maze::Element(app_id) })
+                << Maze::Element({ "app_id" }, { Maze::Element::get_null_element() });
+
+            Maze::Element query(Maze::Type::Object);
+            query.set("$or", or_query);
+            query.set("name", name);
+            query.set("method", method);
 
             _controller = _framework->application_.find_object_in_application_storage("controllers", query);
 
