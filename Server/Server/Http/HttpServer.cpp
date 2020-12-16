@@ -5,7 +5,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <Server/Http/HttpListener.h>
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 
 using std::string;
 using std::vector;
@@ -18,12 +18,12 @@ namespace Vortex::Server::Http {
         _server_di = di;
 
         try {
-            if (!Core::CommonRuntime::instance().storage()->is_initialized()) {
-                Core::CommonRuntime::instance().storage()->initialize(config.get_const_ref("storage", Maze::Type::Object));
+            if (!Core::GlobalRuntime::instance().storage()->is_initialized()) {
+                Core::GlobalRuntime::instance().storage()->initialize(config.get_const_ref("storage", Maze::Type::Object));
             }
 
-            if (!Core::CommonRuntime::instance().cache()->is_initialized()) {
-                Core::CommonRuntime::instance().cache()->initialize(config.get_const_ref("cache", Maze::Type::Object));
+            if (!Core::GlobalRuntime::instance().cache()->is_initialized()) {
+                Core::GlobalRuntime::instance().cache()->initialize(config.get_const_ref("cache", Maze::Type::Object));
             }
         }
         catch (const std::exception& e) {

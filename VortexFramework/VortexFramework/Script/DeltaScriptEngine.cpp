@@ -2,7 +2,7 @@
 #ifdef HAS_FEATURE_DELTASCRIPT
 #include <DeltaScript/DeltaScript.h>
 #endif
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 
 using namespace Vortex::Core;
 
@@ -113,7 +113,7 @@ namespace Vortex::VortexFramework::Script {
 
 
         _ctx->add_native_function("function storage.simple_insert(database, collection, json_value)", [](DeltaScript::Variable* var, void* data) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_insert(
                     var->find_child("database")->var->get_string(),
                     var->find_child("collection")->var->get_string(),
@@ -122,7 +122,7 @@ namespace Vortex::VortexFramework::Script {
             }, nullptr);
         _ctx->add_native_function("function storage.simple_find_all(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+                Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_find_all(
                     var->find_child("database")->var->get_string(),
                     var->find_child("collection")->var->get_string(),
@@ -132,7 +132,7 @@ namespace Vortex::VortexFramework::Script {
             }, nullptr);
         _ctx->add_native_function("function storage.simple_find_first(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_string(
-                Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+                Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_find_first(
                     var->find_child("database")->var->get_string(),
                     var->find_child("collection")->var->get_string(),
@@ -141,7 +141,7 @@ namespace Vortex::VortexFramework::Script {
             );
             }, nullptr);
         _ctx->add_native_function("function storage.simple_replace_first(database, collection, json_simple_query, replacement_json_value)", [](DeltaScript::Variable* var, void* data) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_replace_first(
                     var->find_child("database")->var->get_string(),
                     var->find_child("collection")->var->get_string(),
@@ -150,7 +150,7 @@ namespace Vortex::VortexFramework::Script {
                 );
             }, nullptr);
         _ctx->add_native_function("function storage.simple_delete_all(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_delete_all(
                     var->find_child("database")->var->get_string(),
                     var->find_child("collection")->var->get_string(),
@@ -158,7 +158,7 @@ namespace Vortex::VortexFramework::Script {
                 );
             }, nullptr);
         _ctx->add_native_function("function storage.simple_delete_first(database, collection, json_simple_query)", [](DeltaScript::Variable* var, void* data) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_delete_first(
                     var->find_child("database")->var->get_string(),
                     var->find_child("collection")->var->get_string(),
@@ -168,7 +168,7 @@ namespace Vortex::VortexFramework::Script {
 
         _ctx->add_native_function("function storage.get_database_list()", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_as_array();
-            auto list = Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            auto list = Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->get_database_list();
             for (int i = 0; i < list.size(); ++i) {
                 var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(list[i]));
@@ -177,7 +177,7 @@ namespace Vortex::VortexFramework::Script {
             }, nullptr);
         _ctx->add_native_function("function storage.get_collection_list(database)", [](DeltaScript::Variable* var, void* data) {
             var->find_child("return")->var->set_as_array();
-            auto list = Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            auto list = Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->get_collection_list(var->find_child("database")->var->get_string());
             for (int i = 0; i < list.size(); ++i) {
                 var->find_child("return")->var->set_array_val_at_index(i, new DeltaScript::Variable(list[i]));

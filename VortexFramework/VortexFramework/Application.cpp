@@ -1,5 +1,5 @@
 #include <VortexFramework/Application.h>
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 
 using namespace Vortex::Core;
 
@@ -10,18 +10,18 @@ namespace Vortex::VortexFramework {
 
     void Application::init(const std::string& application_id) {
         const std::string cache_key = "vortex.core.application.value." + application_id;
-        if (CommonRuntime::instance().cache()->exists(cache_key)) {
-            _application = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
+            _application = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
         }
 
         if (!_application.has_children()) {
             Maze::Element query({ "_id" }, { Maze::Element({"$oid"}, {application_id}) });
 
-            _application = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+            _application = Maze::Element::from_json(Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_find_first("vortex", "apps", query.to_json()));
 
             if (_application.has_children()) {
-                CommonRuntime::instance().cache()->set(cache_key, _application.to_json(0));
+                GlobalRuntime::instance().cache()->set(cache_key, _application.to_json(0));
             }
         }
 
@@ -62,8 +62,8 @@ namespace Vortex::VortexFramework {
         if (_framework->config()->get("application").is_string("database")) {
             database = _framework->config()->get("application").get("database").s();
 
-            if (Core::CommonRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
-                result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+            if (Core::GlobalRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
+                result = Maze::Element::from_json(Core::GlobalRuntime::instance().storage()->get_backend()
                     ->simple_find_first(database, collection, query.to_json()));
 
                 if (result.has_children()) {
@@ -75,8 +75,8 @@ namespace Vortex::VortexFramework {
         if (id().length() > 0) {
             database = id();
 
-            if (Core::CommonRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
-                result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+            if (Core::GlobalRuntime::instance().storage()->get_backend()->collection_exists(database, collection)) {
+                result = Maze::Element::from_json(Core::GlobalRuntime::instance().storage()->get_backend()
                     ->simple_find_first(database, collection, query.to_json()));
 
                 if (result.has_children()) {
@@ -88,7 +88,7 @@ namespace Vortex::VortexFramework {
         if (search_other_storages) {
             database = "vortex";
 
-            result = Maze::Element::from_json(Core::CommonRuntime::instance().storage()->get_backend()
+            result = Maze::Element::from_json(Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_find_first(database, collection, query.to_json()));
         }
 

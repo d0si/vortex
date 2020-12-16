@@ -28,5 +28,5 @@ set(CORE_SOURCES
     Core/Util/String.cpp
     Core/Util/Time.cpp
     
-    Core/CommonRuntime.cpp
+    Core/GlobalRuntime.cpp
 )

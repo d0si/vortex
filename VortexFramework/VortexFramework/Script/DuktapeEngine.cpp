@@ -2,7 +2,7 @@
 #ifdef HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 
 using namespace Vortex::Core;
 
@@ -163,42 +163,42 @@ namespace DuktapeBindings {
         Storage() {}
 
         void simple_insert(const std::string& database, const std::string& collection, const std::string& json_value) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_insert(database, collection, json_value);
         }
 
         std::string simple_find_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            return Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_find_all(database, collection, json_simple_query);
         }
 
         std::string simple_find_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            return Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_find_first(database, collection, json_simple_query);
         }
 
         void simple_replace_first(const std::string& database, const std::string& collection, const std::string& json_simple_query, const std::string& replacement_json_value) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_replace_first(database, collection, json_simple_query, replacement_json_value);
         }
 
         void simple_delete_all(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_delete_all(database, collection, json_simple_query);
         }
 
         void simple_delete_first(const std::string& database, const std::string& collection, const std::string& json_simple_query) {
-            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            return Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->simple_delete_first(database, collection, json_simple_query);
         }
 
         std::vector<std::string> get_database_list() {
-            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            return Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->get_database_list();
         }
 
         std::vector<std::string> get_collection_list(const std::string& database) {
-            return Vortex::Core::CommonRuntime::instance().storage()->get_backend()
+            return Vortex::Core::GlobalRuntime::instance().storage()->get_backend()
                 ->get_collection_list(database);
         }
 

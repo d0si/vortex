@@ -6,18 +6,18 @@
 
 namespace Vortex::Core {
 
-    class CommonRuntime {
+    class GlobalRuntime {
     public:
         VORTEX_CORE_API Storage::Storage* storage();
         VORTEX_CORE_API Caching::Cache* cache();
 
-        VORTEX_CORE_API static CommonRuntime& instance();
+        VORTEX_CORE_API static GlobalRuntime& instance();
 
     private:
         Storage::Storage _storage;
         Caching::Cache _cache;
 
-        static CommonRuntime s_instance;
+        static GlobalRuntime s_instance;
     };
 
 }  // namespace Vortex::Core

@@ -31,13 +31,28 @@ namespace Vortex::Core::Modules {
 	};
 
 
-#ifdef WIN32
-
 	struct ModuleInstance;
+
+
+#ifdef WIN32
 
 	class WindowsModuleLoader : public ModuleLoader {
 	public:
 		virtual ~WindowsModuleLoader();
+
+		virtual Module* load_module(const std::string& module_name) override;
+		virtual Module* get_module(const std::string& module_name) override;
+		virtual bool module_loaded(const std::string& module_name) override;
+
+	private:
+		std::unordered_map<std::string, ModuleInstance*> _loaded_modules;
+	};
+
+#else
+
+	class LinuxModuleLoader : public ModuleLoader {
+	public:
+		virtual ~LinuxModuleLoader();
 
 		virtual Module* load_module(const std::string& module_name) override;
 		virtual Module* get_module(const std::string& module_name) override;

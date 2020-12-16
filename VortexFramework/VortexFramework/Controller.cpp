@@ -1,5 +1,5 @@
 #include <VortexFramework/Controller.h>
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 
 using namespace Vortex::Core;
 
@@ -10,26 +10,24 @@ namespace Vortex::VortexFramework {
 
     void Controller::init(const std::string& application_id, const std::string& name, const std::string& method) {
         std::string cache_key = "vortex.core.controller.value." + application_id + "." + name + "." + method;
-        if (CommonRuntime::instance().cache()->exists(cache_key)) {
-            _controller = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
+            _controller = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
         }
 
         if (!_controller.has_children()) {
-            Maze::Element query(
-                { "$or", "name", "method" },
-                    {
-                        Maze::Element({
-                            Maze::Element({"app_id"}, {application_id}),
-                            Maze::Element({"app_id"}, {Maze::Element::get_null_element()}),
-                        }),
-                        name,
-                        method
-                    });
+            Maze::Element or_query(Maze::Type::Array);
+            or_query << Maze::Element({ "app_id" }, { Maze::Element(application_id) })
+                << Maze::Element({ "app_id" }, {Maze::Element::get_null_element()});
+
+            Maze::Element query(Maze::Type::Object);
+            query.set("$or", or_query);
+            query.set("name", name);
+            query.set("method", method);
 
             _controller = _framework->application()->find_object_in_application_storage("controllers", query);
 
             if (_controller.has_children()) {
-                CommonRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
+                GlobalRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
             }
         }
 

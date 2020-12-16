@@ -25,4 +25,4 @@ namespace Vortex::Core::Modules {
 
 extern "C" VORTEX_CORE_API_E Vortex::Core::Modules::Module * get_vortex_module(void);
 
-extern "C" VORTEX_CORE_API_E inline const char* get_vortex_module_name(void);
+extern "C" VORTEX_CORE_API_E const char* get_vortex_module_name(void);

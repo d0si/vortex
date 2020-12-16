@@ -1,5 +1,5 @@
 #include <VortexFramework/View.h>
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 
 using namespace Vortex::Core;
 
@@ -178,8 +178,8 @@ namespace Vortex::VortexFramework {
         _template.remove_all_children();
 
         std::string cache_key = "vortex.core.template.value." + _framework->application()->id() + "." + name;
-        if (CommonRuntime::instance().cache()->exists(cache_key)) {
-            _template = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
+            _template = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
         }
 
         if (!_template.has_children()) {
@@ -197,7 +197,7 @@ namespace Vortex::VortexFramework {
             }
 
             if (_template.has_children()) {
-                CommonRuntime::instance().cache()->set(cache_key, _template.to_json(0));
+                GlobalRuntime::instance().cache()->set(cache_key, _template.to_json(0));
             }
         }
 
@@ -219,8 +219,8 @@ namespace Vortex::VortexFramework {
         _page.remove_all_children();
 
         std::string cache_key = "vortex.core.page.value." + _framework->application()->id() + "." + name;
-        if (CommonRuntime::instance().cache()->exists(cache_key)) {
-            _page = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
+            _page = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
         }
 
         if (!_page.has_children()) {
@@ -238,7 +238,7 @@ namespace Vortex::VortexFramework {
             }
 
             if (_page.has_children()) {
-                CommonRuntime::instance().cache()->set(cache_key, _page.to_json(0));
+                GlobalRuntime::instance().cache()->set(cache_key, _page.to_json(0));
             }
         }
 
