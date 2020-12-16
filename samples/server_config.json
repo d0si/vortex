@@ -32,7 +32,7 @@
   },
   "modules": {
     "load": [
-      "VortexFramework",
+      "VortexBaseRuntime",
       "VortexDbApp",
       "MinimalModuleSample"
     ]

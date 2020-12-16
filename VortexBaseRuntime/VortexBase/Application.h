@@ -2,11 +2,11 @@
 
 #include <Core/Interfaces.h>
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-    class Application : public Core::ApplicationInterface {
+    class Application : public Vortex::Core::ApplicationInterface {
     public:
-        VORTEX_CORE_API Application(Core::FrameworkInterface* framework);
+        VORTEX_CORE_API Application(Vortex::Core::RuntimeInterface* runtime);
         VORTEX_CORE_API virtual ~Application() override = default;
 
         VORTEX_CORE_API virtual void init(const std::string& app_id) override;
@@ -25,4 +25,4 @@ namespace Vortex::VortexFramework {
         Maze::Element _application;
     };
 
-}  // namespace Vortex::VortexFramework
+}  // namespace VortexBase

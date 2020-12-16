@@ -67,7 +67,7 @@ namespace Vortex::Server::Http {
         _res.set(boost::beast::http::field::content_type, "text/html");
         _res.result(boost::beast::http::status::ok);
 
-        Vortex::Core::FrameworkInterface* framework = nullptr;
+        Vortex::Core::RuntimeInterface* framework = nullptr;
 
         try {
             framework = _session_di->activate_framework(

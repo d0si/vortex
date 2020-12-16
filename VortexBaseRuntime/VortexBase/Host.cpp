@@ -1,12 +1,13 @@
-#include <VortexFramework/Host.h>
+#include <VortexBase/Host.h>
 #include <Core/GlobalRuntime.h>
 
-using namespace Vortex::Core;
+using Vortex::Core::RuntimeInterface;
+using Vortex::Core::GlobalRuntime;
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-	Host::Host(FrameworkInterface* framework)
-		: HostInterface(framework) {}
+	Host::Host(RuntimeInterface* runtime)
+		: HostInterface(runtime) {}
 
 	void Host::init(const std::string& hostname) {
 		std::string cache_key = "vortex.core.host.value." + hostname;
@@ -24,8 +25,8 @@ namespace Vortex::VortexFramework {
 		}
 
 		if (!_host.has_children()) {
-			_framework->view()->echo("Nothing is running on this hostname");
-			_framework->exit();
+			_runtime->view()->echo("Nothing is running on this hostname");
+			_runtime->exit();
 		}
 	}
 

@@ -8,12 +8,12 @@
 
 namespace Vortex::Core {
 
-    class FrameworkInterface;
+    class RuntimeInterface;
 
 
     class HostInterface {
     public:
-        VORTEX_CORE_API inline HostInterface(FrameworkInterface* framework) : _framework(framework) {}
+        VORTEX_CORE_API inline HostInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~HostInterface() = default;
 
         VORTEX_CORE_API virtual void init(const std::string& hostname) = 0;
@@ -26,13 +26,13 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::string post_script() = 0;
 
     protected:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
     class ApplicationInterface {
     public:
-        VORTEX_CORE_API inline ApplicationInterface(FrameworkInterface* framework) : _framework(framework) {}
+        VORTEX_CORE_API inline ApplicationInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~ApplicationInterface() = default;
 
         VORTEX_CORE_API virtual void init(const std::string& application_id) = 0;
@@ -48,13 +48,13 @@ namespace Vortex::Core {
             bool search_other_storages = true) = 0;
 
     protected:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
     class RouterInterface {
     public:
-        VORTEX_CORE_API inline RouterInterface(FrameworkInterface* framework) : _framework(framework) {}
+        VORTEX_CORE_API inline RouterInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~RouterInterface() = default;
 
         VORTEX_CORE_API virtual void init() = 0;
@@ -70,13 +70,13 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::string cookie(const std::string& cookie_name, bool* out_cookie_exists = nullptr) = 0;
 
     protected:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
     class ControllerInterface {
     public:
-        VORTEX_CORE_API inline ControllerInterface(FrameworkInterface* framework) : _framework(framework) {}
+        VORTEX_CORE_API inline ControllerInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~ControllerInterface() = default;
 
         VORTEX_CORE_API virtual void init(const std::string& application_id,
@@ -91,13 +91,13 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::string method() = 0;
 
     protected:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
     class ViewInterface {
     public:
-        VORTEX_CORE_API inline ViewInterface(FrameworkInterface* framework) : _framework(framework) {}
+        VORTEX_CORE_API inline ViewInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~ViewInterface() = default;
 
         VORTEX_CORE_API virtual void output() = 0;
@@ -120,13 +120,13 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::string parse_page() = 0;
 
     protected:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
     class ScriptInterface {
     public:
-        VORTEX_CORE_API inline ScriptInterface(FrameworkInterface* framework) : _framework(framework) {}
+        VORTEX_CORE_API inline ScriptInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~ScriptInterface() = default;
 
         VORTEX_CORE_API virtual void init() = 0;
@@ -134,13 +134,13 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual void exec(const std::string& script) = 0;
 
     protected:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
-    class FrameworkInterface {
+    class RuntimeInterface {
     public:
-        VORTEX_CORE_API virtual ~FrameworkInterface() = default;
+        VORTEX_CORE_API virtual ~RuntimeInterface() = default;
 
         VORTEX_CORE_API virtual void init() = 0;
         VORTEX_CORE_API virtual void run() = 0;

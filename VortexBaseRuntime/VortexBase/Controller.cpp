@@ -1,12 +1,13 @@
-#include <VortexFramework/Controller.h>
+#include <VortexBase/Controller.h>
 #include <Core/GlobalRuntime.h>
 
-using namespace Vortex::Core;
+using Vortex::Core::RuntimeInterface;
+using Vortex::Core::GlobalRuntime;
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-    Controller::Controller(FrameworkInterface* framework)
-        : ControllerInterface(framework) {}
+    Controller::Controller(RuntimeInterface* runtime)
+        : ControllerInterface(runtime) {}
 
     void Controller::init(const std::string& application_id, const std::string& name, const std::string& method) {
         std::string cache_key = "vortex.core.controller.value." + application_id + "." + name + "." + method;
@@ -24,7 +25,7 @@ namespace Vortex::VortexFramework {
             query.set("name", name);
             query.set("method", method);
 
-            _controller = _framework->application()->find_object_in_application_storage("controllers", query);
+            _controller = _runtime->application()->find_object_in_application_storage("controllers", query);
 
             if (_controller.has_children()) {
                 GlobalRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
@@ -32,8 +33,8 @@ namespace Vortex::VortexFramework {
         }
 
         if (!_controller.has_children()) {
-            _framework->view()->echo("Controller " + name + " not found.");
-            _framework->exit();
+            _runtime->view()->echo("Controller " + name + " not found.");
+            _runtime->exit();
         }
     }
 

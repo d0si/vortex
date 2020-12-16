@@ -1,8 +1,8 @@
-#include <VortexFramework/Script/DummyEngine.h>
+#include <VortexBase/Script/DummyEngine.h>
 
-namespace Vortex::VortexFramework::Script {
+namespace VortexBase::Script {
 
-    void DummyEngine::init(Core::FrameworkInterface* framework) {}
+    void DummyEngine::init(Vortex::Core::RuntimeInterface* runtime) {}
 
     void DummyEngine::exec(const std::string& script) {}
 

@@ -1,17 +1,17 @@
-#include <VortexFramework/Framework.h>
+#include <VortexBase/BaseRuntime.h>
 #include <Core/Exceptions/ExitFrameworkException.h>
-#include <VortexFramework/Router.h>
-#include <VortexFramework/Host.h>
-#include <VortexFramework/Application.h>
-#include <VortexFramework/Controller.h>
-#include <VortexFramework/View.h>
-#include <VortexFramework/Script/Script.h>
+#include <VortexBase/Router.h>
+#include <VortexBase/Host.h>
+#include <VortexBase/Application.h>
+#include <VortexBase/Controller.h>
+#include <VortexBase/View.h>
+#include <VortexBase/Script/Script.h>
 
-using namespace Vortex::Core;
+using Vortex::Core::RuntimeInterface;
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-    Framework::Framework(
+    BaseRuntime::BaseRuntime(
         const Maze::Element& config,
         std::string client_ip,
         boost::beast::http::request<boost::beast::http::string_body>* request,
@@ -21,7 +21,7 @@ namespace Vortex::VortexFramework {
         _application(new Application(this)), _controller(new Controller(this)),
         _view(new View(this)), _script(new Script::Script(this)) {}
 
-    Framework::~Framework() {
+    BaseRuntime::~BaseRuntime() {
         delete _router;
         delete _host;
         delete _application;
@@ -30,7 +30,7 @@ namespace Vortex::VortexFramework {
         delete _script;
     }
 
-    void Framework::init() {
+    void BaseRuntime::init() {
         _host->init(_router->hostname());
 
         _script->init();
@@ -48,7 +48,7 @@ namespace Vortex::VortexFramework {
             _request->method_string().to_string());
     }
 
-    void Framework::run() {
+    void BaseRuntime::run() {
         _script->exec(_application->script());
         _script->exec(_host->script());
         _script->exec(_controller->script());
@@ -59,52 +59,52 @@ namespace Vortex::VortexFramework {
 
         _view->output();
 
-        throw Exceptions::ExitFrameworkException();
+        throw Vortex::Core::Exceptions::ExitFrameworkException();
     }
 
-    void Framework::exit() {
+    void BaseRuntime::exit() {
         _view->respond();
 
-        throw Exceptions::ExitFrameworkException();
+        throw Vortex::Core::Exceptions::ExitFrameworkException();
     }
 
-    const std::string& Framework::client_ip() const {
+    const std::string& BaseRuntime::client_ip() const {
         return _client_ip;
     }
 
-    boost::beast::http::request<boost::beast::http::string_body>* Framework::request() {
+    boost::beast::http::request<boost::beast::http::string_body>* BaseRuntime::request() {
         return _request;
     }
 
-    boost::beast::http::response<boost::beast::http::string_body>* Framework::response() {
+    boost::beast::http::response<boost::beast::http::string_body>* BaseRuntime::response() {
         return _response;
     }
 
-    Maze::Element* Framework::config() {
+    Maze::Element* BaseRuntime::config() {
         return &_config;
     }
 
-    RouterInterface* Framework::router() {
+    Vortex::Core::RouterInterface* BaseRuntime::router() {
         return _router;
     }
 
-    HostInterface* Framework::host() {
+    Vortex::Core::HostInterface* BaseRuntime::host() {
         return _host;
     }
 
-    ApplicationInterface* Framework::application() {
+    Vortex::Core::ApplicationInterface* BaseRuntime::application() {
         return _application;
     }
 
-    ControllerInterface* Framework::controller() {
+    Vortex::Core::ControllerInterface* BaseRuntime::controller() {
         return _controller;
     }
 
-    ViewInterface* Framework::view() {
+    Vortex::Core::ViewInterface* BaseRuntime::view() {
         return _view;
     }
 
-    ScriptInterface* Framework::script() {
+    Vortex::Core::ScriptInterface* BaseRuntime::script() {
         return _script;
     }
 

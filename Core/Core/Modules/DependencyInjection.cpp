@@ -30,11 +30,11 @@ namespace Vortex::Core::Modules {
         return &s_global;
     }
 
-    void DependencyInjector::install(FrameworkInterface* (*framework_activate)(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response)) {
+    void DependencyInjector::install(RuntimeInterface* (*framework_activate)(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response)) {
         _framework_activator = framework_activate;
     }
 
-    FrameworkInterface* DependencyInjector::activate_framework(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
+    RuntimeInterface* DependencyInjector::activate_framework(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
         if (_framework_activator) {
             _framework_instance = _framework_activator(config, client_ip, request, response);
         

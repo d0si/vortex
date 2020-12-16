@@ -6,16 +6,16 @@
 #include <Core/DLLSupport.h>
 #include <Core/Interfaces.h>
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-	class Framework : public Core::FrameworkInterface {
+	class BaseRuntime : public Vortex::Core::RuntimeInterface {
 	public:
-		VORTEX_CORE_API Framework(
+		VORTEX_CORE_API BaseRuntime(
 			const Maze::Element& config,
 			std::string client_ip,
 			boost::beast::http::request<boost::beast::http::string_body>* request,
 			boost::beast::http::response<boost::beast::http::string_body>* response);
-		VORTEX_CORE_API virtual ~Framework() override;
+		VORTEX_CORE_API virtual ~BaseRuntime() override;
 
 		VORTEX_CORE_API virtual void init() override;
 		VORTEX_CORE_API virtual void run() override;
@@ -25,12 +25,12 @@ namespace Vortex::VortexFramework {
 		VORTEX_CORE_API virtual boost::beast::http::request<boost::beast::http::string_body>* request() override;
 		VORTEX_CORE_API virtual boost::beast::http::response<boost::beast::http::string_body>* response() override;
 		VORTEX_CORE_API virtual Maze::Element* config() override;
-		VORTEX_CORE_API virtual Core::RouterInterface* router() override;
-		VORTEX_CORE_API virtual Core::HostInterface* host() override;
-		VORTEX_CORE_API virtual Core::ApplicationInterface* application() override;
-		VORTEX_CORE_API virtual Core::ControllerInterface* controller() override;
-		VORTEX_CORE_API virtual Core::ViewInterface* view() override;
-		VORTEX_CORE_API virtual Core::ScriptInterface* script() override;
+		VORTEX_CORE_API virtual Vortex::Core::RouterInterface* router() override;
+		VORTEX_CORE_API virtual Vortex::Core::HostInterface* host() override;
+		VORTEX_CORE_API virtual Vortex::Core::ApplicationInterface* application() override;
+		VORTEX_CORE_API virtual Vortex::Core::ControllerInterface* controller() override;
+		VORTEX_CORE_API virtual Vortex::Core::ViewInterface* view() override;
+		VORTEX_CORE_API virtual Vortex::Core::ScriptInterface* script() override;
 
 	private:
 		std::string _client_ip;
@@ -38,12 +38,12 @@ namespace Vortex::VortexFramework {
 		boost::beast::http::response<boost::beast::http::string_body>* _response;
 		Maze::Element _config;
 
-		Core::RouterInterface* _router;
-		Core::HostInterface* _host;
-		Core::ApplicationInterface* _application;
-		Core::ControllerInterface* _controller;
-		Core::ViewInterface* _view;
-		Core::ScriptInterface* _script;
+		Vortex::Core::RouterInterface* _router;
+		Vortex::Core::HostInterface* _host;
+		Vortex::Core::ApplicationInterface* _application;
+		Vortex::Core::ControllerInterface* _controller;
+		Vortex::Core::ViewInterface* _view;
+		Vortex::Core::ScriptInterface* _script;
 	};
 
-}  // namespace Vortex::VortexFramework
+}  // namespace VortexBase

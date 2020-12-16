@@ -1,16 +1,16 @@
-project(VortexFramework)
+project(VortexBaseRuntime)
 
 
 #
 # Include project file list variables
 #
-include(VortexFramework.cmake)
+include(VortexBaseRuntime.cmake)
 
 
 #
 # Add library
 #
-add_library(${PROJECT_NAME} SHARED ${VORTEXFRAMEWORK_SOURCES})
+add_library(${PROJECT_NAME} SHARED ${VORTEX_BASE_RUNTIME_SOURCES})
 add_library(Vortex::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC VORTEX_APP_EXPORTS)

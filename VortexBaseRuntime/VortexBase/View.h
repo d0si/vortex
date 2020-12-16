@@ -2,11 +2,11 @@
 
 #include <Core/Interfaces.h>
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-	class View : public Core::ViewInterface {
+	class View : public Vortex::Core::ViewInterface {
 	public:
-		VORTEX_CORE_API View(Core::FrameworkInterface* framework);
+		VORTEX_CORE_API View(Vortex::Core::RuntimeInterface* runtime);
 		VORTEX_CORE_API virtual ~View() override = default;
 
 		VORTEX_CORE_API virtual void output() override;
@@ -34,4 +34,4 @@ namespace Vortex::VortexFramework {
 		Maze::Element _page;
 	};
 
-}  // namespace Vortex::VortexFramework
+}  // namespace VortexBase

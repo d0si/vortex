@@ -36,8 +36,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # Include solution projects
 #
 add_subdirectory(Core)
-add_subdirectory(VortexFramework)
 add_subdirectory(Server)
+add_subdirectory(VortexBaseRuntime)
 
 add_subdirectory(samples/VortexDbApp)
 add_subdirectory(samples/MinimalModuleSample)

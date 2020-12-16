@@ -1,10 +1,10 @@
-#include <VortexFramework/Script/DuktapeEngine.h>
+#include <VortexBase/Script/DuktapeEngine.h>
 #ifdef HAS_FEATURE_DUKTAPE
 #include <duktape-cpp/DuktapeCpp.h>
 #endif
 #include <Core/GlobalRuntime.h>
 
-using namespace Vortex::Core;
+using Vortex::Core::RuntimeInterface;
 
 #ifdef HAS_FEATURE_DUKTAPE
 
@@ -14,39 +14,39 @@ namespace DuktapeBindings {
     public:
         View() {}
 
-        View(FrameworkInterface* framework)
-            : _framework(framework) {}
+        View(RuntimeInterface* runtime)
+            : _runtime(runtime) {}
 
         void echo(std::string content) {
-            _framework->view()->echo(content);
+            _runtime->view()->echo(content);
         }
 
         void set_content_type(std::string content_type) {
-            _framework->view()->set_content_type(content_type);
+            _runtime->view()->set_content_type(content_type);
         }
 
         void set_status_code(int status_code) {
-            _framework->view()->set_status_code(status_code);
+            _runtime->view()->set_status_code(status_code);
         }
 
         void set_cookie(const std::string& cookie_string) {
-            _framework->view()->set_cookie(cookie_string);
+            _runtime->view()->set_cookie(cookie_string);
         }
 
         void set_template(std::string name) {
-            _framework->view()->set_template(name);
+            _runtime->view()->set_template(name);
         }
 
         void set_page(std::string name) {
-            _framework->view()->set_page(name);
+            _runtime->view()->set_page(name);
         }
 
         std::string parse_page() {
-            return _framework->view()->parse_page();
+            return _runtime->view()->parse_page();
         }
 
         void finish() {
-            return _framework->view()->finish();
+            return _runtime->view()->finish();
         }
 
         template<class Inspector>
@@ -63,7 +63,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
@@ -71,35 +71,35 @@ namespace DuktapeBindings {
     public:
         Router() {}
 
-        Router(FrameworkInterface* framework)
-            : _framework(framework) {}
+        Router(RuntimeInterface* runtime)
+            : _runtime(runtime) {}
 
         std::string get_hostname() const {
-            return _framework->router()->hostname();
+            return _runtime->router()->hostname();
         }
 
         std::string get_lang() const {
-            return _framework->router()->lang();
+            return _runtime->router()->lang();
         }
 
         std::string get_controller() const {
-            return _framework->router()->controller();
+            return _runtime->router()->controller();
         }
 
         std::vector<std::string> get_args() const {
-            return _framework->router()->args();
+            return _runtime->router()->args();
         }
 
         std::string get_post() const {
-            return _framework->router()->request_post_body();
+            return _runtime->router()->request_post_body();
         }
 
         std::string get_cookie(const std::string& cookie_name) const {
-            return _framework->router()->cookie(cookie_name);
+            return _runtime->router()->cookie(cookie_name);
         }
 
         std::string get_cookies_json() const {
-            auto cookies = _framework->router()->cookies();
+            auto cookies = _runtime->router()->cookies();
             Maze::Element cookies_obj(Maze::Type::Object);
 
             for (const auto& cookie : cookies) {
@@ -127,7 +127,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
@@ -135,15 +135,15 @@ namespace DuktapeBindings {
     public:
         Application() {}
 
-        Application(FrameworkInterface* framework)
-            : _framework(framework) {}
+        Application(RuntimeInterface* runtime)
+            : _runtime(runtime) {}
 
         std::string get_id() {
-            return _framework->application()->id();
+            return _runtime->application()->id();
         }
 
         std::string get_title() {
-            return _framework->application()->title();
+            return _runtime->application()->title();
         }
 
         template<class Inspector>
@@ -154,7 +154,7 @@ namespace DuktapeBindings {
         }
 
     private:
-        FrameworkInterface* _framework;
+        RuntimeInterface* _runtime;
     };
 
 
@@ -226,7 +226,7 @@ DUK_CPP_DEF_CLASS_NAME(DuktapeBindings::Storage);
 
 #endif  // HAS_FEATURE_DUKTAPE
 
-namespace Vortex::VortexFramework::Script {
+namespace VortexBase::Script {
 
     DuktapeEngine::DuktapeEngine() {
 #ifdef HAS_FEATURE_DUKTAPE
@@ -242,16 +242,16 @@ namespace Vortex::VortexFramework::Script {
 #endif
     }
 
-    void DuktapeEngine::init(FrameworkInterface* framework) {
-        _framework = framework;
+    void DuktapeEngine::init(RuntimeInterface* runtime) {
+        _runtime = runtime;
 
 #ifdef HAS_FEATURE_DUKTAPE
         _ctx->registerClass<DuktapeBindings::View>();
-        auto view = std::make_shared<DuktapeBindings::View>(_framework);
+        auto view = std::make_shared<DuktapeBindings::View>(_runtime);
         _ctx->registerClass<DuktapeBindings::Router>();
-        auto router = std::make_shared<DuktapeBindings::Router>(_framework);
+        auto router = std::make_shared<DuktapeBindings::Router>(_runtime);
         _ctx->registerClass<DuktapeBindings::Application>();
-        auto application = std::make_shared<DuktapeBindings::Application>(_framework);
+        auto application = std::make_shared<DuktapeBindings::Application>(_runtime);
         _ctx->registerClass<DuktapeBindings::Storage>();
         auto storage = std::make_shared<DuktapeBindings::Storage>();
 
@@ -272,20 +272,20 @@ namespace Vortex::VortexFramework::Script {
             }
             catch (duk::DuktapeException& e) {
                 std::string message = e.what();
-                _framework->view()->echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
-                _framework->view()->respond();
-                _framework->exit();
+                _runtime->view()->echo("<i>Script error (duktape engine):</i><pre>" + message + "</pre>");
+                _runtime->view()->respond();
+                _runtime->exit();
             }
             catch (...) {
-                _framework->view()->echo("<i>Script error (duktape engine)</i>");
-                _framework->view()->respond();
-                _framework->exit();
+                _runtime->view()->echo("<i>Script error (duktape engine)</i>");
+                _runtime->view()->respond();
+                _runtime->exit();
             }
         }
 #else
-        _framework->view()->echo("Duktape script engine is unavailable.");
-        _framework->view()->respond();
-        _framework->exit();
+        _runtime->view()->echo("Duktape script engine is unavailable.");
+        _runtime->view()->respond();
+        _runtime->exit();
 #endif
     }
 

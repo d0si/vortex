@@ -1,20 +1,20 @@
-#include <VortexFramework/Router.h>
+#include <VortexBase/Router.h>
 
-using namespace Vortex::Core;
+using Vortex::Core::RuntimeInterface;
 
-namespace Vortex::VortexFramework {
+namespace VortexBase {
 
-    Router::Router(FrameworkInterface* framework)
-        : RouterInterface(framework) {
+    Router::Router(RuntimeInterface* runtime)
+        : RouterInterface(runtime) {
         _lang = "en";
         _controller = "index";
 
-        std::string target = _framework->request()->target().to_string();
+        std::string target = _runtime->request()->target().to_string();
         _request_uri = target.substr(1, target.length() - 1);
     }
 
     void Router::init() {
-        Maze::Element router_config = _framework->config()->get("router", Maze::Type::Object);
+        Maze::Element router_config = _runtime->config()->get("router", Maze::Type::Object);
 
         if (router_config.is_object("routes")) {
             Maze::Element routes = router_config.get("routes", Maze::Type::Object);
@@ -204,7 +204,7 @@ namespace Vortex::VortexFramework {
     }
 
     std::string Router::hostname() {
-        return _framework->request()->base()[boost::beast::http::field::host].to_string();
+        return _runtime->request()->base()[boost::beast::http::field::host].to_string();
     }
 
     std::string Router::lang() {
@@ -220,12 +220,12 @@ namespace Vortex::VortexFramework {
     }
 
     std::string Router::request_post_body() {
-        return _framework->request()->body();
+        return _runtime->request()->body();
     }
 
     std::map<std::string, std::string> Router::cookies() {
         if (!_cookies_initialized) {
-            std::string cookies_string = _framework->request()->base()[boost::beast::http::field::cookie].to_string();
+            std::string cookies_string = _runtime->request()->base()[boost::beast::http::field::cookie].to_string();
 
             std::string key = "";
             std::string value = "";
