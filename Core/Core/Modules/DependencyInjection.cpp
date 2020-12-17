@@ -1,8 +1,25 @@
 #include <Core/Modules/DependencyInjection.h>
 #include <Core/Exceptions/VortexException.h>
 
+#define ADD_DEPENDENCY_FUNCS(field_name, type_prefix, activate_arg,...)                                             \
+    void DependencyInjector::install(type_prefix##Activator activator) { _##field_name##_activator = activator; }   \
+    const std::shared_ptr<type_prefix##Interface>& DependencyInjector::activate_##field_name(__VA_ARGS__) {         \
+        if (_##field_name##_activator) {                                                                            \
+            _##field_name##_instance = _##field_name##_activator(activate_arg);                                     \
+                                                                                                                    \
+            return _##field_name##_instance;                                                                        \
+        }                                                                                                           \
+                                                                                                                    \
+        if (_parent) return _parent->activate_##field_name##(activate_arg);                                         \
+                                                                                                                    \
+        throw Exceptions::VortexException("Unable to activate ##field_name##", "Dependency injection resolve failed. No applicable activator installed."); \
+    }                                                                                                               \
+    const std::shared_ptr<type_prefix##Interface>& DependencyInjector::field_name() {                               \
+        return _##field_name##_instance;                                                                            \
+    }
+
 namespace Vortex::Core::Modules {
-    
+
     DependencyInjector::DependencyInjector(DependencyInjector* parent)
         : _parent(parent) {
         if (_parent != nullptr)
@@ -13,9 +30,6 @@ namespace Vortex::Core::Modules {
         if (_parent != nullptr) {
             _parent->del_ref();
         }
-
-        if (_framework_instance)
-            delete _framework_instance;
     }
 
     DependencyInjector* DependencyInjector::di_scope() {
@@ -30,22 +44,33 @@ namespace Vortex::Core::Modules {
         return &s_global;
     }
 
-    void DependencyInjector::install(RuntimeInterface* (*framework_activate)(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response)) {
-        _framework_activator = framework_activate;
+    void DependencyInjector::install(RuntimeActivator activator) {
+        _runtime_activator = activator;
     }
 
-    RuntimeInterface* DependencyInjector::activate_framework(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
-        if (_framework_activator) {
-            _framework_instance = _framework_activator(config, client_ip, request, response);
-        
-            return _framework_instance;
+    const std::shared_ptr<RuntimeInterface>& DependencyInjector::activate_runtime(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
+        if (_runtime_activator) {
+            _runtime_instance = _runtime_activator(config, client_ip, request, response);
+
+            return _runtime_instance;
         }
 
         if (_parent)
-            return _parent->activate_framework(config, client_ip, request, response);
+            return _parent->activate_runtime(config, client_ip, request, response);
 
-        throw Exceptions::VortexException("Unable to activate framework", "Dependency injection resolve failed. No applicable activator installed.");
+        throw Exceptions::VortexException("Unable to activate runtime", "Dependency injection resolve failed. No applicable activator installed.");
     }
+
+    const std::shared_ptr<RuntimeInterface>& DependencyInjector::runtime() {
+        return _runtime_instance;
+    }
+
+    ADD_DEPENDENCY_FUNCS(host, Host, runtime, const std::shared_ptr<RuntimeInterface> runtime);
+    ADD_DEPENDENCY_FUNCS(application, Application, runtime, const std::shared_ptr<RuntimeInterface> runtime);
+    ADD_DEPENDENCY_FUNCS(router, Router, runtime, const std::shared_ptr<RuntimeInterface> runtime);
+    ADD_DEPENDENCY_FUNCS(controller, Controller, runtime, const std::shared_ptr<RuntimeInterface> runtime);
+    ADD_DEPENDENCY_FUNCS(view, View, runtime, const std::shared_ptr<RuntimeInterface> runtime);
+    ADD_DEPENDENCY_FUNCS(script, Script, runtime, const std::shared_ptr<RuntimeInterface> runtime);
 
     ModuleLoader* DependencyInjector::module_loader() {
         return ModuleLoader::loader();

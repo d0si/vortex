@@ -11,16 +11,16 @@ namespace VortexBase {
 
 	void Host::init(const std::string& hostname) {
 		std::string cache_key = "vortex.core.host.value." + hostname;
-		if (GlobalRuntime::instance().cache()->exists(cache_key)) {
-			_host = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
+		if (GlobalRuntime::instance().cache().exists(cache_key)) {
+			_host = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
 		}
 
 		if (!_host.has_children()) {
-			_host = Maze::Element::from_json(GlobalRuntime::instance().storage()->get_backend()
+			_host = Maze::Element::from_json(GlobalRuntime::instance().storage().get_backend()
 				->simple_find_first("vortex", "hosts", Maze::Element({ "hostname" }, { hostname }).to_json()));
 
 			if (_host.has_children()) {
-				GlobalRuntime::instance().cache()->set(cache_key, _host.to_json(0));
+				GlobalRuntime::instance().cache().set(cache_key, _host.to_json(0));
 			}
 		}
 

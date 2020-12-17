@@ -2,12 +2,12 @@
 
 namespace Vortex::Core {
 
-    Storage::Storage* GlobalRuntime::storage() {
-        return &_storage;
+    Storage::Storage& GlobalRuntime::storage() {
+        return _storage;
     }
 
-    Caching::Cache* GlobalRuntime::cache() {
-        return &_cache;
+    Caching::Cache& GlobalRuntime::cache() {
+        return _cache;
     }
 
     GlobalRuntime& GlobalRuntime::instance() {

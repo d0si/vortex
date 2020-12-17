@@ -28,7 +28,7 @@ namespace VortexBase {
 
     void VortexBaseRuntimeModule::register_di(DependencyInjector* di) {
         di->install([](const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
-            return (RuntimeInterface*)new BaseRuntime(config, client_ip, request, response);
+            return (std::shared_ptr<RuntimeInterface>)std::make_shared<BaseRuntime>(config, client_ip, request, response);
             });
     }
 

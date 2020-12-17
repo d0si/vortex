@@ -11,8 +11,8 @@ namespace VortexBase {
 
     void Controller::init(const std::string& application_id, const std::string& name, const std::string& method) {
         std::string cache_key = "vortex.core.controller.value." + application_id + "." + name + "." + method;
-        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
-            _controller = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache().exists(cache_key)) {
+            _controller = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
         }
 
         if (!_controller.has_children()) {
@@ -28,7 +28,7 @@ namespace VortexBase {
             _controller = _runtime->application()->find_object_in_application_storage("controllers", query);
 
             if (_controller.has_children()) {
-                GlobalRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
+                GlobalRuntime::instance().cache().set(cache_key, _controller.to_json(0));
             }
         }
 

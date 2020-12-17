@@ -179,8 +179,8 @@ namespace VortexBase {
         _template.remove_all_children();
 
         std::string cache_key = "vortex.core.template.value." + _runtime->application()->id() + "." + name;
-        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
-            _template = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache().exists(cache_key)) {
+            _template = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
         }
 
         if (!_template.has_children()) {
@@ -198,7 +198,7 @@ namespace VortexBase {
             }
 
             if (_template.has_children()) {
-                GlobalRuntime::instance().cache()->set(cache_key, _template.to_json(0));
+                GlobalRuntime::instance().cache().set(cache_key, _template.to_json(0));
             }
         }
 
@@ -220,8 +220,8 @@ namespace VortexBase {
         _page.remove_all_children();
 
         std::string cache_key = "vortex.core.page.value." + _runtime->application()->id() + "." + name;
-        if (GlobalRuntime::instance().cache()->exists(cache_key)) {
-            _page = Maze::Element::from_json(GlobalRuntime::instance().cache()->get(cache_key));
+        if (GlobalRuntime::instance().cache().exists(cache_key)) {
+            _page = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
         }
 
         if (!_page.has_children()) {
@@ -239,7 +239,7 @@ namespace VortexBase {
             }
 
             if (_page.has_children()) {
-                GlobalRuntime::instance().cache()->set(cache_key, _page.to_json(0));
+                GlobalRuntime::instance().cache().set(cache_key, _page.to_json(0));
             }
         }
 

@@ -9,8 +9,8 @@ namespace Vortex::Core {
 
     void Controller::find(std::string app_id, std::string name, std::string method) {
         std::string cache_key = "vortex.core.controller.value." + app_id + "." + name + "." + method;
-        if (CommonRuntime::instance().cache()->exists(cache_key)) {
-            _controller = Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+        if (CommonRuntime::instance().cache().exists(cache_key)) {
+            _controller = Maze::Element::from_json(CommonRuntime::instance().cache().get(cache_key));
         }
 
         if (!_controller.has_children()) {
@@ -26,7 +26,7 @@ namespace Vortex::Core {
             _controller = _framework->application_.find_object_in_application_storage("controllers", query);
 
             if (_controller.has_children()) {
-                CommonRuntime::instance().cache()->set(cache_key, _controller.to_json(0));
+                CommonRuntime::instance().cache().set(cache_key, _controller.to_json(0));
             }
         }
 

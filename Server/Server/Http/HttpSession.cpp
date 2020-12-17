@@ -67,10 +67,10 @@ namespace Vortex::Server::Http {
         _res.set(boost::beast::http::field::content_type, "text/html");
         _res.result(boost::beast::http::status::ok);
 
-        Vortex::Core::RuntimeInterface* framework = nullptr;
+        std::shared_ptr<Vortex::Core::RuntimeInterface> framework;
 
         try {
-            framework = _session_di->activate_framework(
+            framework = _session_di->activate_runtime(
                 _config,
                 _stream.socket().remote_endpoint().address().to_string(),
                 &_req,
@@ -116,10 +116,6 @@ namespace Vortex::Server::Http {
         catch (...) {
             _res.result(boost::beast::http::status::internal_server_error);
             _res.body() = "Internal server error";
-        }
-
-        if (framework != nullptr) {
-            delete framework;
         }
 
         _res.set(boost::beast::http::field::content_length, _res.body().size());

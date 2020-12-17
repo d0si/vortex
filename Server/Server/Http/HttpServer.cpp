@@ -18,12 +18,12 @@ namespace Vortex::Server::Http {
         _server_di = di;
 
         try {
-            if (!Core::GlobalRuntime::instance().storage()->is_initialized()) {
-                Core::GlobalRuntime::instance().storage()->initialize(config.get_const_ref("storage", Maze::Type::Object));
+            if (!Core::GlobalRuntime::instance().storage().is_initialized()) {
+                Core::GlobalRuntime::instance().storage().initialize(config.get_const_ref("storage", Maze::Type::Object));
             }
 
-            if (!Core::GlobalRuntime::instance().cache()->is_initialized()) {
-                Core::GlobalRuntime::instance().cache()->initialize(config.get_const_ref("cache", Maze::Type::Object));
+            if (!Core::GlobalRuntime::instance().cache().is_initialized()) {
+                Core::GlobalRuntime::instance().cache().initialize(config.get_const_ref("cache", Maze::Type::Object));
             }
         }
         catch (const std::exception& e) {
