@@ -1,6 +1,6 @@
-#include <Core/Util/Password.h>
+#include <Core/Util/Password.hpp>
 #include <stdexcept>
-#include <Core/Util/Random.h>
+#include <Core/Util/Random.hpp>
 #ifdef HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>
 #include <cryptopp/base64.h>

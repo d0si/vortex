@@ -1,5 +1,4 @@
-#include <Core/Exceptions/StorageException.h>
-#include <stdio.h>
+#include <Core/Exceptions/StorageException.hpp>
 
 namespace Vortex::Core::Exceptions {
 

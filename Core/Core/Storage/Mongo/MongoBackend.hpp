@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <Core/Storage/Storage.h>
-#include <Core/Storage/Mongo/Mongo.h>
+#include <Core/Storage/Storage.hpp>
+#include <Core/Storage/Mongo/Mongo.hpp>
 
 namespace Vortex::Core::Storage::Mongo {
 

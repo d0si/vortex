@@ -1,4 +1,4 @@
-#include <Core/Storage/Mongo/Collection.h>
+#include <Core/Storage/Mongo/Collection.hpp>
 #ifdef VORTEX_HAS_FEATURE_MONGO
 #include <bsoncxx/json.hpp>
 #endif

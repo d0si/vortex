@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include <Core/DLLSupport.h>
+#include <Core/DLLSupport.hpp>
 
 namespace Vortex::Core::Util::String {
 

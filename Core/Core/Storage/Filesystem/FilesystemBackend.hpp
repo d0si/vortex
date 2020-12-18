@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Storage/Storage.h>
+#include <Core/Storage/Storage.hpp>
 #include <Maze/Maze.hpp>
 
 namespace Vortex::Core::Storage::Filesystem {

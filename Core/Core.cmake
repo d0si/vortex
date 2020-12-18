@@ -2,6 +2,8 @@
 # Set source files that need to be built
 #
 set(CORE_SOURCES
+    Core/Applications/Application.cpp
+
     Core/Caching/Backends/RedisBackend.cpp
     Core/Caching/Backends/MemoryCacheBackend.cpp
     Core/Caching/Backends/DummyCacheBackend.cpp
@@ -29,4 +31,7 @@ set(CORE_SOURCES
     Core/Util/Time.cpp
     
     Core/GlobalRuntime.cpp
+
+    # Testing
+    Core/VortexBase.cpp
 )

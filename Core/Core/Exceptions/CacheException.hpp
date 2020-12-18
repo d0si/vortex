@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Exceptions/VortexException.h>
+#include <Core/Exceptions/VortexException.hpp>
 
 namespace Vortex::Core::Exceptions {
 

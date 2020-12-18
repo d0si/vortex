@@ -1,4 +1,4 @@
-#include <Core/GlobalRuntime.h>
+#include <Core/GlobalRuntime.hpp>
 
 namespace Vortex::Core {
 

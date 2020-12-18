@@ -1,13 +1,14 @@
-#include <Vortex/Vortex.h>
+#include <Vortex/Vortex.hpp>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <thread>
 #include <Maze/Maze.hpp>
-#include <Server/Http/HttpServer.h>
-#include <Core/Util/String.h>
-#include <Core/Modules/DependencyInjection.h>
-#include <Core/Modules/ModuleLoader.h>
+#include <Server/Http/HttpServer.hpp>
+#include <Core/Util/String.hpp>
+#include <Core/Modules/DependencyInjection.hpp>
+#include <Core/Modules/ModuleLoader.hpp>
+#include <Core/VortexBase.hpp>
 #include <boost/filesystem.hpp>
 #ifdef HAS_FEATURE_MONGO
 #include <mongocxx/instance.hpp>
@@ -327,21 +328,26 @@ namespace Vortex {
 
     using Vortex::Core::Modules::DependencyInjector;
     using Vortex::Core::Modules::Module;
-    DependencyInjector* init_di(const Maze::Element& config);
+    std::shared_ptr<DependencyInjector> init_di(const Maze::Element& config);
 
     void start_http_server(const Maze::Element& config) {
-        DependencyInjector* program_di = init_di(config);
+        std::shared_ptr<DependencyInjector> program_di = init_di(config);
 
         Vortex::Server::Http::HttpServer server;
 
         server.start(config, program_di->di_scope());
     }
 
-    DependencyInjector* init_di(const Maze::Element& config) {
-        DependencyInjector* di_scope = DependencyInjector::di_global()->di_scope();
+    std::shared_ptr<DependencyInjector> init_di(const Maze::Element& config) {
+        std::shared_ptr<DependencyInjector> di_scope = DependencyInjector::di_global()->di_scope();
 
         Maze::Element module_config = config.get("modules");
 
+		// TESTING:
+		di_scope->install([]() {
+			return (std::shared_ptr<IApplicationResolver>)std::make_shared<VortexBase::ApplicationResolver>();
+			});
+		/*
         if (module_config.is_array("load")) {
             for (const auto& module_conf : module_config.get("load")) {
                 if (module_conf.is_string()) {
@@ -358,7 +364,7 @@ namespace Vortex {
                 }
             }
         }
-
+		*/
         return di_scope;
     }
 

@@ -1,4 +1,4 @@
-#include <Core/Caching/Backends/DummyCacheBackend.h>
+#include <Core/Caching/Backends/DummyCacheBackend.hpp>
 
 namespace Vortex::Core::Caching::Backends {
 

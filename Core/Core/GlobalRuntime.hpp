@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Core/DLLSupport.h>
-#include <Core/Storage/Storage.h>
-#include <Core/Caching/Cache.h>
+#include <Core/DLLSupport.hpp>
+#include <Core/Storage/Storage.hpp>
+#include <Core/Caching/Cache.hpp>
 
 namespace Vortex::Core {
 

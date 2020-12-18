@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <Core/DLLSupport.h>
+#include <Core/DLLSupport.hpp>
 
 namespace Vortex::Core::Util::Password {
 

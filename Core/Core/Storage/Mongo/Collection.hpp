@@ -5,7 +5,7 @@
 #include <mongocxx/collection.hpp>
 #endif
 #include <Maze/Maze.hpp>
-#include <Core/DLLSupport.h>
+#include <Core/DLLSupport.hpp>
 
 namespace Vortex::Core::Storage::Mongo {
 

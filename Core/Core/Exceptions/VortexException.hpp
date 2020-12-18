@@ -2,7 +2,7 @@
 
 #include <exception>
 #include <string>
-#include <Core/DLLSupport.h>
+#include <Core/DLLSupport.hpp>
 
 namespace Vortex::Core::Exceptions {
 

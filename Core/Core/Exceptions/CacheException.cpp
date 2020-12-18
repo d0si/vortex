@@ -1,4 +1,4 @@
-#include <Core/Exceptions/CacheException.h>
+#include <Core/Exceptions/CacheException.hpp>
 
 namespace Vortex::Core::Exceptions {
 

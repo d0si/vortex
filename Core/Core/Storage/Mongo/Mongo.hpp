@@ -6,8 +6,8 @@
 #include <mongocxx/client.hpp>
 #endif
 #include <Maze/Maze.hpp>
-#include <Core/Storage/Mongo/Db.h>
-#include <Core/Storage/Mongo/Collection.h>
+#include <Core/Storage/Mongo/Db.hpp>
+#include <Core/Storage/Mongo/Collection.hpp>
 
 namespace Vortex::Core::Storage::Mongo {
 

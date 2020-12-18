@@ -2,7 +2,7 @@
 
 #include <list>
 #include <boost/unordered_map.hpp>
-#include <Core/Caching/Cache.h>
+#include <Core/Caching/Cache.hpp>
 #include <Maze/Maze.hpp>
 
 namespace Vortex::Core::Caching::Backends {

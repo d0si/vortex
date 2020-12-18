@@ -1,4 +1,4 @@
-#include <Vortex/Vortex.h>
+#include <Vortex/Vortex.hpp>
 
 int main(int argc, char** args) {
     Vortex::start_vortex(std::vector<std::string>(args, args + argc));

@@ -1,4 +1,4 @@
-#include <Core/Exceptions/ScriptException.h>
+#include <Core/Exceptions/ScriptException.hpp>
 
 namespace Vortex::Core::Exceptions {
 

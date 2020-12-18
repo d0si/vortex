@@ -1,12 +1,12 @@
-#include <Core/Caching/Cache.h>
+#include <Core/Caching/Cache.hpp>
 #include <boost/thread/mutex.hpp>
 #include <iostream>
-#include <Core/Exceptions/CacheException.h>
+#include <Core/Exceptions/CacheException.hpp>
 #ifdef HAS_FEATURE_CPPREDIS
-#include <Core/Caching/Backends/RedisBackend.h>
+#include <Core/Caching/Backends/RedisBackend.hpp>
 #endif
-#include <Core/Caching/Backends/MemoryCacheBackend.h>
-#include <Core/Caching/Backends/DummyCacheBackend.h>
+#include <Core/Caching/Backends/MemoryCacheBackend.hpp>
+#include <Core/Caching/Backends/DummyCacheBackend.hpp>
 
 namespace Vortex::Core::Caching {
 

@@ -3,7 +3,7 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <Maze/Maze.hpp>
-#include <Core/Modules/DependencyInjection.h>
+#include <Core/Modules/DependencyInjection.hpp>
 
 namespace Vortex::Server::Http {
 
@@ -13,7 +13,7 @@ namespace Vortex::Server::Http {
 			const Maze::Element& config,
 			boost::asio::io_context& io_ctx,
 			boost::asio::ip::tcp::endpoint endpoint,
-			Core::Modules::DependencyInjector* server_di);
+			const std::shared_ptr<Core::Modules::DependencyInjector>& server_di);
 
 		void run();
 		void do_accept();
@@ -25,7 +25,7 @@ namespace Vortex::Server::Http {
 		boost::asio::io_context& _io_ctx;
 		boost::asio::ip::tcp::acceptor _acceptor;
 		Maze::Element _config;
-		Core::Modules::DependencyInjector* _server_di;
+		std::shared_ptr<Core::Modules::DependencyInjector> _server_di;
 	};
 
 }  // namespace Vortex::Server::Http

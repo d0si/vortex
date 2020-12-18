@@ -3,7 +3,7 @@
 #ifdef HAS_FEATURE_CPPREDIS
 #include <cpp_redis/cpp_redis>
 #endif
-#include <Core/Caching/Cache.h>
+#include <Core/Caching/Cache.hpp>
 #include <Maze/Maze.hpp>
 
 namespace Vortex::Core::Caching::Backends {

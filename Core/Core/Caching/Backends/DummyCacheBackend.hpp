@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/Caching/Cache.h>
+#include <Core/Caching/Cache.hpp>
 #include <Maze/Maze.hpp>
 
 namespace Vortex::Core::Caching::Backends {

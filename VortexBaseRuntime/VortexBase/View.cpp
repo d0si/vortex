@@ -3,11 +3,12 @@
 
 using Vortex::Core::RuntimeInterface;
 using Vortex::Core::GlobalRuntime;
+using Vortex::Core::Modules::DependencyInjector;
 
 namespace VortexBase {
 
-    View::View(RuntimeInterface* runtime)
-        : ViewInterface(runtime) {}
+    View::View(const std::shared_ptr<DependencyInjector>& di)
+        : _runtime {}
 
     void View::output() {
         _rendered += parse_template();

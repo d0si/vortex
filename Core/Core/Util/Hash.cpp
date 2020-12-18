@@ -1,4 +1,4 @@
-#include <Core/Util/Hash.h>
+#include <Core/Util/Hash.hpp>
 #include <stdexcept>
 #ifdef HAS_FEATURE_CRYPTOPP
 #include <cryptopp/sha.h>

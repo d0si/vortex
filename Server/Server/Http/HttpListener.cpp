@@ -1,9 +1,9 @@
-#include <Server/Http/HttpListener.h>
+#include <Server/Http/HttpListener.hpp>
 #include <iostream>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/bind_handler.hpp>
-#include <Server/Http/HttpSession.h>
+#include <Server/Http/HttpSession.hpp>
 
 namespace asio = boost::asio;
 namespace beast = boost::beast;
@@ -16,7 +16,7 @@ namespace Vortex::Server::Http {
         const Maze::Element& config,
         asio::io_context& io_ctx,
         tcp::endpoint endpoint,
-        Core::Modules::DependencyInjector* server_di)
+        const std::shared_ptr<Core::Modules::DependencyInjector>& server_di)
         : _config(config), _io_ctx(io_ctx), _acceptor(asio::make_strand(io_ctx)), _server_di(server_di) {
         error_code ec;
 

@@ -3,8 +3,8 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
-#include <Core/DLLSupport.h>
-#include <Core/Modules/Module.h>
+#include <Core/DLLSupport.hpp>
+#include <Core/Modules/Module.hpp>
 
 namespace Vortex::Core::Modules {
 

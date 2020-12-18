@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <Maze/Maze.hpp>
-#include <Core/DLLSupport.h>
+#include <Core/DLLSupport.hpp>
 
 namespace Vortex::Core::Caching {
 

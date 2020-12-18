@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Core/DLLSupport.h>
+#include <Core/DLLSupport.hpp>
 
 #ifdef VORTEX_CORE_EXPORTS
 #define VORTEX_SERVER_API __DLL_EXPORT

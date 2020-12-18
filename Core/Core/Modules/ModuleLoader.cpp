@@ -1,4 +1,4 @@
-#include <Core/Modules/ModuleLoader.h>
+#include <Core/Modules/ModuleLoader.hpp>
 #include <iostream>
 #ifdef WIN32
 #include <Windows.h>
