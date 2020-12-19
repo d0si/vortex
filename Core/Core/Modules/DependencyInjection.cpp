@@ -44,17 +44,26 @@ namespace Vortex::Core::Modules {
     }
 
 
-    
+
     void DependencyInjector::install(ApplicationResolverActivator activator) {
         _application_resolver_activator = activator;
     }
 
-    std::shared_ptr<Applications::IApplicationResolver> DependencyInjector::activate_application_resolver() {
+    std::shared_ptr<Applications::IApplicationResolver> DependencyInjector::activate_application_resolver(
+        const std::shared_ptr<Applications::string_body_request>& request,
+        const std::shared_ptr<Applications::string_body_response>& response) {
+        return activate_application_resolver(shared_from_this(), request, response);
+    }
+
+    std::shared_ptr<Applications::IApplicationResolver> DependencyInjector::activate_application_resolver(
+        const std::shared_ptr<DependencyInjector>& di,
+        const std::shared_ptr<Applications::string_body_request>& request,
+        const std::shared_ptr<Applications::string_body_response>& response) {
         if (_application_resolver_activator)
-            return _application_resolver_activator();
+            return _application_resolver_activator(di, request, response);
 
         if (_parent)
-            return _parent->activate_application_resolver();
+            return _parent->activate_application_resolver(di, request, response);
 
         throw Exceptions::VortexException("Dependency injection failed", "Unable to activate application resolver - no suitable activator installed");
     }

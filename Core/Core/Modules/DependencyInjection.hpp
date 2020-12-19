@@ -51,9 +51,18 @@ namespace Vortex::Core::Modules {
 
 
 
-        typedef std::shared_ptr<Applications::IApplicationResolver>(*ApplicationResolverActivator)();
+        typedef std::shared_ptr<Applications::IApplicationResolver>(*ApplicationResolverActivator)(
+            const std::shared_ptr<DependencyInjector>& di,
+            const std::shared_ptr<Applications::string_body_request>& request,
+            const std::shared_ptr<Applications::string_body_response>& response);
         VORTEX_CORE_API virtual void install(ApplicationResolverActivator activator);
-        VORTEX_CORE_API virtual std::shared_ptr<Applications::IApplicationResolver> activate_application_resolver();
+        VORTEX_CORE_API virtual std::shared_ptr<Applications::IApplicationResolver> activate_application_resolver(
+            const std::shared_ptr<Applications::string_body_request>& request,
+            const std::shared_ptr<Applications::string_body_response>& response);
+        VORTEX_CORE_API virtual std::shared_ptr<Applications::IApplicationResolver> activate_application_resolver(
+            const std::shared_ptr<DependencyInjector>& di,
+            const std::shared_ptr<Applications::string_body_request>& request,
+            const std::shared_ptr<Applications::string_body_response>& response);
 
         typedef std::shared_ptr<Applications::IApplicationRuntime>(*ApplicationRuntimeActivator)();
         VORTEX_CORE_API virtual void install(ApplicationRuntimeActivator activator);
