@@ -71,7 +71,7 @@ namespace Vortex::Server::Http {
         {
             try {
                 std::shared_ptr<Vortex::Core::Applications::IApplicationRuntime> app_runtime =
-                    _session_di->activate_application_resolver(_req, _res)->get_application_runtime();
+                    _session_di->activate_application_resolver(_req, _res, _config)->get_application_runtime();
                 /*app = _session_di->activate_runtime(
                     _session_di->shared_from_this(),
                     _config,

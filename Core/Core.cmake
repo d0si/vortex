@@ -3,6 +3,7 @@
 #
 set(CORE_SOURCES
     Core/Applications/Application.cpp
+    Core/Applications/Routing.cpp
 
     Core/Caching/Backends/RedisBackend.cpp
     Core/Caching/Backends/MemoryCacheBackend.cpp

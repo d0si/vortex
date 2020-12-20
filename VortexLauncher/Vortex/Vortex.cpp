@@ -346,9 +346,24 @@ namespace Vortex {
         // TESTING:
         di_scope->install([](
             const std::shared_ptr<DependencyInjector>& di,
+            const std::shared_ptr<IApplicationRuntime>& runtime) {
+                return (std::shared_ptr<IRouter>)std::make_shared<Core::Applications::BaseRouter>(runtime);
+            });
+        di_scope->install([](
+            const std::shared_ptr<DependencyInjector>& di,
             const std::shared_ptr<Vortex::Core::Applications::string_body_request>& request,
-            const std::shared_ptr<Vortex::Core::Applications::string_body_response>& response) {
-                return (std::shared_ptr<IApplicationResolver>)std::make_shared<VortexBase::ApplicationResolver>(di, request, response);
+            const std::shared_ptr<Vortex::Core::Applications::string_body_response>& response,
+            const Maze::Element& host_info,
+            const Maze::Element& app_info,
+            const Maze::Element& config) {
+                return (std::shared_ptr<IApplicationRuntime>)std::make_shared<VortexBase::ApplicationRuntime>(di, request, response, host_info, app_info, config);
+            });
+        di_scope->install([](
+            const std::shared_ptr<DependencyInjector>& di,
+            const std::shared_ptr<Vortex::Core::Applications::string_body_request>& request,
+            const std::shared_ptr<Vortex::Core::Applications::string_body_response>& response,
+            const Maze::Element& config) {
+                return (std::shared_ptr<IApplicationResolver>)std::make_shared<Core::Applications::BaseApplicationResolver>(di, request, response, config);
             });
         /*
         if (module_config.is_array("load")) {
