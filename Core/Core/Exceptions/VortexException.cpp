@@ -1,4 +1,4 @@
-#include <Core/Exceptions/VortexException.hpp>
+#include <Core/Exceptions/VortexException.h>
 
 namespace Vortex::Core::Exceptions {
 

@@ -18,7 +18,7 @@ namespace ModuleSample {
         return nullptr;
     }
 
-    void SampleModule::register_di(const std::shared_ptr<DependencyInjector>& di) {}
+    void SampleModule::register_di(DependencyInjector* di) {}
 }
 
 VORTEX_APP_API Module* get_vortex_module() {

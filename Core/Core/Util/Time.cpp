@@ -1,4 +1,4 @@
-#include <Core/Util/Time.hpp>
+#include <Core/Util/Time.h>
 #include <time.h>
 
 namespace Vortex::Core::Util {

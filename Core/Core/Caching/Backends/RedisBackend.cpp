@@ -1,4 +1,4 @@
-#include <Core/Caching/Backends/RedisBackend.hpp>
+#include <Core/Caching/Backends/RedisBackend.h>
 
 namespace Vortex::Core::Caching::Backends {
 

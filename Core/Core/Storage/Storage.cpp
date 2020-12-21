@@ -1,8 +1,8 @@
-#include <Core/Storage/Storage.hpp>
-#include <Core/Storage/Filesystem/FilesystemBackend.hpp>
-#include <Core/Exceptions/StorageException.hpp>
+#include <Core/Storage/Storage.h>
+#include <Core/Storage/Filesystem/FilesystemBackend.h>
+#include <Core/Exceptions/StorageException.h>
 #ifdef VORTEX_HAS_FEATURE_MONGO
-#include <Core/Storage/Mongo/MongoBackend.hpp>
+#include <Core/Storage/Mongo/MongoBackend.h>
 #endif
 
 namespace Vortex::Core::Storage {

@@ -1,11 +1,11 @@
-#include <Server/Http/HttpServer.hpp>
+#include <Server/Http/HttpServer.h>
 #include <iostream>
 #include <thread>
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
-#include <Server/Http/HttpListener.hpp>
-#include <Core/GlobalRuntime.hpp>
+#include <Server/Http/HttpListener.h>
+#include <Core/GlobalRuntime.h>
 
 using std::string;
 using std::vector;
@@ -13,7 +13,7 @@ namespace ip = boost::asio::ip;
 
 namespace Vortex::Server::Http {
 
-    void HttpServer::start(const Maze::Element& config, const std::shared_ptr<Core::Modules::DependencyInjector>& di) {
+    void HttpServer::start(const Maze::Element& config, Core::Modules::DependencyInjector* di) {
         _config = config;
         _server_di = di;
 

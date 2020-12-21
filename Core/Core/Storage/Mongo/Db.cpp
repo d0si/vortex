@@ -1,4 +1,4 @@
-#include <Core/Storage/Mongo/Db.hpp>
+#include <Core/Storage/Mongo/Db.h>
 
 namespace Vortex::Core::Storage::Mongo {
 

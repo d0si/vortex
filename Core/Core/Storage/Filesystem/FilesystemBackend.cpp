@@ -1,9 +1,9 @@
-#include <Core/Storage/Filesystem/FilesystemBackend.hpp>
+#include <Core/Storage/Filesystem/FilesystemBackend.h>
 #include <fstream>
 #include <sstream>
-#include <Core/Exceptions/StorageException.hpp>
-#include <Core/GlobalRuntime.hpp>
-#include <Core/Util/String.hpp>
+#include <Core/Exceptions/StorageException.h>
+#include <Core/GlobalRuntime.h>
+#include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #define BOOST_ERROR_CODE_HEADER_ONLY
