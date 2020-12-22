@@ -10,7 +10,7 @@
             return _##field_name##_instance;                                                                        \
         }                                                                                                           \
                                                                                                                     \
-        if (_parent) return _parent->activate_##field_name##(activate_arg);                                         \
+        if (_parent) return _parent->activate_##field_name(activate_arg);                                           \
                                                                                                                     \
         throw Exceptions::VortexException("Unable to activate ##field_name##", "Dependency injection resolve failed. No applicable activator installed."); \
     }                                                                                                               \
