@@ -20,9 +20,6 @@ namespace VortexBase {
         VORTEX_CORE_API virtual Maze::Element find_object_in_application_storage(
             const std::string& collection, const Maze::Element& query,
             bool search_other_storages = true) override;
-
-    protected:
-        Maze::Element _application;
     };
 
 }  // namespace VortexBase

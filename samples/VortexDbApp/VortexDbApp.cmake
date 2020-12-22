@@ -6,5 +6,4 @@ set(VORTEX_DB_APP_SOURCES
 
 	Plugins/DbApplicationPlugin.cpp
 	Plugins/DbHostPlugin.cpp
-	Plugins/DbRouterPlugin.cpp
 )

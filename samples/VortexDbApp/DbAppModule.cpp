@@ -1,6 +1,7 @@
 #include "DbAppModule.h"
 #include <Core/Modules/DependencyInjection.h>
-#include "Plugins/DbRouterPlugin.h"
+#include "Plugins/DbHostPlugin.h"
+#include "Plugins/DbApplicationPlugin.h"
 
 using namespace Vortex::Core::Modules;
 
@@ -14,19 +15,20 @@ namespace Vortex::App::Db {
 
     const std::vector<std::string> DbAppModule::plugin_names() {
         return std::vector<std::string> {
-            Plugins::DbRouterPlugin::s_plugin_name,
+            Plugins::DbHostPlugin::s_plugin_name, Plugins::DbApplicationPlugin::s_plugin_name,
         };
     }
 
     std::shared_ptr<Plugin> DbAppModule::plugin(const std::string& plugin_name) {
-        if (plugin_name == Plugins::DbRouterPlugin::s_plugin_name)
-            return std::make_shared<Plugins::DbRouterPlugin>();
+        if (plugin_name == Plugins::DbHostPlugin::s_plugin_name)
+            return std::make_shared<Plugins::DbApplicationPlugin>();
 
         return nullptr;
     }
 
     void DbAppModule::register_di(DependencyInjector* di) {
-        di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbRouterPlugin>());
+        di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbHostPlugin>());
+        di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbApplicationPlugin>());
     }
 }
 

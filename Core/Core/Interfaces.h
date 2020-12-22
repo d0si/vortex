@@ -25,9 +25,9 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::string hostname() = 0;
         VORTEX_CORE_API virtual std::string application_id() = 0;
         VORTEX_CORE_API virtual Maze::Element config() = 0;
-        VORTEX_CORE_API inline virtual Maze::Element& host_ref() { return _host; }
         VORTEX_CORE_API virtual std::string script() = 0;
         VORTEX_CORE_API virtual std::string post_script() = 0;
+        VORTEX_CORE_API inline virtual Maze::Element& host_ref() { return _host; }
 
     protected:
         RuntimeInterface* _runtime;
@@ -47,6 +47,7 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual Maze::Element config() = 0;
         VORTEX_CORE_API virtual std::string script() = 0;
         VORTEX_CORE_API virtual std::string post_script() = 0;
+        VORTEX_CORE_API inline virtual Maze::Element& application_ref() { return _application; }
 
         VORTEX_CORE_API virtual Maze::Element find_object_in_application_storage(
             const std::string& collection, const Maze::Element& query,
@@ -54,6 +55,7 @@ namespace Vortex::Core {
 
     protected:
         RuntimeInterface* _runtime;
+        Maze::Element _application;
     };
 
 
@@ -61,6 +63,14 @@ namespace Vortex::Core {
     public:
         VORTEX_CORE_API inline RouterInterface(RuntimeInterface* runtime) : _runtime(runtime) {}
         VORTEX_CORE_API virtual ~RouterInterface() = default;
+
+        struct RouterData {
+            std::string request_uri;
+            std::string lang;
+            std::string controller;
+            std::vector<std::string> args;
+            std::map<std::string, std::string> cookies;
+        };
 
         VORTEX_CORE_API virtual void init() = 0;
 
@@ -74,8 +84,11 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::map<std::string, std::string> cookies() = 0;
         VORTEX_CORE_API virtual std::string cookie(const std::string& cookie_name, bool* out_cookie_exists = nullptr) = 0;
 
+        VORTEX_CORE_API inline virtual RouterData& router_data_ref() { return _router_data; }
+
     protected:
         RuntimeInterface* _runtime;
+        RouterData _router_data;
     };
 
 

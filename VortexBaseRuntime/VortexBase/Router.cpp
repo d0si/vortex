@@ -7,11 +7,11 @@ namespace VortexBase {
 
     Router::Router(RuntimeInterface* runtime)
         : RouterInterface(runtime) {
-        _lang = "en";
-        _controller = "index";
+        _router_data.lang = "en";
+        _router_data.controller = "index";
 
         std::string target = _runtime->request()->target().to_string();
-        _request_uri = target.substr(1, target.length() - 1);
+        _router_data.request_uri = target.substr(1, target.length() - 1);
     }
 
     void Router::init() {
@@ -28,13 +28,13 @@ namespace VortexBase {
                 const Maze::Element& route = routes.get(route_url);
 
                 if (route.is_object() &&
-                    _request_uri.substr(0, route_url.length()) == route_url) {
+                    _router_data.request_uri.substr(0, route_url.length()) == route_url) {
 
                     if (route.is_string("default_lang")) {
-                        _lang = route.get("default_lang").s();
+                        _router_data.lang = route.get("default_lang").s();
                     }
                     if (route.is_string("default_controller")) {
-                        _controller = route.get("default_controller").s();
+                        _router_data.controller = route.get("default_controller").s();
                     }
                     if (route.is_array("url_schemes")) {
                         router_config.set("url_schemes", route.get("url_schemes"));
@@ -54,7 +54,7 @@ namespace VortexBase {
 
         std::vector<std::string> request_uri_parts;
         std::string request_uri_part;
-        for (const char& it : _request_uri) {
+        for (const char& it : _router_data.request_uri) {
             if (it == '/') {
                 request_uri_parts.push_back(request_uri_part);
                 request_uri_part = "";
@@ -83,18 +83,18 @@ namespace VortexBase {
                 std::string type = url_scheme->get_string();
 
                 if (type == "lang" && i < parts_count) {
-                    _lang = request_uri_parts[i];
+                    _router_data.lang = request_uri_parts[i];
                 }
                 else if (type == "controller" && i < parts_count) {
                     controller_parts.push_back(request_uri_parts[i]);
                 }
                 else if (type == "args" && i < parts_count) {
                     for (; i < parts_count; i++) {
-                        _args.push_back(request_uri_parts[i]);
+                        _router_data.args.push_back(request_uri_parts[i]);
                     }
                 }
                 else if (type == "arg" && i < parts_count) {
-                    _args.push_back(request_uri_parts[i]);
+                    _router_data.args.push_back(request_uri_parts[i]);
                 }
             }
             else if (url_scheme->is_object()) {
@@ -103,7 +103,7 @@ namespace VortexBase {
 
                     if (type == "lang") {
                         if (url_scheme->is_string("value")) {
-                            _lang = url_scheme->get("value").s();
+                            _router_data.lang = url_scheme->get("value").s();
                         }
                         else if (i < parts_count) {
                             std::string lang;
@@ -118,10 +118,10 @@ namespace VortexBase {
                                 lang += url_scheme->get("suffix").s();
                             }
 
-                            _lang = lang;
+                            _router_data.lang = lang;
                         }
                         else if (url_scheme->is_string("default_value")) {
-                            _lang = url_scheme->get("default_value").s();
+                            _router_data.lang = url_scheme->get("default_value").s();
                         }
                     }
                     else if (type == "controller") {
@@ -154,21 +154,21 @@ namespace VortexBase {
 
                                 for (int ix = 0; ix < arg_count; ++ix) {
                                     if (i < parts_count) {
-                                        _args.push_back(request_uri_parts[i]);
+                                        _router_data.args.push_back(request_uri_parts[i]);
                                         i++;
                                     }
                                 }
                             }
                             else {
                                 for (; i < parts_count; ++i) {
-                                    _args.push_back(request_uri_parts[i]);
+                                    _router_data.args.push_back(request_uri_parts[i]);
                                 }
                             }
                         }
                     }
                     else if (type == "arg") {
                         if (url_scheme->is_string("value")) {
-                            _args.push_back(url_scheme->get("value").s());
+                            _router_data.args.push_back(url_scheme->get("value").s());
                         }
                         else if (i < parts_count) {
                             std::string arg;
@@ -183,10 +183,10 @@ namespace VortexBase {
                                 arg += url_scheme->get("suffix").s();
                             }
 
-                            _args.push_back(arg);
+                            _router_data.args.push_back(arg);
                         }
                         else if (url_scheme->is_string("default_value")) {
-                            _args.push_back(url_scheme->get("default_value").s());
+                            _router_data.args.push_back(url_scheme->get("default_value").s());
                         }
                     }
                 }
@@ -203,7 +203,7 @@ namespace VortexBase {
             }
             controller_str.erase(controller_str.length() - 1);
 
-            _controller = controller_str;
+            _router_data.controller = controller_str;
         }
 
         _runtime->di()->plugin_manager()->on_router_init_after(_runtime);
@@ -214,15 +214,15 @@ namespace VortexBase {
     }
 
     std::string Router::lang() {
-        return _lang;
+        return _router_data.lang;
     }
 
     std::string Router::controller() {
-        return _controller;
+        return _router_data.controller;
     }
 
     std::vector<std::string> Router::args() {
-        return _args;
+        return _router_data.args;
     }
 
     std::string Router::request_post_body() {
@@ -241,12 +241,12 @@ namespace VortexBase {
                 char val = cookies_string[i];
 
                 if (val == ';') {
-                    _cookies.emplace(std::make_pair(key, value));
+                    _router_data.cookies.emplace(std::make_pair(key, value));
                     key.clear();
                     value.clear();
                     grabbing_value_part = false;
 
-                    while (cookies_string[i + 1] == ' ') {
+                    while (cookies_string[(size_t)i + 1] == ' ') {
                         ++i;
                     }
                 }
@@ -264,11 +264,11 @@ namespace VortexBase {
             }
 
             if (!key.empty()) {
-                _cookies.emplace(std::make_pair(key, value));
+                _router_data.cookies.emplace(std::make_pair(key, value));
             }
         }
 
-        return _cookies;
+        return _router_data.cookies;
     }
 
     std::string Router::cookie(const std::string& cookie_name, bool* cookie_exists) {

@@ -19,7 +19,7 @@ namespace Vortex::App::Db::Plugins {
             Maze::Element host(Maze::Type::Object);
 
 			host.set("_id", Maze::Element({ "$oid" }, { Maze::Element("vortex_db_app") }));
-			host.set("hostname", "unknown"); // TODO
+			host.set("hostname", runtime->router()->hostname());
 			host.set("app_id", "vortex_db_app");
 			
             runtime->host()->host_ref() = host;

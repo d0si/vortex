@@ -22,11 +22,6 @@ namespace VortexBase {
 		VORTEX_CORE_API virtual std::string cookie(const std::string& cookie_name, bool* out_cookie_exists = nullptr) override;
 
 	protected:
-		std::string _request_uri;
-		std::string _lang;
-		std::string _controller;
-		std::vector<std::string> _args;
-		std::map<std::string, std::string> _cookies;
 		bool _cookies_initialized = false;
 	};
 
