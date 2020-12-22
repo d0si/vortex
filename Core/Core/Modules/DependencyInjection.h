@@ -28,7 +28,7 @@ namespace Vortex::Core::Modules {
         VORTEX_CORE_API DependencyInjector di_scope_temp();
         VORTEX_CORE_API static DependencyInjector* di_global();
 
-        ADD_DEPENDENCY(runtime, Runtime, const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response);
+        ADD_DEPENDENCY(runtime, Runtime, DependencyInjector* di, const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response);
         ADD_DEPENDENCY(host, Host, const std::shared_ptr<RuntimeInterface> runtime);
         ADD_DEPENDENCY(application, Application, const std::shared_ptr<RuntimeInterface> runtime);
         ADD_DEPENDENCY(router, Router, const std::shared_ptr<RuntimeInterface> runtime);
@@ -37,6 +37,7 @@ namespace Vortex::Core::Modules {
         ADD_DEPENDENCY(script, Script, const std::shared_ptr<RuntimeInterface> runtime);
 
         VORTEX_CORE_API static ModuleLoader* module_loader();
+        VORTEX_CORE_API static PluginManager* plugin_manager();
 
         VORTEX_CORE_API void add_ref();
         VORTEX_CORE_API void del_ref();

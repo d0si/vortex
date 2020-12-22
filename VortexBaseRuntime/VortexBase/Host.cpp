@@ -1,5 +1,6 @@
 #include <VortexBase/Host.h>
 #include <Core/GlobalRuntime.h>
+#include <Core/Modules/DependencyInjection.h>
 
 using Vortex::Core::RuntimeInterface;
 using Vortex::Core::GlobalRuntime;
@@ -10,6 +11,9 @@ namespace VortexBase {
 		: HostInterface(runtime) {}
 
 	void Host::init(const std::string& hostname) {
+		if (_runtime->di()->plugin_manager()->on_host_init_before(_runtime))
+			return;
+
 		std::string cache_key = "vortex.core.host.value." + hostname;
 		if (GlobalRuntime::instance().cache().exists(cache_key)) {
 			_host = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
@@ -23,6 +27,9 @@ namespace VortexBase {
 				GlobalRuntime::instance().cache().set(cache_key, _host.to_json(0));
 			}
 		}
+		
+		if (_runtime->di()->plugin_manager()->on_host_init_after(_runtime))
+			return;
 
 		if (!_host.has_children()) {
 			_runtime->view()->echo("Nothing is running on this hostname");

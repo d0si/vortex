@@ -17,9 +17,6 @@ namespace VortexBase {
         VORTEX_CORE_API virtual Maze::Element config() override;
         VORTEX_CORE_API virtual std::string script() override;
         VORTEX_CORE_API virtual std::string post_script() override;
-
-    protected:
-        Maze::Element _host;
     };
 
 }  // namespace VortexBase

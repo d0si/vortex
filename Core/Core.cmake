@@ -12,8 +12,9 @@ set(CORE_SOURCES
     Core/Exceptions/StorageException.cpp
     Core/Exceptions/VortexException.cpp
 
-    Core/Modules/ModuleLoader.cpp
     Core/Modules/DependencyInjection.cpp
+    Core/Modules/ModuleLoader.cpp
+    Core/Modules/Plugin.cpp
 
     Core/Storage/Storage.cpp
     Core/Storage/Mongo/Mongo.cpp

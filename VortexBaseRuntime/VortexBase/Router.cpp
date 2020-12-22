@@ -1,4 +1,5 @@
 #include <VortexBase/Router.h>
+#include <Core/Modules/DependencyInjection.h>
 
 using Vortex::Core::RuntimeInterface;
 
@@ -15,6 +16,9 @@ namespace VortexBase {
 
     void Router::init() {
         Maze::Element router_config = _runtime->config()->get("router", Maze::Type::Object);
+
+        if (_runtime->di()->plugin_manager()->on_router_init_before(_runtime))
+            return;
 
         if (router_config.is_object("routes")) {
             Maze::Element routes = router_config.get("routes", Maze::Type::Object);
@@ -201,6 +205,8 @@ namespace VortexBase {
 
             _controller = controller_str;
         }
+
+        _runtime->di()->plugin_manager()->on_router_init_after(_runtime);
     }
 
     std::string Router::hostname() {

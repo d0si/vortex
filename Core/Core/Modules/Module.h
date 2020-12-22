@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <Core/DLLSupport.h>
 #include <Core/Modules/Plugin.h>
 
@@ -16,7 +17,7 @@ namespace Vortex::Core::Modules {
         VORTEX_CORE_API virtual const std::string module_name() const = 0;
 
         VORTEX_CORE_API virtual const std::vector<std::string> plugin_names() = 0;
-        VORTEX_CORE_API virtual Plugin* plugin(const std::string& plugin_name) = 0;
+        VORTEX_CORE_API virtual std::shared_ptr<Plugin> plugin(const std::string& plugin_name) = 0;
 
         VORTEX_CORE_API virtual void register_di(DependencyInjector* di) = 0;
     };

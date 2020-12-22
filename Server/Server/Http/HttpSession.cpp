@@ -71,6 +71,7 @@ namespace Vortex::Server::Http {
 
         try {
             framework = _session_di->activate_runtime(
+                _session_di,
                 _config,
                 _stream.socket().remote_endpoint().address().to_string(),
                 &_req,

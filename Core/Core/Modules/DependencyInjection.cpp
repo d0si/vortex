@@ -48,15 +48,15 @@ namespace Vortex::Core::Modules {
         _runtime_activator = activator;
     }
 
-    const std::shared_ptr<RuntimeInterface>& DependencyInjector::activate_runtime(const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
+    const std::shared_ptr<RuntimeInterface>& DependencyInjector::activate_runtime(DependencyInjector* di, const Maze::Element& config, std::string client_ip, boost::beast::http::request<boost::beast::http::string_body>* request, boost::beast::http::response<boost::beast::http::string_body>* response) {
         if (_runtime_activator) {
-            _runtime_instance = _runtime_activator(config, client_ip, request, response);
+            _runtime_instance = _runtime_activator(di, config, client_ip, request, response);
 
             return _runtime_instance;
         }
 
         if (_parent)
-            return _parent->activate_runtime(config, client_ip, request, response);
+            return _parent->activate_runtime(di, config, client_ip, request, response);
 
         throw Exceptions::VortexException("Unable to activate runtime", "Dependency injection resolve failed. No applicable activator installed.");
     }
@@ -74,6 +74,10 @@ namespace Vortex::Core::Modules {
 
     ModuleLoader* DependencyInjector::module_loader() {
         return ModuleLoader::loader();
+    }
+
+    PluginManager* DependencyInjector::plugin_manager() {
+        return PluginManager::instance();
     }
 
     void DependencyInjector::add_ref() {

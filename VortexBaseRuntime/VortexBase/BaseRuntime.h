@@ -11,6 +11,7 @@ namespace VortexBase {
 	class BaseRuntime : public Vortex::Core::RuntimeInterface {
 	public:
 		VORTEX_CORE_API BaseRuntime(
+			Vortex::Core::Modules::DependencyInjector* di,
 			const Maze::Element& config,
 			std::string client_ip,
 			boost::beast::http::request<boost::beast::http::string_body>* request,
@@ -31,6 +32,8 @@ namespace VortexBase {
 		VORTEX_CORE_API virtual Vortex::Core::ControllerInterface* controller() override;
 		VORTEX_CORE_API virtual Vortex::Core::ViewInterface* view() override;
 		VORTEX_CORE_API virtual Vortex::Core::ScriptInterface* script() override;
+
+		VORTEX_CORE_API virtual Vortex::Core::Modules::DependencyInjector* di() override;
 
 	private:
 		std::string _client_ip;

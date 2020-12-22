@@ -40,5 +40,5 @@ add_subdirectory(Server)
 add_subdirectory(VortexBaseRuntime)
 
 add_subdirectory(samples/VortexDbApp)
-add_subdirectory(samples/MinimalModuleSample)
+#add_subdirectory(samples/MinimalModuleSample)
 add_subdirectory(VortexLauncher)

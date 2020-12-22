@@ -7,6 +7,9 @@
 #include <Core/DLLSupport.h>
 
 namespace Vortex::Core {
+    namespace Modules {
+        class DependencyInjector;
+    }
 
     class RuntimeInterface;
 
@@ -22,11 +25,13 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual std::string hostname() = 0;
         VORTEX_CORE_API virtual std::string application_id() = 0;
         VORTEX_CORE_API virtual Maze::Element config() = 0;
+        VORTEX_CORE_API inline virtual Maze::Element& host_ref() { return _host; }
         VORTEX_CORE_API virtual std::string script() = 0;
         VORTEX_CORE_API virtual std::string post_script() = 0;
 
     protected:
         RuntimeInterface* _runtime;
+        Maze::Element _host;
     };
 
 
@@ -140,6 +145,7 @@ namespace Vortex::Core {
 
     class RuntimeInterface {
     public:
+        VORTEX_CORE_API inline RuntimeInterface(Modules::DependencyInjector* di) : _di(di) {}
         VORTEX_CORE_API virtual ~RuntimeInterface() = default;
 
         VORTEX_CORE_API virtual void init() = 0;
@@ -156,6 +162,11 @@ namespace Vortex::Core {
         VORTEX_CORE_API virtual ControllerInterface* controller() = 0;
         VORTEX_CORE_API virtual ViewInterface* view() = 0;
         VORTEX_CORE_API virtual ScriptInterface* script() = 0;
+
+        VORTEX_CORE_API virtual Modules::DependencyInjector* di() = 0;
+
+    protected:
+        Modules::DependencyInjector* _di;
     };
 
 }  // namespace Vortex::Core

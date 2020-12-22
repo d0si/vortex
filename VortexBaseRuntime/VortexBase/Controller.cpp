@@ -1,5 +1,6 @@
 #include <VortexBase/Controller.h>
 #include <Core/GlobalRuntime.h>
+#include <Core/Modules/DependencyInjection.h>
 
 using Vortex::Core::RuntimeInterface;
 using Vortex::Core::GlobalRuntime;
@@ -10,6 +11,9 @@ namespace VortexBase {
         : ControllerInterface(runtime) {}
 
     void Controller::init(const std::string& application_id, const std::string& name, const std::string& method) {
+        if (_runtime->di()->plugin_manager()->on_controller_init_before(_runtime))
+            return;
+
         std::string cache_key = "vortex.core.controller.value." + application_id + "." + name + "." + method;
         if (GlobalRuntime::instance().cache().exists(cache_key)) {
             _controller = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
@@ -31,6 +35,9 @@ namespace VortexBase {
                 GlobalRuntime::instance().cache().set(cache_key, _controller.to_json(0));
             }
         }
+
+        if (_runtime->di()->plugin_manager()->on_controller_init_after(_runtime))
+            return;
 
         if (!_controller.has_children()) {
             _runtime->view()->echo("Controller " + name + " not found.");

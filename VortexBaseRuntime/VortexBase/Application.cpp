@@ -1,5 +1,6 @@
 #include <VortexBase/Application.h>
 #include <Core/GlobalRuntime.h>
+#include <Core/Modules/DependencyInjection.h>
 
 using Vortex::Core::RuntimeInterface;
 using Vortex::Core::GlobalRuntime;
@@ -10,6 +11,9 @@ namespace VortexBase {
         : ApplicationInterface(runtime) {}
 
     void Application::init(const std::string& application_id) {
+        if (_runtime->di()->plugin_manager()->on_application_init_before(_runtime))
+            return;
+
         const std::string cache_key = "vortex.core.application.value." + application_id;
         if (GlobalRuntime::instance().cache().exists(cache_key)) {
             _application = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
@@ -26,6 +30,9 @@ namespace VortexBase {
             }
         }
 
+        if (_runtime->di()->plugin_manager()->on_application_init_after(_runtime))
+            return;
+        
         if (!_application.has_children()) {
             _runtime->view()->echo("Application associated with this hostname does not exist");
             _runtime->exit();
