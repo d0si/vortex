@@ -4,7 +4,7 @@
 
 namespace Vortex::App::Db::Plugins {
 
-    class DbApplicationPlugin : public Vortex::Core::Modules::Plugin {
+    class DbControllerPlugin : public Vortex::Core::Modules::Plugin {
     public:
         static const std::string s_plugin_name;
 

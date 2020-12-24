@@ -31,6 +31,7 @@ To build the project yourself you will need:
 - **duktape-cpp**
 - **crypto++** (recommended version 8.2.0)
 - **libgraphqlparser** (recommended version 0.7.0)
+- **spdlog** (recommended version 1.8.0)
 
 Please take a look at [d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine](https://github.com/d0si/cmake-cpp-vortex-builder/blob/master/Dockerfile.alpine) to see how the dependencies can be installed and adapt the concept to match your distro.
 

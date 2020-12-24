@@ -2,6 +2,9 @@
 #include <Core/Modules/DependencyInjection.h>
 #include "Plugins/DbHostPlugin.h"
 #include "Plugins/DbApplicationPlugin.h"
+#include "Plugins/DbControllerPlugin.h"
+#include "Plugins/DbViewPagePlugin.h"
+#include "Plugins/DbViewTemplatePlugin.h"
 
 using namespace Vortex::Core::Modules;
 
@@ -29,6 +32,9 @@ namespace Vortex::App::Db {
     void DbAppModule::register_di(DependencyInjector* di) {
         di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbHostPlugin>());
         di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbApplicationPlugin>());
+        di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbControllerPlugin>());
+        di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbViewPagePlugin>());
+        di->plugin_manager()->register_plugin(std::make_shared<Plugins::DbViewTemplatePlugin>());
     }
 }
 

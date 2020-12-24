@@ -4,14 +4,14 @@
 
 namespace Vortex::App::Db::Plugins {
 
-    class DbApplicationPlugin : public Vortex::Core::Modules::Plugin {
+    class DbViewPagePlugin : public Vortex::Core::Modules::Plugin {
     public:
         static const std::string s_plugin_name;
 
         virtual const std::string plugin_name() const override;
         virtual Vortex::Core::Modules::PluginExecutePoint execute_point() override;
 
-        virtual bool execute_before(Vortex::Core::RuntimeInterface* runtime, void* data) override;  
+        virtual bool execute_before(Vortex::Core::RuntimeInterface* runtime, void* data) override;
     };
 
 }  // namespace Vortex::App::Db::Plugins

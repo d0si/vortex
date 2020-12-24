@@ -2,11 +2,11 @@
 
 namespace Vortex::Core::Modules {
 
-    bool Plugin::execute_before(RuntimeInterface* runtime) {
+    bool Plugin::execute_before(RuntimeInterface* runtime, void* data) {
         return false;
     }
 
-    bool Plugin::execute_after(RuntimeInterface* runtime) {
+    bool Plugin::execute_after(RuntimeInterface* runtime, void* data) {
         return false;
     }
 
@@ -85,30 +85,80 @@ namespace Vortex::Core::Modules {
         return execute_plugins_after(runtime, _router_init);
     }
 
-    bool PluginManager::on_controller_init_before(RuntimeInterface* runtime) {
-        return execute_plugins_before(runtime, _controller_init);
+    bool PluginManager::on_controller_init_before(RuntimeInterface* runtime, const std::string application_id, const std::string name, const std::string method, Maze::Element* controller_value) {
+        ControllerInitData data{
+            application_id,
+            name,
+            method,
+            controller_value,
+        };
+        
+        return execute_plugins_before(runtime, _controller_init, &data);
     }
 
-    bool PluginManager::on_controller_init_after(RuntimeInterface* runtime) {
-        return execute_plugins_after(runtime, _controller_init);
+    bool PluginManager::on_controller_init_after(RuntimeInterface* runtime, const std::string application_id, const std::string name, const std::string method, Maze::Element* controller_value) {
+        ControllerInitData data{
+            application_id,
+            name,
+            method,
+            controller_value,
+        };
+        
+        return execute_plugins_after(runtime, _controller_init, &data);
+    }
+
+    bool PluginManager::on_view_set_template_before(RuntimeInterface* runtime, const std::string& name, Maze::Element* template_value) {
+        ViewSetTemplateData data{
+            name,
+            template_value,
+        };
+
+        return execute_plugins_before(runtime, _view_set_template, &data);
+    }
+
+    bool PluginManager::on_view_set_template_after(RuntimeInterface* runtime, const std::string& name, Maze::Element* template_value) {
+        ViewSetTemplateData data{
+            name,
+            template_value,
+        };
+
+        return execute_plugins_after(runtime, _view_set_template, &data);
+    }
+
+    bool PluginManager::on_view_set_page_before(RuntimeInterface* runtime, const std::string& name, Maze::Element* page_value) {
+        ViewSetPageData data{
+            name,
+            page_value,
+        };
+        
+        return execute_plugins_before(runtime, _view_set_page, &data);
+    }
+
+    bool PluginManager::on_view_set_page_after(RuntimeInterface* runtime, const std::string& name, Maze::Element* page_value) {
+        ViewSetPageData data{
+            name,
+            page_value,
+        };
+        
+        return execute_plugins_after(runtime, _view_set_page, &data);
     }
 
     PluginManager* PluginManager::instance() {
         return _s_instance;
     }
 
-    bool PluginManager::execute_plugins_before(RuntimeInterface* runtime, const std::vector<std::shared_ptr<Plugin>> plugins) {
+    bool PluginManager::execute_plugins_before(RuntimeInterface* runtime, const std::vector<std::shared_ptr<Plugin>> plugins, void* data) {
         for (const auto& plugin : plugins) {
-            if (plugin->execute_before(runtime))
+            if (plugin->execute_before(runtime, data))
                 return true;
         }
 
         return false;
     }
 
-    bool PluginManager::execute_plugins_after(RuntimeInterface* runtime, const std::vector<std::shared_ptr<Plugin>> plugins) {
+    bool PluginManager::execute_plugins_after(RuntimeInterface* runtime, const std::vector<std::shared_ptr<Plugin>> plugins, void* data) {
         for (const auto& plugin : plugins) {
-            if (plugin->execute_after(runtime))
+            if (plugin->execute_after(runtime, data))
                 return true;
         }
 

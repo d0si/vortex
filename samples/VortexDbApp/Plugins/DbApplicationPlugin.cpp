@@ -14,7 +14,7 @@ namespace Vortex::App::Db::Plugins {
         return Vortex::Core::Modules::PluginExecutePoint::APPLICATION_INIT;
     }
 
-    bool DbApplicationPlugin::execute_before(Vortex::Core::RuntimeInterface* runtime) {
+    bool DbApplicationPlugin::execute_before(Vortex::Core::RuntimeInterface* runtime, void* data) {
         if (runtime->host()->application_id() == "vortex_db_app") {
             Maze::Element application(Maze::Type::Object);
             Maze::Element url_schemes(Maze::Type::Array);

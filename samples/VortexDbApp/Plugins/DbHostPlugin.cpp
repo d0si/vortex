@@ -14,7 +14,7 @@ namespace Vortex::App::Db::Plugins {
         return Vortex::Core::Modules::PluginExecutePoint::APPLICATION_INIT;
     }
 
-    bool DbHostPlugin::execute_before(Vortex::Core::RuntimeInterface* runtime) {
+    bool DbHostPlugin::execute_before(Vortex::Core::RuntimeInterface* runtime, void* data) {
         if (Core::Util::String::starts_with(runtime->request()->target().to_string(), "/vortex_db")) {
             Maze::Element host(Maze::Type::Object);
 

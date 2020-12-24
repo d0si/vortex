@@ -10,3 +10,6 @@
 [submodule "dependencies/DeltaScript"]
 	path = dependencies/DeltaScript
 	url = https://github.com/d0si/DeltaScript.git
+[submodule "dependencies/spdlog"]
+	path = dependencies/spdlog
+	url = https://github.com/gabime/spdlog.git

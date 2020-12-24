@@ -11,7 +11,7 @@ namespace VortexBase {
         : ControllerInterface(runtime) {}
 
     void Controller::init(const std::string& application_id, const std::string& name, const std::string& method) {
-        if (_runtime->di()->plugin_manager()->on_controller_init_before(_runtime))
+        if (_runtime->di()->plugin_manager()->on_controller_init_before(_runtime, application_id, name, method, &_controller))
             return;
 
         std::string cache_key = "vortex.core.controller.value." + application_id + "." + name + "." + method;
@@ -36,7 +36,7 @@ namespace VortexBase {
             }
         }
 
-        if (_runtime->di()->plugin_manager()->on_controller_init_after(_runtime))
+        if (_runtime->di()->plugin_manager()->on_controller_init_after(_runtime, application_id, name, method, &_controller))
             return;
 
         if (!_controller.has_children()) {

@@ -1,5 +1,6 @@
 #include <VortexBase/View.h>
 #include <Core/GlobalRuntime.h>
+#include <Core/Modules/DependencyInjection.h>
 
 using Vortex::Core::RuntimeInterface;
 using Vortex::Core::GlobalRuntime;
@@ -178,6 +179,9 @@ namespace VortexBase {
     void View::set_template(const std::string& name) {
         _template.remove_all_children();
 
+        if (_runtime->di()->plugin_manager()->on_view_set_template_before(_runtime, name, &_template))
+            return;
+
         std::string cache_key = "vortex.core.template.value." + _runtime->application()->id() + "." + name;
         if (GlobalRuntime::instance().cache().exists(cache_key)) {
             _template = Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
@@ -202,6 +206,9 @@ namespace VortexBase {
             }
         }
 
+        if (_runtime->di()->plugin_manager()->on_view_set_template_after(_runtime, name, &_template))
+            return;
+
         if (!_template.has_children()) {
             _runtime->view()->echo("Template " + name + " not found");
             _runtime->exit();
@@ -218,6 +225,9 @@ namespace VortexBase {
 
     void View::set_page(const std::string& name) {
         _page.remove_all_children();
+
+        if (_runtime->di()->plugin_manager()->on_view_set_page_before(_runtime, name, &_page))
+            return;
 
         std::string cache_key = "vortex.core.page.value." + _runtime->application()->id() + "." + name;
         if (GlobalRuntime::instance().cache().exists(cache_key)) {
@@ -242,6 +252,9 @@ namespace VortexBase {
                 GlobalRuntime::instance().cache().set(cache_key, _page.to_json(0));
             }
         }
+
+        if (_runtime->di()->plugin_manager()->on_view_set_page_after(_runtime, name, &_page))
+            return;
 
         if (!_page.has_children()) {
             _page.set("contents", "Page " + name + " not found");
