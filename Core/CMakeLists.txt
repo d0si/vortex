@@ -28,6 +28,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 include(${PROJECT_SOURCE_DIR}/../cmake/AddMaze.cmake)
+include(${PROJECT_SOURCE_DIR}/../cmake/AddSpdlog.cmake)
 
 
 #

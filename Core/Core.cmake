@@ -30,4 +30,5 @@ set(CORE_SOURCES
     Core/Util/Time.cpp
     
     Core/GlobalRuntime.cpp
+    Core/Logging.cpp
 )
