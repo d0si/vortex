@@ -1,8 +1,8 @@
 #include <Server/Http/HttpListener.h>
-#include <iostream>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core/bind_handler.hpp>
+#include <Core/Logging.h>
 #include <Server/Http/HttpSession.h>
 
 namespace asio = boost::asio;
@@ -22,29 +22,28 @@ namespace Vortex::Server::Http {
 
         _acceptor.open(endpoint.protocol(), ec);
         if (ec) {
-            std::cout << "Listener open failed. " << ec.message() << std::endl;
+            VORTEX_CRITICAL("Listener open failed. {0}", ec.message());
 
             return;
         }
 
         _acceptor.set_option(asio::socket_base::reuse_address(true), ec);
         if (ec) {
-            std::cout << "Listener set option REUSE_ADDRESS failed. "
-                << ec.message() << std::endl;
+            VORTEX_CRITICAL("Listener set option REUSE_ADDRESS failed. {0}", ec.message());
 
             return;
         }
 
         _acceptor.bind(endpoint, ec);
         if (ec) {
-            std::cout << "Listener bind failed. " << ec.message() << std::endl;
+            VORTEX_CRITICAL("Listener bind failed. {0}", ec.message());
 
             return;
         }
 
         _acceptor.listen(asio::socket_base::max_listen_connections, ec);
         if (ec) {
-            std::cout << "Listener listen failed. " << ec.message() << std::endl;
+            VORTEX_CRITICAL("Listener listen failed. {0}", ec.message());
 
             return;
         }
@@ -68,7 +67,7 @@ namespace Vortex::Server::Http {
 
     void HttpListener::on_accept(error_code ec, tcp::socket socket) {
         if (ec) {
-            std::cout << "Listener accept failed. " << ec.message() << std::endl;
+            VORTEX_CRITICAL("Listener accept failed. {0}", ec.message());
         }
         else {
             std::make_shared<HttpSession>(

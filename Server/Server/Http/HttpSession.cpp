@@ -1,10 +1,10 @@
 #include <Server/Http/HttpSession.h>
-#include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
 #include <Core/Modules/DependencyInjection.h>
 #include <Core/Exceptions/VortexException.h>
 #include <Core/Exceptions/ExitFrameworkException.h>
+#include <Core/Logging.h>
 #ifdef HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
@@ -44,17 +44,15 @@ namespace Vortex::Server::Http {
         }
 
         if (ec) {
-            std::cout << "HttpSession read failed. " << ec.message() << std::endl;
+            VORTEX_ERROR("HttpSession read failed. {0}", ec.message());
 
             return;
         }
 
         const clock_t begin_time = clock();
-        std::cout << "Request received ("
-            << _req.method_string().to_string()
-            << ") "
-            << _req.target().to_string()
-            << std::endl;
+        VORTEX_INFO("Request received ({0}) {1}",
+            _req.method_string().to_string(),
+            _req.target().to_string());
 
         _res.version(_req.version());
 
@@ -121,12 +119,10 @@ namespace Vortex::Server::Http {
 
         _res.set(boost::beast::http::field::content_length, _res.body().size());
 
-        std::cout << "Request finished "
-            << _req.target().to_string()
-            << " ["
-            << std::to_string(float(clock() - begin_time) / CLOCKS_PER_SEC)
-            << "]"
-            << std::endl;
+
+        VORTEX_INFO("Request finished {0} [{1}]",
+            _req.target().to_string(),
+            std::to_string(float(clock() - begin_time) / CLOCKS_PER_SEC));
 
         send();
     }
@@ -138,7 +134,7 @@ namespace Vortex::Server::Http {
         boost::ignore_unused(bytes_transferred);
 
         if (ec) {
-            std::cout << "HttpSession write failed. " << ec.message() << std::endl;
+            VORTEX_ERROR("HttpSession write failed. {0}", ec.message());
 
             return;
         }

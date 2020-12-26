@@ -1,5 +1,5 @@
 #include <Core/Modules/ModuleLoader.h>
-#include <iostream>
+#include <Core/Logging.h>
 #ifdef WIN32
 #include <Windows.h>
 #else
@@ -60,14 +60,14 @@ namespace Vortex::Core::Modules {
         HANDLE file_handle = FindFirstFile(module_path.c_str(), &file_find_data);
         if (file_handle == (void*)ERROR_INVALID_HANDLE ||
             file_handle == (void*)ERROR_FILE_NOT_FOUND) {
-            std::cout << "Module file not found " << module_path << std::endl;
+            VORTEX_ERROR("Module file not found {0}", module_path);
 
             return nullptr;
         }
 
         HINSTANCE lib_handle = LoadLibrary(module_path.c_str());
         if (!lib_handle) {
-            std::cout << "Unable to load module " << module_path << std::endl;
+            VORTEX_ERROR("Unable to load module {0}", module_path);
 
             return nullptr;
         }
@@ -79,20 +79,20 @@ namespace Vortex::Core::Modules {
         ModuleProc get_module_func = (ModuleProc)GetProcAddress(lib_handle, "get_vortex_module");
 
         if (module_name_func == nullptr) {
-            std::cout << "Unable to load module. Get module name function not found" << std::endl;
+            VORTEX_ERROR("Unable to load module. Get module name function (get_vortex_module_name) not found");
 
             return nullptr;
         }
 
         if (get_module_func == nullptr) {
-            std::cout << "Unable to load module '" << module_name_func() << "'. Get module instance function not found" << std::endl;
+            VORTEX_ERROR("Unable to load module '{0}'. Get module instance function (get_vortex_module) not found", module_name_func());
 
             return nullptr;
         }
 
         Module* module_ptr = get_module_func();
         if (module_ptr == nullptr) {
-            std::cout << "Unable to load module '" << module_name_func() << "'. Get module instance function returned null pointer" << std::endl;
+            VORTEX_ERROR("Unable to load module '{0}'. Get module instance function returned null pointer", module_name_func());
 
             return nullptr;
         }
@@ -101,6 +101,8 @@ namespace Vortex::Core::Modules {
             lib_handle,
             module_ptr,
         };
+
+        VORTEX_TRACE("Module '{0}' loaded", module_name);
 
         return module_ptr;
     }
@@ -118,7 +120,7 @@ namespace Vortex::Core::Modules {
         return _loaded_modules.find(module_name) != _loaded_modules.end();
     }
 
-#else
+    #else
 
     struct ModuleInstance {
         void* lib_handle;
@@ -140,7 +142,7 @@ namespace Vortex::Core::Modules {
 
         void* lib_handle = dlopen(module_path.c_str(), RTLD_NOW);
         if (!lib_handle) {
-            std::cout << "Unable to load module " << module_name << " from '" << module_path << "'" << std::endl;
+            VORTEX_ERROR("Unable to load module '{0}' from '{1}'", module_name, module_path);
 
             return nullptr;
         }
@@ -151,21 +153,21 @@ namespace Vortex::Core::Modules {
         ModuleNameProc module_name_func = (ModuleNameProc)dlsym(lib_handle, "get_vortex_module_name");
         const char* error = dlerror();
         if (error || module_name_func == nullptr) {
-            std::cout << "Unable to load module. Get module name function not found. " << error << std::endl;
+            VORTEX_ERROR("Unable to load module '{0}'. Get module name function (get_vortex_module_name) not found. Error: {1}", module_name, error);
 
             return nullptr;
         }
         ModuleProc get_module_func = (ModuleProc)dlsym(lib_handle, "get_vortex_module");
         error = dlerror();
         if (error || get_module_func == nullptr) {
-            std::cout << "Unable to load module '" << module_name_func() << "'. Get module instance function not found. " << error << std::endl;
+            VORTEX_ERROR("Unable to load module '{0}'. Get module instance function (get_vortex_module) not found. Error: {1}", module_name_func(), error);
 
             return nullptr;
         }
 
         Module* module_ptr = get_module_func();
         if (module_ptr == nullptr) {
-            std::cout << "Unable to load module '" << module_name_func() << "'. Get module instance function returned null pointer" << std::endl;
+            VORTEX_ERROR("Unable to load module '{0}'. Get module instance function returned null pointer", module_name_func());
 
             return nullptr;
         }
@@ -174,6 +176,8 @@ namespace Vortex::Core::Modules {
             lib_handle,
             module_ptr,
         };
+
+        VORTEX_TRACE("Module '{0}' loaded", module_name);
 
         return module_ptr;
     }
