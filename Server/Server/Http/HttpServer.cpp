@@ -1,11 +1,11 @@
 #include <Server/Http/HttpServer.h>
-#include <iostream>
 #include <thread>
 #include <boost/asio/ip/address.hpp>
 #include <boost/asio/io_context.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <Server/Http/HttpListener.h>
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
+#include <Core/Logging.h>
 
 using std::string;
 using std::vector;
@@ -13,20 +13,21 @@ namespace ip = boost::asio::ip;
 
 namespace Vortex::Server::Http {
 
-    void HttpServer::start(const Maze::Element& config) {
+    void HttpServer::start(const Maze::Element& config, Core::Modules::DependencyInjector* di) {
         _config = config;
+        _server_di = di;
 
         try {
-            if (!Core::CommonRuntime::instance().storage()->is_initialized()) {
-                Core::CommonRuntime::instance().storage()->initialize(config.get_const_ref("storage", Maze::Type::Object));
+            if (!Core::GlobalRuntime::instance().storage().is_initialized()) {
+                Core::GlobalRuntime::instance().storage().initialize(config.get_const_ref("storage", Maze::Type::Object));
             }
 
-            if (!Core::CommonRuntime::instance().cache()->is_initialized()) {
-                Core::CommonRuntime::instance().cache()->initialize(config.get_const_ref("cache", Maze::Type::Object));
+            if (!Core::GlobalRuntime::instance().cache().is_initialized()) {
+                Core::GlobalRuntime::instance().cache().initialize(config.get_const_ref("cache", Maze::Type::Object));
             }
         }
         catch (const std::exception& e) {
-            std::cout << "Unable to initialize storage or caching - " << e.what() << std::endl;
+            VORTEX_CRITICAL("Unable to initialize storage or caching - {0}", e.what());
 
             return;
         }
@@ -43,7 +44,7 @@ namespace Vortex::Server::Http {
                 address = ip::make_address(server_config["address"].get_string());
             }
             catch (...) {
-                std::cout << "Server startup error: IP address resolution failed." << std::endl;
+                VORTEX_CRITICAL("Server startup error: IP address resolution failed.");
 
                 return;
             }
@@ -74,10 +75,11 @@ namespace Vortex::Server::Http {
             std::make_shared<HttpListener>(
                 _config,
                 io_context,
-                ip::tcp::endpoint{ address, port })
+                ip::tcp::endpoint{ address, port },
+                _server_di)
                 ->run();
 
-            std::cout << "Starting http server on port " << port << std::endl;
+            VORTEX_INFO("Starting http server on port {0}", port);
 
             int thread_count_z = thread_count - 1;
             if (thread_count_z < 1)
@@ -95,7 +97,7 @@ namespace Vortex::Server::Http {
             io_context.run();
         }
         catch (std::exception const& e) {
-            std::cout << "Server failed to start. " << e.what() << std::endl;
+            VORTEX_CRITICAL("Server failed to start. {0}", e.what());
         }
     }
 

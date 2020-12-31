@@ -4,7 +4,7 @@
       "server": {
         "ip": "0.0.0.0",
         "port": 8081,
-        "thread_count": 2
+        "thread_count": 4
       }
     }
   ],
@@ -15,19 +15,26 @@
         "enabled": false
       },
       "Filesystem": {
-        "root_path": "../../../samples",
+        "root_path": "../../../samples/data",
         "cache_enabled": true,
         "in_memory_only": true
       }
     }
   },
   "cache": {
-    "enabled": false,
+    "enabled": true,
     "default_backend": "MemoryCache",
     "config": {
       "MemoryCache": {
-        "enabled": false
+        "enabled": true
       }
     }
+  },
+  "modules": {
+    "load": [
+      "VortexBaseRuntime",
+      "VortexDbApp",
+      "MinimalModuleSample"
+    ]
   }
 }

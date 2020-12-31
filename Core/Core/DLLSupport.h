@@ -18,6 +18,14 @@
 
 #ifdef VORTEX_CORE_EXPORTS
     #define VORTEX_CORE_API __DLL_EXPORT
+    #define VORTEX_CORE_API_E __DLL_EXPORT
 #else
     #define VORTEX_CORE_API __DLL_IMPORT
+    #define VORTEX_CORE_API_E __DLL_IMPORT
+#endif
+
+#ifdef VORTEX_APP_EXPORTS
+    #define VORTEX_APP_API __DLL_EXPORT
+#else
+    #define VORTEX_APP_API __DLL_IMPORT
 #endif

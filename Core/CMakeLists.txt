@@ -28,6 +28,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 include(${PROJECT_SOURCE_DIR}/../cmake/AddMaze.cmake)
+include(${PROJECT_SOURCE_DIR}/../cmake/AddSpdlog.cmake)
 
 
 #
@@ -38,12 +39,6 @@ if (VORTEX_ENABLE_FEATURE_MONGO)
 endif()
 if (VORTEX_ENABLE_FEATURE_REDIS)
     include(${PROJECT_SOURCE_DIR}/../cmake/AddCppRedis.cmake)
-endif()
-if (VORTEX_ENABLE_FEATURE_DELTASCRIPT)
-    include(${PROJECT_SOURCE_DIR}/../cmake/AddDeltaScript.cmake)
-endif()
-if (VORTEX_ENABLE_FEATURE_DUKTAPE)
-    include(${PROJECT_SOURCE_DIR}/../cmake/AddDuktapeCpp.cmake)
 endif()
 if (VORTEX_ENABLE_FEATURE_CRYPTOPP)
     include(${PROJECT_SOURCE_DIR}/../cmake/AddCryptopp.cmake)

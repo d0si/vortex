@@ -1,9 +1,10 @@
 #include <Server/Http/HttpSession.h>
-#include <iostream>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/beast/http.hpp>
-#include <Core/Framework.h>
+#include <Core/Modules/DependencyInjection.h>
 #include <Core/Exceptions/VortexException.h>
+#include <Core/Exceptions/ExitFrameworkException.h>
+#include <Core/Logging.h>
 #ifdef HAS_FEATURE_MONGO
 #include <mongocxx/exception/exception.hpp>
 #endif
@@ -17,8 +18,9 @@ namespace Vortex::Server::Http {
 
     HttpSession::HttpSession(
         const Maze::Element& config,
-        tcp::socket socket)
-        : _config(config), _stream(std::move(socket)) {}
+        tcp::socket socket,
+        Core::Modules::DependencyInjector* session_di)
+        : _config(config), _stream(std::move(socket)), _session_di(session_di) {}
 
     void HttpSession::run() {
         do_read();
@@ -42,17 +44,15 @@ namespace Vortex::Server::Http {
         }
 
         if (ec) {
-            std::cout << "HttpSession read failed. " << ec.message() << std::endl;
+            VORTEX_ERROR("HttpSession read failed. {0}", ec.message());
 
             return;
         }
 
         const clock_t begin_time = clock();
-        std::cout << "Request received ("
-            << _req.method_string().to_string()
-            << ") "
-            << _req.target().to_string()
-            << std::endl;
+        VORTEX_INFO("Request received ({0}) {1}",
+            _req.method_string().to_string(),
+            _req.target().to_string());
 
         _res.version(_req.version());
 
@@ -65,21 +65,25 @@ namespace Vortex::Server::Http {
         _res.set(boost::beast::http::field::content_type, "text/html");
         _res.result(boost::beast::http::status::ok);
 
-        Vortex::Core::Framework* framework = nullptr;
+        std::shared_ptr<Vortex::Core::RuntimeInterface> framework;
 
         try {
-            framework = new Vortex::Core::Framework(
+            framework = _session_di->activate_runtime(
+                _session_di,
                 _config,
                 _stream.socket().remote_endpoint().address().to_string(),
                 &_req,
                 &_res);
 
-            framework->setup();
+            framework->init();
 
             framework->run();
         }
-        catch (int e) {
-            e;
+        catch (Core::Exceptions::ExitFrameworkException) {
+
+        }
+        catch (int) {
+
 #ifdef HAS_FEATURE_MONGO
         }
         catch (const mongocxx::exception& e) {
@@ -92,6 +96,11 @@ namespace Vortex::Server::Http {
             _res.result(boost::beast::http::status::internal_server_error);
             std::string what = e.what();
             _res.body() = "Exception - " + what;
+        }
+        catch (const Maze::MazeException& e) {
+            _res.result(boost::beast::http::status::internal_server_error);
+            std::string what = e.what();
+            _res.body() = "Runtime error: " + what;
         }
         catch (const std::runtime_error& e) {
             _res.result(boost::beast::http::status::internal_server_error);
@@ -108,18 +117,12 @@ namespace Vortex::Server::Http {
             _res.body() = "Internal server error";
         }
 
-        if (framework != nullptr) {
-            delete framework;
-        }
-
         _res.set(boost::beast::http::field::content_length, _res.body().size());
 
-        std::cout << "Request finished "
-            << _req.target().to_string()
-            << " ["
-            << std::to_string(float(clock() - begin_time) / CLOCKS_PER_SEC)
-            << "]"
-            << std::endl;
+
+        VORTEX_INFO("Request finished {0} [{1}]",
+            _req.target().to_string(),
+            std::to_string(float(clock() - begin_time) / CLOCKS_PER_SEC));
 
         send();
     }
@@ -131,7 +134,7 @@ namespace Vortex::Server::Http {
         boost::ignore_unused(bytes_transferred);
 
         if (ec) {
-            std::cout << "HttpSession write failed. " << ec.message() << std::endl;
+            VORTEX_ERROR("HttpSession write failed. {0}", ec.message());
 
             return;
         }

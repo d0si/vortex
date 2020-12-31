@@ -1,7 +1,7 @@
 #include <Core/Caching/Cache.h>
 #include <boost/thread/mutex.hpp>
-#include <iostream>
 #include <Core/Exceptions/CacheException.h>
+#include <Core/Logging.h>
 #ifdef HAS_FEATURE_CPPREDIS
 #include <Core/Caching/Backends/RedisBackend.h>
 #endif
@@ -78,7 +78,7 @@ namespace Vortex::Core::Caching {
             }
         }
         else {
-            std::cout << "Caching is disabled in configuration." << std::endl;
+            VORTEX_INFO("Caching is disabled in configuration.");
         }
 
         _initialized = true;

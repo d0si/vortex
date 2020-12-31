@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <Core/Exceptions/StorageException.h>
-#include <Core/CommonRuntime.h>
+#include <Core/GlobalRuntime.h>
 #include <Core/Util/String.h>
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -177,8 +177,8 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.database_list";
 
         if (_cache_enabled) {
-            if (CommonRuntime::instance().cache()->exists(cache_key)) {
-                return Util::String::split(CommonRuntime::instance().cache()->get(cache_key), ",");
+            if (GlobalRuntime::instance().cache().exists(cache_key)) {
+                return Util::String::split(GlobalRuntime::instance().cache().get(cache_key), ",");
             }
         }
 
@@ -202,7 +202,7 @@ namespace Vortex::Core::Storage::Filesystem {
             }
         }
 
-        CommonRuntime::instance().cache()->set(cache_key, Util::String::join(database_list, ","), 15);
+        GlobalRuntime::instance().cache().set(cache_key, Util::String::join(database_list, ","), 15);
 
         return database_list;
     }
@@ -211,8 +211,8 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.collection_list." + database;
 
         if (_cache_enabled) {
-            if (CommonRuntime::instance().cache()->exists(cache_key)) {
-                return Util::String::split(CommonRuntime::instance().cache()->get(cache_key), ",");
+            if (GlobalRuntime::instance().cache().exists(cache_key)) {
+                return Util::String::split(GlobalRuntime::instance().cache().get(cache_key), ",");
             }
         }
 
@@ -240,7 +240,7 @@ namespace Vortex::Core::Storage::Filesystem {
             }
         }
 
-        CommonRuntime::instance().cache()->set(cache_key, Util::String::join(collection_list, ","), 15);
+        GlobalRuntime::instance().cache().set(cache_key, Util::String::join(collection_list, ","), 15);
 
         return collection_list;
     }
@@ -249,8 +249,8 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.database_exists." + database;
 
         if (_cache_enabled) {
-            if (CommonRuntime::instance().cache()->exists(cache_key)) {
-                return (CommonRuntime::instance().cache()->get(cache_key) == "1");
+            if (GlobalRuntime::instance().cache().exists(cache_key)) {
+                return (GlobalRuntime::instance().cache().get(cache_key) == "1");
             }
         }
 
@@ -258,14 +258,14 @@ namespace Vortex::Core::Storage::Filesystem {
 
         if (boost::filesystem::exists(database_path) && boost::filesystem::is_directory(database_path)) {
             if (_cache_enabled) {
-                CommonRuntime::instance().cache()->set(cache_key, "1", 15);
+                GlobalRuntime::instance().cache().set(cache_key, "1", 15);
             }
 
             return true;
         }
         else {
             if (_cache_enabled) {
-                CommonRuntime::instance().cache()->set(cache_key, "0", 15);
+                GlobalRuntime::instance().cache().set(cache_key, "0", 15);
             }
 
             return false;
@@ -276,8 +276,8 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.collection_exists." + database + "." + collection;
 
         if (_cache_enabled) {
-            if (CommonRuntime::instance().cache()->exists(cache_key)) {
-                return (CommonRuntime::instance().cache()->get(cache_key) == "1");
+            if (GlobalRuntime::instance().cache().exists(cache_key)) {
+                return (GlobalRuntime::instance().cache().get(cache_key) == "1");
             }
         }
 
@@ -285,14 +285,14 @@ namespace Vortex::Core::Storage::Filesystem {
 
         if (boost::filesystem::exists(collection_path) && boost::filesystem::is_regular_file(collection_path)) {
             if (_cache_enabled) {
-                CommonRuntime::instance().cache()->set(cache_key, "1", 15);
+                GlobalRuntime::instance().cache().set(cache_key, "1", 15);
             }
 
             return true;
         }
         else {
             if (_cache_enabled) {
-                CommonRuntime::instance().cache()->set(cache_key, "0", 15);
+                GlobalRuntime::instance().cache().set(cache_key, "0", 15);
             }
 
             return false;
@@ -383,8 +383,8 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
 
         if (_cache_enabled) {
-            if (CommonRuntime::instance().cache()->exists(cache_key)) {
-                return Maze::Element::from_json(CommonRuntime::instance().cache()->get(cache_key));
+            if (GlobalRuntime::instance().cache().exists(cache_key)) {
+                return Maze::Element::from_json(GlobalRuntime::instance().cache().get(cache_key));
             }
         }
 
@@ -413,7 +413,7 @@ namespace Vortex::Core::Storage::Filesystem {
             Maze::Element result = Maze::Element::from_json(value);
 
             if (_cache_enabled) {
-                CommonRuntime::instance().cache()->set(cache_key, value, _cache_expiry);
+                GlobalRuntime::instance().cache().set(cache_key, value, _cache_expiry);
             }
 
             return result;
@@ -429,13 +429,13 @@ namespace Vortex::Core::Storage::Filesystem {
         const std::string cache_key = "vortex.core.filesystem.cache." + database + "." + collection;
 
         if (_in_memory_only) {
-            CommonRuntime::instance().cache()->set(cache_key, values.to_json(0), 0);
+            GlobalRuntime::instance().cache().set(cache_key, values.to_json(0), 0);
 
             return;
         }
 
         if (_cache_enabled) {
-            CommonRuntime::instance().cache()->set(cache_key, values.to_json(0), _cache_expiry);
+            GlobalRuntime::instance().cache().set(cache_key, values.to_json(0), _cache_expiry);
         }
 
         if (!_filesystem_config.is_string("root_path")) {
